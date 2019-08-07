@@ -24,8 +24,24 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    glwidget.cpp \
+    helper.cpp \
+    dealusb_msg.cpp \
+    receusb_msg.cpp \
+    savepcdthread.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    glwidget.h \
+    helper.h \
+    dealusb_msg.h \
+    receusb_msg.h \
+    savepcdthread.h
 
 FORMS    += mainwindow.ui
+
+
+INCLUDEPATH += "D:/programInstall/libsub"
+#INCLUDEPATH += -lD:/programInstall/libsub
+
+LIBS += "D:/programInstall/libsub/libusb.lib"
