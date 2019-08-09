@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1190</width>
+    <width>1385</width>
     <height>738</height>
    </rect>
   </property>
@@ -38,7 +38,6 @@
          <property name="styleSheet">
           <string notr="true">background-color:black</string>
          </property>
-         <zorder>toolBox</zorder>
         </widget>
        </item>
        <item row="0" column="0">
@@ -426,7 +425,7 @@ border:0px</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1190</width>
+     <width>1385</width>
      <height>23</height>
     </rect>
    </property>

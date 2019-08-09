@@ -15,6 +15,7 @@
 #include<QTimer>
 #include<QMessageBox>
 #include<QFileDialog>
+#include<filesave.h>
 
 
 namespace Ui {
@@ -55,6 +56,7 @@ public:
     QTableWidgetItem peakMinItem_value;
     QTableWidgetItem peakMaxItem_value;
 
+    fileSave fileSaveDia;
 
 
 private:
@@ -81,6 +83,12 @@ private slots:
 
     void reReadDevSlot(QString str); //读取设备指令 返回槽函数
 
+    void showSaveFileDialog();
+
+    void isSaveFlagSlot(bool,QString,int);
+
+    void statisticsValueSlot(float, float, float,float);
+
 signals:
     void openLinkSignal(int ,int); //打开连接
 
@@ -94,7 +102,7 @@ signals:
 
     void writeDevSignal(int,int,QString,bool);
 
-    void loadSettingSignal(QString);
+    void loadSettingSignal(QString, bool);
 
     void saveSettingSignal(QString,int, bool );
 

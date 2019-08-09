@@ -55,6 +55,10 @@
 #include <QFont>
 #include <QPen>
 #include <QWidget>
+#include<vector>
+#include<QMutex>
+
+using namespace std;
 
 //! [0]
 class Helper
@@ -69,6 +73,7 @@ public:
     int Window_height;
 
     int radiusMeter;               //半径显示多少米
+
 
 private:
     QBrush background;

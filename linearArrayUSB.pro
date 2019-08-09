@@ -29,16 +29,19 @@ SOURCES += main.cpp\
     helper.cpp \
     dealusb_msg.cpp \
     receusb_msg.cpp \
-    savepcdthread.cpp
+    savepcdthread.cpp \
+    filesave.cpp
 
 HEADERS  += mainwindow.h \
     glwidget.h \
     helper.h \
     dealusb_msg.h \
     receusb_msg.h \
-    savepcdthread.h
+    savepcdthread.h \
+    filesave.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    filesave.ui
 
 
 INCLUDEPATH += "D:/programInstall/libsub"

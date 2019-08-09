@@ -7,6 +7,9 @@
 
 bool isWriteSuccess;   //配置集是否配置成功标识
 bool isRecvFlag;
+int saveFileIndex;
+QString saveFilePath;
+bool isSaveFlag;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -36,10 +39,23 @@ void MainWindow::initConnect()
     connect(this,SIGNAL(writeSysSignal(int,QString,bool)),recvUsbMsg_obj,SLOT(writeSysSlot(int,QString,bool)));
     connect(this,SIGNAL(readDevSignal(int,int,bool)),recvUsbMsg_obj,SLOT(readDevSlot(int,int,bool)));
     connect(this,SIGNAL(writeDevSignal(int,int,QString,bool)),recvUsbMsg_obj,SLOT(writeDevSlot(int,int,QString,bool)));
-    connect(this,SIGNAL(loadSettingSignal(QString)),recvUsbMsg_obj,SLOT(loadSettingSlot(QString)));
+    connect(this,SIGNAL(loadSettingSignal(QString,bool)),recvUsbMsg_obj,SLOT(loadSettingSlot(QString,bool)));
     connect(this,SIGNAL(saveSettingSignal(QString,int,bool)),recvUsbMsg_obj,SLOT(saveSettingSlot(QString,int,bool)));
     connect(recvUsbMsg_obj,SIGNAL(reReadSysSignal(QString)),this,SLOT(reReadSysSlot(QString)));
     connect(recvUsbMsg_obj,SIGNAL(reReadDevSignal(QString)),this,SLOT(reReadDevSlot(QString)));
+
+    //主函数与数据处理线程的 信号与槽的连接
+    connect(dealUsbMsg_obj,SIGNAL(statisticsValueSignal(float,float,float,float)),this,SLOT(statisticsValueSlot(float, float, float,float)));
+
+    //文件保存相关的 信号与槽的连接
+    connect(ui->action,SIGNAL(triggered()),this,SLOT(showSaveFileDialog())); //文件保存 窗口打开
+    connect(&fileSaveDia,SIGNAL(isSaveFlagSignal(bool,QString,int)),this,SLOT(isSaveFlagSlot(bool,QString,int)));
+    connect(dealUsbMsg_obj,SIGNAL(saveTXTSignal(QString)),savePCD_obj,SLOT(saveTXTSlot(QString)));
+
+    //数据接收与数据处理线程 信号与槽的连接
+    connect(recvUsbMsg_obj,SIGNAL(recvMsgSignal(QByteArray)),dealUsbMsg_obj,SLOT(recvMsgSlot(QByteArray)));
+
+
 
 }
 
@@ -69,10 +85,25 @@ void MainWindow::initThread()
 //界面的初始化函数
 void MainWindow::initGUI()
 {
+//    ui->textEdit->setAlignment(Qt::AlignHCenter);
+    ui->textEdit->setAlignment(Qt::AlignJustify);
+
+
+
     ui->tableWidget_2->setColumnWidth(0,93);
     ui->tableWidget_2->setColumnWidth(1,93);
     ui->tableWidget_2->setRowHeight(0,43);
     ui->tableWidget_2->setRowHeight(1,44);
+    tofMinItem_value.setTextAlignment(Qt::AlignCenter);
+    tofMaxItem_value.setTextAlignment(Qt::AlignCenter);
+    peakMinItem_value.setTextAlignment(Qt::AlignCenter);
+    peakMaxItem_value.setTextAlignment(Qt::AlignCenter);
+    ui->tableWidget_2->setItem(0,0,&tofMinItem_value);
+    ui->tableWidget_2->setItem(0,1,&tofMaxItem_value);
+    ui->tableWidget_2->setItem(1,0,&peakMinItem_value);
+    ui->tableWidget_2->setItem(1,1,&peakMaxItem_value);
+
+
 }
 
 //设备寄存器读写的界面的初始化函数
@@ -87,8 +118,8 @@ void MainWindow::initTreeWidget()
     ui->treeWidget->setHeaderLabel(tr("item tree"));    //设置标题
     QList<QTreeWidgetItem *> items;
     //创建两个节点
-    QTreeWidgetItem *fItem1 = new QTreeWidgetItem(ui->treeWidget,QStringList(QString("f1")));
-    QTreeWidgetItem *fItem2 = new QTreeWidgetItem(ui->treeWidget,QStringList(QString("f2")));
+    QTreeWidgetItem *fItem1 = new QTreeWidgetItem(ui->treeWidget,QStringList(QString("TDC Setting")));
+    QTreeWidgetItem *fItem2 = new QTreeWidgetItem(ui->treeWidget,QStringList(QString("Integration Setting")));
     items.append(fItem1);
     items.append(fItem2);
     //添加顶层节点
@@ -116,7 +147,7 @@ void MainWindow::initTreeWidget()
     box->setText("sss");
     QLineEdit *edit = new QLineEdit();
     pushButton.setText(QStringLiteral("读取"));
-    ui->treeWidget->setItemWidget(fItem1a,1,box);
+    ui->treeWidget->setItemWidget(fItem1a,1,edit);
     ui->treeWidget->setItemWidget(fItem1a,2,&pushButton);
 }
 
@@ -251,7 +282,19 @@ void MainWindow::on_loadSetting_pushButton_clicked()
         return ;
     }
 
-    emit loadSettingSignal(file_path);
+    //如果接收线程正在运行，先关闭接收线程（while循环），否则线程接收不到信号
+    //线程处理完数据以后，再次打开while循环，即另isRecvFlag = true;
+
+//    emit loadSettingSignal(file_path);
+
+    if(isRecvFlag)
+    {
+        isRecvFlag = false;
+        emit loadSettingSignal(file_path,true);
+    }else
+    {
+        emit loadSettingSignal(file_path,false);
+    }
 
 
 }
@@ -309,6 +352,7 @@ void MainWindow::on_saveSetting_pushButton_clicked()
 void MainWindow::on_pushButton_5_clicked()
 {
 
+    ui->widget->timer.start(10);
 }
 
 //读取设备指令返回信息的槽函数
@@ -340,14 +384,6 @@ void MainWindow::linkInfoSlot(int flagNum)
         QMessageBox::information(NULL,QStringLiteral("告警"),QStringLiteral("未找到设备！"));
         break;
     case 2:
-        /*****打印到运行日志*****/
-        tempstr_1 = QStringLiteral("接收数据异常，请检查设备！");
-        t1 = QTime::currentTime();
-        str = tempstr_1 + "           " +t1.toString("hh:mm:ss");
-        ui->textEdit->append(str);
-
-
-
         isRecvFlag = false ;
         tempStr = QStringLiteral("未接收到数据，请检查设备！");
         tempStr.append("             ");
@@ -379,10 +415,12 @@ void MainWindow::linkInfoSlot(int flagNum)
     case 8:
         tempStr = QStringLiteral("加载配置信息成功！");
         tempStr.append("                     ");
+        isWriteSuccess = true;
         break;
     case 9:
         tempStr = QStringLiteral("加载配置信息失败！");
         tempStr.append("                   ");
+        isWriteSuccess = false;
         QMessageBox::information(NULL,QStringLiteral("告警"),QStringLiteral("加载配置信息失败."));
         break;
     case 10:
@@ -415,7 +453,34 @@ void MainWindow::linkInfoSlot(int flagNum)
     default:
         break;
     }
-
     str = tempStr  +t1.toString("hh:mm:ss");
     ui->textEdit->append(str);
+}
+
+
+//打开文件保存窗口
+void MainWindow::showSaveFileDialog()
+{
+    fileSaveDia.show();
+}
+
+//用户保存信息接收 槽函数,formatSelect属于预留，暂时不适用
+void MainWindow::isSaveFlagSlot(bool saveFlag, QString filePath,int formatSelect)
+{
+    if(saveFlag)
+        saveFileIndex = 1;
+
+    saveFilePath = filePath;
+    isSaveFlag = saveFlag;
+    qDebug()<<"saveFlag ="<<saveFlag<<"  filePath="<<filePath<<endl;
+
+}
+
+
+void MainWindow::statisticsValueSlot(float tofMin,float tofMax,float peakMin,float peakMax)
+{
+    tofMinItem_value.setText(QString::number(tofMin));
+    tofMaxItem_value.setText(QString::number(tofMax));
+    peakMinItem_value.setText(QString::number(peakMin));
+    peakMaxItem_value.setText(QString::number(peakMax));
 }

@@ -3,42 +3,40 @@
 
 #include <QObject>
 #include<QImage>
+#include<vector>
+
+using namespace std;
 
 class DealUsb_msg : public QObject
 {
     Q_OBJECT
+
 public:
+
     explicit DealUsb_msg(QObject *parent = 0);
 
     QByteArray recvArray;
 
-    int lastSpadNum;
+    int lastLineNum;
 
-
-    int cloudIndex;
-
-    float  LSB ; //时钟频率
-    bool isFirstLink;   //因为USB驱动存在问题，故设次函数
-
-    float tofMin,tofMax,peakMin,peakMax,xMin,xMax,yMin,yMax,zMin,zMax;
-    float temp_x,temp_y,temp_z;
-
-    int r,g,b,rgb;
-
-    int tmp_tofInfo[16384];
-    int tmp_peakInfo[16384];
+    float tofMin,tofMax,peakMin,peakMax;
 
     QString tofPeakToSave_string;   //存储文件所需的tof和peak;
 
+    vector<int> Rece_points;        //保存一帧的点，先角度 后TOF
 
+    int pointIndex;
+
+    float angle;
 
 signals:
-    void staticValueSignal(float,float,float,float,float,float,float,float,float,float);
 
+    void statisticsValueSignal(float,float,float,float);
 
     void saveTXTSignal(QString );
 
 public slots:
+
     void recvMsgSlot(QByteArray array);
 
 

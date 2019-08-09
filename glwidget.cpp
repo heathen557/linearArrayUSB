@@ -31,3 +31,15 @@ void GLWidget::paintEvent(QPaintEvent *event)
     helper.paint(&painter, event, elapsed);
     painter.end();
 }
+
+
+void GLWidget::mousePressEvent(QMouseEvent *event)
+{
+    int x = event->x();
+    int y = event->y();
+    int origin_x  = helper.Window_wid/2;
+    int origin_y = helper.Window_height;
+    float distance = sqrtf(pow((origin_x-x),2)+pow(origin_y-y,2));    //计算鼠标点击处的坐标到原点的距离值,这个值没有经过换算
+
+    qDebug()<<"x = "<<x<<"  y="<<y<<"  window_width"<<helper.Window_wid <<"  window_height="<<helper.Window_height<<"  distance ="<<distance<<endl;
+}

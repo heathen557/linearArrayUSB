@@ -36,23 +36,10 @@ public:
 
     struct usb_device * dev;
 
-    QTimer *readTimer;               //此处采用轮询的方式读取USB串口数据，1ms读取一次
-    QTimer showTimer;
     int lastSpadNum;
 
 
-//    pcl::PointCloud<pcl::PointXYZI> tempcloud_XYZI;
-//    pcl::PointCloud<pcl::PointXYZ>  tempcloud_RGB;
-    int cloudIndex;
-
-    float  LSB ; //时钟频率
     bool isFirstLink;   //因为USB驱动存在问题，故设次函数
-
-    float tofMin,tofMax,peakMin,peakMax,xMin,xMax,yMin,yMax,zMin,zMax;
-    float temp_x,temp_y,temp_z;
-
-    int r,g,b,rgb;
-
 
     int idVendor_,idProduct_;
 
@@ -91,7 +78,7 @@ public slots:
     void writeSysSlot(int addr,QString data,bool recvFlag);
     void readDevSlot(int id,int address,bool recvFlag);
     void writeDevSlot(int slavId,int addr,QString data,bool recvFlag);
-    void loadSettingSlot(QString filePath);
+    void loadSettingSlot(QString filePath,bool recvFlag);
     void saveSettingSlot(QString filePath,int deviceId,bool  recvFlag);
 };
 

@@ -54,12 +54,16 @@
 #include <QPaintEvent>
 #include <QWidget>
 #include<QDebug>
-#include<vector>
+
 #include<iostream>
 #include<math.h>
-using namespace std;
 
+QMutex m_mutex;
 vector<vector<int>> AllPoint_vec;
+extern int halfWidth_showWindow;
+#define PI 3.14159
+
+#define maxDistance (1000/0.75)
 
 //! [0]
 Helper::Helper()
@@ -112,49 +116,41 @@ void Helper::paint(QPainter *painter, QPaintEvent *event, int elapsed)
 //    painter->rotate(elapsed * 0.030);
 
     QPointF pointf[10000];
+
+
+    m_mutex.lock();       //不加锁程序会异常退出；
     int allLen = AllPoint_vec.size();
+
     for(int m=0; m<allLen; m++)
     {
         int len =AllPoint_vec[m].size();
         int pointNum = 0;
         for(int n=0; n<len-1; n+=2)
         {
-            pointf[pointNum].setX(0);
-            pointf[pointNum].setY(0);
+            float ang = AllPoint_vec[m][n];         //角度为float形式
+            int distance = AllPoint_vec[m][n+1];    //tof值为整形,tof的范围为0-10m,传送来的数据为LSB，1LSB=(0.75cm 1.5cm)  故接收到的数据范围：1000/0.75 = 1333.3 ；10000/1.5 = 666.7
 
-            int ang = AllPoint_vec[m][n];
-            int distance = AllPoint_vec[m][n+1];
-//            qDebug()<<"ang="<<ang/10.0<<"  distance="<<distance<<endl;
-
-            //半径的像素个数为300，显示30米时,distance = 30000 ; 缩放系数为：30000/300 = 100
-            //显示15米时, 缩放系数为：15000/300 = 50
-            //显示x米时， 缩放系数为：1000x/300 =10/3*x
-            //当distance > 1000x时， distance = 1000x;
-
-            if(radiusMeter < 1)
-            {
-                radiusMeter = 10 ;  //缺省为10米
-             }
-
-            if(distance > 1000*radiusMeter)
-            {
-                distance = 1000.0 * radiusMeter ;
-            }
-            float coefficient = 1000.0 * radiusMeter/300.0;
+            /********、此处涉及到一些坐标的变换，tof(0~1333.3),转换比例    *********/
+            //           1333.3                 distance
+            //     ------------------  = -----------------
+            //      width/(2*cos30)           newDistance
+            float newDistance = (Window_wid/(2*cos(30*PI/180.0))) * distance / (maxDistance);
 
 
+            float x  = Window_wid/2.0 + newDistance*sin(ang*PI/180.0);
+            float y  = Window_height -  newDistance*cos(ang*PI/180.0);
+            pointf[pointNum].setX(x);
+            pointf[pointNum].setY(y);
+            qDebug()<<"pointNum ="<<pointNum<<",  x="<<x<<",  y="<<y<<endl;
 
-            double x = distance * sin(ang/10.0/180.0*3.14)/coefficient;
-            double y = -1 * distance * cos(ang/10.0/180.0*3.14)/coefficient;
-
-            pointf[pointNum].setX(x + Window_wid/2.0);
-            pointf[pointNum].setY(y + Window_height/2.0);
 
             pointNum++;
             painter->drawPoints(pointf,pointNum);
 
         }
     }
+
+    m_mutex.unlock();
     painter->restore();
 
 

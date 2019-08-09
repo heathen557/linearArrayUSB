@@ -22,17 +22,6 @@ ReceUSB_Msg::ReceUSB_Msg(QObject *parent) : QObject(parent)
     isFirstLink = true;
     isRecvFlag = false;
 
-    tofMin = 10000;
-    tofMax = -10000;
-    peakMin = 10000;
-    peakMax = -10000;
-    xMin = 10000;
-    xMax = -10000;
-    yMin = 10000;
-    yMax = -10000;
-    zMin = 10000;
-    zMax = -10000;
-
 }
 
 //查找是不是存在想要链接的USB设备
@@ -113,7 +102,6 @@ void ReceUSB_Msg::closeUSB()
 {
     if(devHandle)
     {
-        readTimer->stop();   //先关闭数据接收
         devOpenFlg = false;
         //        UsbListener::quit();
         int ret = usb_close(devHandle); // Exit Thread
@@ -266,13 +254,14 @@ void ReceUSB_Msg::read_usb()
         if (ret < 0) {
             qDebug("**************************************************error reading:%s", usb_strerror());
             emit linkInfoSignal(2);  //  2:没有接收到数据
-            readTimer->stop();
         }
 
         if(260 == ret)
         {
+
             mArray = QByteArray(MyBuffer,260);
             emit recvMsgSignal(mArray);
+//            qDebug()<<mArray<<endl;
         }
 
     }
@@ -286,8 +275,6 @@ void ReceUSB_Msg::run(int vId, int pId)
     idVendor_ = vId;
     idProduct_ = pId;
 
-    readTimer = new QTimer();
-    connect(readTimer, SIGNAL(timeout()),this,SLOT(read_usb()));
     openLinkDevSlot();
 
 }
@@ -323,7 +310,7 @@ void ReceUSB_Msg::openLinkDevSlot()
         return ;
     }
 
-    if(true ==openUSB(dev))                               //打开USB设备
+    if(true ==openUSB(dev))                    //打开USB设备
     {
         emit linkInfoSignal(0);                //打开设备成功
     }else{
@@ -412,7 +399,7 @@ void ReceUSB_Msg::writeDevSlot(int slavId,int addr,QString data,bool recvFlag)
 }
 
 //加载配置集槽函数
-void ReceUSB_Msg::loadSettingSlot(QString filePath)
+void ReceUSB_Msg::loadSettingSlot(QString filePath,bool recvFlag)
 {
     QFile file(filePath);
     QString line[20];
@@ -525,26 +512,17 @@ void ReceUSB_Msg::saveSettingSlot(QString filePath,int deviceId,bool recvFlag)
 
     /***************文本中写入str2*****************************************************/
     res = System_Register_Read(17, dataStr);
-//    ba = dataStr.toLatin1();
-//    c_str = ba.data();
-//    m = uint8_t(c_str[0]);
     m = dataStr.toInt();
     QString tmpData = QString("%1 ").arg(m,2,16,QLatin1Char('0')).toUpper();
     textString = tmpData;
 
     res = System_Register_Read(18, dataStr);
-//    ba = dataStr.toLatin1();
-//    c_str = ba.data();
-//    m = uint8_t(c_str[0]);
     m = dataStr.toInt();
     tmpData = QString("%1 ").arg(m,2,16,QLatin1Char('0')).toUpper();
     textString.append(tmpData);
 
 
     res = System_Register_Read(226, dataStr);
-//    ba = dataStr.toLatin1();
-//    c_str = ba.data();
-//    m = uint8_t(c_str[0]);
     m = dataStr.toInt();
     tmpData = QString("%1 ").arg(m,2,16,QLatin1Char('0')).toUpper();
     textString.append(tmpData);
@@ -557,9 +535,6 @@ void ReceUSB_Msg::saveSettingSlot(QString filePath,int deviceId,bool recvFlag)
     for (i = 0; i < 12; i++)
     {
         res = System_Register_Read((32+i), dataStr);
-//        ba = dataStr.toLatin1();
-//        c_str = ba.data();
-//        m = uint8_t(c_str[0]);
         m = dataStr.toInt();
         tmpData = QString("%1 ").arg(m,2,16,QLatin1Char('0')).toUpper();
         textString.append(tmpData);
@@ -574,8 +549,6 @@ void ReceUSB_Msg::saveSettingSlot(QString filePath,int deviceId,bool recvFlag)
         isRecvFlag = true;
         qDebug()<<"saveSettingSlot has set the recvFlag =  true"<<endl;
         read_usb();
-
-
     }
 
     if(res)

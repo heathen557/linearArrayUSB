@@ -1,10 +1,11 @@
-#ifndef GLWIDGET_H
+﻿#ifndef GLWIDGET_H
 #define GLWIDGET_H
 
 #include <QOpenGLWidget>
 #include<helper.h>
 #include <QPainter>
 #include <QTimer>
+#include<QMouseEvent>
 
 class GLWidget : public QOpenGLWidget
 {
@@ -23,6 +24,9 @@ public slots:
 private:
 
     int elapsed;
+
+protected:
+    void mousePressEvent(QMouseEvent *event) override;
 
 };
 
