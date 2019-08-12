@@ -61,9 +61,14 @@
 QMutex m_mutex;
 vector<vector<int>> AllPoint_vec;
 extern int halfWidth_showWindow;
+
+extern int showFrameNum;   //同时显示多少帧数据
+extern int showTOFmax;     //设置显示的最大范围（m）
 #define PI 3.14159
 
-#define maxDistance (1000/0.75)
+//#define maxDistance (1000/0.75)
+
+#define maxDistance (showTOFmax*100/0.75)
 
 //! [0]
 Helper::Helper()
@@ -141,7 +146,7 @@ void Helper::paint(QPainter *painter, QPaintEvent *event, int elapsed)
             float y  = Window_height -  newDistance*cos(ang*PI/180.0);
             pointf[pointNum].setX(x);
             pointf[pointNum].setY(y);
-            qDebug()<<"pointNum ="<<pointNum<<",  x="<<x<<",  y="<<y<<endl;
+//            qDebug()<<"pointNum ="<<pointNum<<",  x="<<x<<",  y="<<y<<endl;
 
 
             pointNum++;

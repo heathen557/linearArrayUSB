@@ -16,6 +16,7 @@
 #include<QMessageBox>
 #include<QFileDialog>
 #include<filesave.h>
+#include<showsettingdia.h>
 
 
 namespace Ui {
@@ -55,8 +56,13 @@ public:
     QTableWidgetItem tofMaxItem_value;
     QTableWidgetItem peakMinItem_value;
     QTableWidgetItem peakMaxItem_value;
+    float tofMin_, tofMax_, peakMin_, peakMax_;
+
+    QTimer oneSecondTimer;   //1sec show
 
     fileSave fileSaveDia;
+
+    showSettingDia showSettingDia_;
 
 
 private:
@@ -88,6 +94,12 @@ private slots:
     void isSaveFlagSlot(bool,QString,int);
 
     void statisticsValueSlot(float, float, float,float);
+
+    void oneSecondTimer_slot();
+
+    void showShowSettingDialog();
+
+    void showSettingParaSlot(int FrameNum,int TOFmax);
 
 signals:
     void openLinkSignal(int ,int); //打开连接

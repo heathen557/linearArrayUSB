@@ -10,6 +10,9 @@ extern bool isSaveFlag;
 extern vector<vector<int>> AllPoint_vec;    //保存要显示的点
 extern QMutex m_mutex;
 
+extern int showFrameNum;   //同时显示多少帧数据
+extern int showTOFmax;     //设置显示的最大范围（m）
+
 
 DealUsb_msg::DealUsb_msg(QObject *parent) : QObject(parent)
 {
@@ -54,11 +57,16 @@ void DealUsb_msg::recvMsgSlot(QByteArray array)
             AllPoint_vec.push_back(Rece_points);
             Rece_points.clear();
 
-            if(AllPoint_vec.size() >= 2)  //循环清理第一个元素,因为每次只显示一帧数据，故这里把容器的长度设置为2
+            if(AllPoint_vec.size() == showFrameNum+1)  //循环清理第一个元素,因为每次只显示一帧数据，故这里把容器的长度设置为2
             {
                 AllPoint_vec.erase(AllPoint_vec.begin(),AllPoint_vec.begin()+1);
 
             }
+            if(AllPoint_vec.size() > showFrameNum+1)
+            {
+                AllPoint_vec.clear();
+            }
+
             m_mutex.unlock();
         }
 

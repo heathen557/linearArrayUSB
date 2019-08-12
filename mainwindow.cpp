@@ -11,6 +11,9 @@ int saveFileIndex;
 QString saveFilePath;
 bool isSaveFlag;
 
+int showFrameNum;   //同时显示多少帧数据
+int showTOFmax;     //设置显示的最大范围（m）
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -20,13 +23,16 @@ MainWindow::MainWindow(QWidget *parent) :
     isRecvFlag = false;
     isLinkSuccess = false;
 
+    showFrameNum = 1;
+    showTOFmax = 10;
+
+
     initTreeWidget();
     initGUI();
     initThread();
     initConnect();
 
 }
-
 
 void MainWindow::initConnect()
 {
@@ -55,6 +61,10 @@ void MainWindow::initConnect()
     //数据接收与数据处理线程 信号与槽的连接
     connect(recvUsbMsg_obj,SIGNAL(recvMsgSignal(QByteArray)),dealUsbMsg_obj,SLOT(recvMsgSlot(QByteArray)));
 
+    //显示相关
+    connect(&oneSecondTimer,SIGNAL(timeout()),this,SLOT(oneSecondTimer_slot()));  //1sec 刷新显示
+    connect(ui->action_2,SIGNAL(triggered()),this,SLOT(showShowSettingDialog()));
+    connect(&showSettingDia_,SIGNAL(showSettingParaSignal(int,int)),this,SLOT(showSettingParaSlot(int,int)));
 
 
 }
@@ -351,9 +361,20 @@ void MainWindow::on_saveSetting_pushButton_clicked()
 //播放的槽函数
 void MainWindow::on_pushButton_5_clicked()
 {
+    if(ui->pushButton_5->text() == QStringLiteral("播放"))
+    {
+        ui->widget->timer.start(10);
+        ui->pushButton_5->setText(QStringLiteral("暂停"));
+        oneSecondTimer.start(1000);
 
-    ui->widget->timer.start(10);
+    }else if(ui->pushButton_5->text() == QStringLiteral("暂停"))
+    {
+        ui->widget->timer.stop();
+        ui->pushButton_5->setText(QStringLiteral("播放"));
+        oneSecondTimer.stop();
+    }
 }
+
 
 //读取设备指令返回信息的槽函数
 void MainWindow::reReadDevSlot(QString str)
@@ -476,11 +497,36 @@ void MainWindow::isSaveFlagSlot(bool saveFlag, QString filePath,int formatSelect
 
 }
 
-
+//接收线程发送来的统计信息的槽函数
 void MainWindow::statisticsValueSlot(float tofMin,float tofMax,float peakMin,float peakMax)
 {
-    tofMinItem_value.setText(QString::number(tofMin));
-    tofMaxItem_value.setText(QString::number(tofMax));
-    peakMinItem_value.setText(QString::number(peakMin));
-    peakMaxItem_value.setText(QString::number(peakMax));
+    tofMin_ = tofMin;
+    tofMax_ = tofMax;
+    peakMin_ = peakMin;
+    peakMax_ = peakMax;
+
+}
+
+//显示统计信息槽函数
+void MainWindow::oneSecondTimer_slot()
+{
+    tofMinItem_value.setText(QString::number(tofMin_));
+    tofMaxItem_value.setText(QString::number(tofMax_));
+    peakMinItem_value.setText(QString::number(peakMin_));
+    peakMaxItem_value.setText(QString::number(peakMax_));
+}
+
+//显示窗口弹出槽函数
+void MainWindow::showShowSettingDialog()
+{
+    showSettingDia_.show();
+}
+
+//接收显示设置参数的槽函数
+void MainWindow::showSettingParaSlot(int FrameNum,int TOFmax)
+{
+    showFrameNum = FrameNum;
+    showTOFmax = TOFmax;
+
+    qDebug()<<"showFrameNum = "<<showFrameNum<<"  showTOFmax ="<<showTOFmax<<endl;
 }
