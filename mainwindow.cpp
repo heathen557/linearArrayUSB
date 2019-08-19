@@ -119,46 +119,266 @@ void MainWindow::initGUI()
 //设备寄存器读写的界面的初始化函数
 void MainWindow::initTreeWidget()
 {
-    connect(&pushButton,SIGNAL(clicked()),this,SLOT(pushButton_slot()));
+//    connect(&pushButton,SIGNAL(clicked()),this,SLOT(pushButton_slot()));
     ui->treeWidget->clear();
-    ui->treeWidget->setColumnCount(3);
+    ui->treeWidget->setColumnCount(4);
     ui->treeWidget->setColumnWidth(0,100);
-    ui->treeWidget->setColumnWidth(1,50);
-    ui->treeWidget->setColumnWidth(2,50);
-    ui->treeWidget->setHeaderLabel(tr("item tree"));    //设置标题
+    ui->treeWidget->setColumnWidth(1,35);
+    ui->treeWidget->setColumnWidth(2,35);
+    ui->treeWidget->setColumnWidth(3,35);
+//    ui->treeWidget->setHeaderLabel(QStringLiteral("寄存器设置"));    //设置标题
+    QStringList strList;
+    strList.append(QStringLiteral("寄存器名称"));
+    strList.append(QStringLiteral("数据"));
+    strList.append(QStringLiteral("读取"));
+    strList.append(QStringLiteral("写入"));
+
+    ui->treeWidget->setHeaderLabels(strList);
+
     QList<QTreeWidgetItem *> items;
     //创建两个节点
-    QTreeWidgetItem *fItem1 = new QTreeWidgetItem(ui->treeWidget,QStringList(QString("TDC Setting")));
-    QTreeWidgetItem *fItem2 = new QTreeWidgetItem(ui->treeWidget,QStringList(QString("Integration Setting")));
-    items.append(fItem1);
-    items.append(fItem2);
+    QTreeWidgetItem *TDC = new QTreeWidgetItem(ui->treeWidget,QStringList(QString("TDC")));
+    QTreeWidgetItem *Integration = new QTreeWidgetItem(ui->treeWidget,QStringList(QString("Integration")));
+    QTreeWidgetItem *MA = new QTreeWidgetItem(ui->treeWidget,QStringList(QString("MA")));
+    QTreeWidgetItem *Digital = new QTreeWidgetItem(ui->treeWidget,QStringList(QString("Digital")));
+    QTreeWidgetItem *Analog = new QTreeWidgetItem(ui->treeWidget,QStringList(QString("Analog")));
+    QTreeWidgetItem *Pixel = new QTreeWidgetItem(ui->treeWidget,QStringList(QString("Pixel")));
+    QTreeWidgetItem *Top = new QTreeWidgetItem(ui->treeWidget,QStringList(QString("Top Setting")));
+    QTreeWidgetItem *Delayline = new QTreeWidgetItem(ui->treeWidget,QStringList(QString("Delayline")));
+    QTreeWidgetItem *MISC = new QTreeWidgetItem(ui->treeWidget,QStringList(QString("MISC")));
+    QTreeWidgetItem *Others = new QTreeWidgetItem(ui->treeWidget,QStringList(QString("Others")));
+
+    items.append(TDC);
+    items.append(Integration);
+    items.append(MA);
+    items.append(Digital);
+    items.append(Analog);
+    items.append(Pixel);
+    items.append(Top);
+    items.append(Delayline);
+    items.append(MISC);
     //添加顶层节点
     ui->treeWidget->insertTopLevelItems(0,items);
-    //节点始终保持展开
-//    ui->treeWidget->setItemsExpandable(false);
-//    ui->treeWidget->expandAll();
-    ui->treeWidget->expandItem(fItem1);
-    // ----------
-    //创建子节点
-    QTreeWidgetItem *fItem1a = new QTreeWidgetItem(fItem1,QStringList(QString("f1a")));
-    QTreeWidgetItem *fItem1b = new QTreeWidgetItem(fItem1,QStringList(QString("f1b")));
 
-    QTreeWidgetItem *fItem2a = new QTreeWidgetItem(fItem2,QStringList(QString("f2a")));
-    QTreeWidgetItem *fItem2b = new QTreeWidgetItem(fItem2,QStringList(QString("f2b")));
+    int i = 0;
 
-        //添加字节点
-    fItem1->addChild(fItem1a);
-    fItem1->addChild(fItem1b);
 
-    fItem2->addChild(fItem2a);
-    fItem2->addChild(fItem2b);
+    //创建TDC子节点
+    QTreeWidgetItem *TDC_widgetItem[13];
+    TDC_widgetItem[0] = new QTreeWidgetItem(TDC,QStringList(QString("sfw_rst(0)[0]")));
+    TDC_widgetItem[1] = new QTreeWidgetItem(TDC,QStringList(QString("r_cnt_rst_dly1(1)[7:4]")));
+    TDC_widgetItem[2] = new QTreeWidgetItem(TDC,QStringList(QString("r_syncnt_rst_width(1)[3:0]")));
+    TDC_widgetItem[3] = new QTreeWidgetItem(TDC,QStringList(QString("r_cnt_hld_dly2(2)[7:0]")));
+    TDC_widgetItem[4] = new QTreeWidgetItem(TDC,QStringList(QString("r_tdc_rdck_dly1(3)[7:4]")));
+    TDC_widgetItem[5] = new QTreeWidgetItem(TDC,QStringList(QString("r_tdc_redn_dly(3)[3:0]")));
+    TDC_widgetItem[6] = new QTreeWidgetItem(TDC,QStringList(QString("r_tdc_cnt_rst_dly2(4)[7:4]")));
+    TDC_widgetItem[7] = new QTreeWidgetItem(TDC,QStringList(QString("r_tdc_rdck_cyc(4)[3:0]")));
+    TDC_widgetItem[8] = new QTreeWidgetItem(TDC,QStringList(QString("r_rising_latch(5)[7]")));
+    TDC_widgetItem[9] = new QTreeWidgetItem(TDC,QStringList(QString("r_tdc_read_en_same(5)[6]")));
+    TDC_widgetItem[10] = new QTreeWidgetItem(TDC,QStringList(QString("r_slower_clk(5)[5]")));
+    TDC_widgetItem[11] = new QTreeWidgetItem(TDC,QStringList(QString("r_faster_clk(5)[4]")));
+    TDC_widgetItem[12] = new QTreeWidgetItem(TDC,QStringList(QString("r_cnt_hld_dly1(5)[3:0]")));
+    for(i=0; i<13; i++)
+    {
+        TDC_read_pushButton[i].setText(QStringLiteral("读取"));
+        TDC_write_pushButton[i].setText(QStringLiteral("写入"));
+        ui->treeWidget->setItemWidget(TDC_widgetItem[i],1,&TDC_lineEdit[i]);
+        ui->treeWidget->setItemWidget(TDC_widgetItem[i],2,&TDC_read_pushButton[i]);
+        ui->treeWidget->setItemWidget(TDC_widgetItem[i],3,&TDC_write_pushButton[i]);
+    }
 
-    QCheckBox *box = new QCheckBox();
-    box->setText("sss");
-    QLineEdit *edit = new QLineEdit();
-    pushButton.setText(QStringLiteral("读取"));
-    ui->treeWidget->setItemWidget(fItem1a,1,edit);
-    ui->treeWidget->setItemWidget(fItem1a,2,&pushButton);
+    //创建Integration子节点
+    QTreeWidgetItem *Integration_widgetItem[4];
+    Integration_widgetItem[0] = new QTreeWidgetItem(Integration,QStringList(QString("r_integ(6)[7:0]")));
+    Integration_widgetItem[1] = new QTreeWidgetItem(Integration,QStringList(QString("r_hts(7)[5:4]")));
+    Integration_widgetItem[2] = new QTreeWidgetItem(Integration,QStringList(QString("r_integ(7)[3:0]")));
+    Integration_widgetItem[3] = new QTreeWidgetItem(Integration,QStringList(QString("r_hts(8)[7:0]")));
+    for(i=0; i<4; i++)
+    {
+        Integration_read_pushButton[i].setText(QStringLiteral("读取"));
+        Integration_write_pushButton[i].setText(QStringLiteral("写入"));
+        ui->treeWidget->setItemWidget(Integration_widgetItem[i],1,&Integration_lineEdit[i]);
+        ui->treeWidget->setItemWidget(Integration_widgetItem[i],2,&Integration_read_pushButton[i]);
+        ui->treeWidget->setItemWidget(Integration_widgetItem[i],3,&Integration_write_pushButton[i]);
+    }
+
+    //创建MA 子节点
+    QTreeWidgetItem *MA_widgetItem[16];
+    MA_widgetItem[0] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_w0(9)[3:0]")));
+    MA_widgetItem[1] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_w1(9)[7:4]")));
+    MA_widgetItem[2] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_w2(a)[3:0]")));
+    MA_widgetItem[3] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_w3(a)[7:4]")));
+    MA_widgetItem[4] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_w4(b)[3:0]")));
+    MA_widgetItem[5] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_w5(b)[7:4]")));
+    MA_widgetItem[6] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_w6(c)[3:0]")));
+    MA_widgetItem[7] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_w7(c)[7:4]")));
+    MA_widgetItem[8] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_w8(d)[3:0]")));
+    MA_widgetItem[9] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_w9(d)[7:4]")));
+    MA_widgetItem[10] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_wa(e)[3:0]")));
+    MA_widgetItem[11] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_wb(e)[7:4]")));
+    MA_widgetItem[12] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_wc(f)[3:0]")));
+    MA_widgetItem[13] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_wd(f)[7:4]")));
+    MA_widgetItem[14] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_we(10)[3:0]")));
+    MA_widgetItem[15] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_wf(10)[7:4]")));
+    for(i=0; i<16; i++)
+    {
+        MA_read_pushButton[i].setText(QStringLiteral("读取"));
+        MA_write_pushButton[i].setText(QStringLiteral("写入"));
+        ui->treeWidget->setItemWidget(MA_widgetItem[i],1,&MA_lineEdit[i]);
+        ui->treeWidget->setItemWidget(MA_widgetItem[i],2,&MA_read_pushButton[i]);
+        ui->treeWidget->setItemWidget(MA_widgetItem[i],3,&MA_write_pushButton[i]);
+    }
+
+    //创建Digital子节点
+    QTreeWidgetItem *Digital_widgetItem[10];
+    Digital_widgetItem[0] = new QTreeWidgetItem(Digital,QStringList(QString("r_spi_en(11)[7]")));
+    Digital_widgetItem[1] = new QTreeWidgetItem(Digital,QStringList(QString("r_dvp_clk_sel(11)[6:4]")));
+    Digital_widgetItem[2] = new QTreeWidgetItem(Digital,QStringList(QString("r_clk_divider(11)[3:0]")));
+    Digital_widgetItem[3] = new QTreeWidgetItem(Digital,QStringList(QString("r_sramout_clksel(12)[7]")));
+    Digital_widgetItem[4] = new QTreeWidgetItem(Digital,QStringList(QString("r_raw_out_mode(12)[6]")));
+    Digital_widgetItem[5] = new QTreeWidgetItem(Digital,QStringList(QString("r_dvp_sram_output_mode(12)[5]")));
+    Digital_widgetItem[6] = new QTreeWidgetItem(Digital,QStringList(QString("r_sram_output_cycles(12)[4:0]")));
+    Digital_widgetItem[7] = new QTreeWidgetItem(Digital,QStringList(QString("r_row_start(13)[4:0]")));
+    Digital_widgetItem[8] = new QTreeWidgetItem(Digital,QStringList(QString("r_high_bits(13)[7]")));
+    Digital_widgetItem[9] = new QTreeWidgetItem(Digital,QStringList(QString("r_row_end(14)[5:0]")));
+    for(i=0 ;i<10; i++)
+    {
+        Digital_read_pushButton[i].setText(QStringLiteral("读取"));
+        Digital_write_pushButton[i].setText(QStringLiteral("写入"));
+        ui->treeWidget->setItemWidget(Digital_widgetItem[i],1,&Digital_lineEdit[i]);
+        ui->treeWidget->setItemWidget(Digital_widgetItem[i],2,&Digital_read_pushButton[i]);
+        ui->treeWidget->setItemWidget(Digital_widgetItem[i],3,&Digital_write_pushButton[i]);
+    }
+
+
+    //创建Analog子节点
+    QTreeWidgetItem *Analog_widgetItem[16];
+    Analog_widgetItem[0] = new QTreeWidgetItem(Analog,QStringList(QString("dl_sel_dly(15)[2:0]")));
+    Analog_widgetItem[1] = new QTreeWidgetItem(Analog,QStringList(QString("dl_sel_long(15)[3]")));
+    Analog_widgetItem[2] = new QTreeWidgetItem(Analog,QStringList(QString("dl_en(15)[4]")));
+    Analog_widgetItem[3] = new QTreeWidgetItem(Analog,QStringList(QString("tdc_syncnt_en_global(15)[5]")));
+    Analog_widgetItem[4] = new QTreeWidgetItem(Analog,QStringList(QString("tdc_ckdrv_en(15)[6]")));
+    Analog_widgetItem[5] = new QTreeWidgetItem(Analog,QStringList(QString("sel_cnt_mode(15)[7]")));
+    Analog_widgetItem[6] = new QTreeWidgetItem(Analog,QStringList(QString("pll_coarse_cnt_cksel(16)[4:0]")));
+    Analog_widgetItem[7] = new QTreeWidgetItem(Analog,QStringList(QString("pll_lpf_rc(16)[7:6]")));
+    Analog_widgetItem[8] = new QTreeWidgetItem(Analog,QStringList(QString("pll_div_ctrl(17)[6:0]")));
+    Analog_widgetItem[9] = new QTreeWidgetItem(Analog,QStringList(QString("enb_pclk(18)[7]")));
+    Analog_widgetItem[10] = new QTreeWidgetItem(Analog,QStringList(QString("r_tdc_start_re(18)[6]")));
+    Analog_widgetItem[11] = new QTreeWidgetItem(Analog,QStringList(QString("mclk_div_rst(18)[5]")));
+    Analog_widgetItem[12] = new QTreeWidgetItem(Analog,QStringList(QString("mclk_div_ctrl(18)[4:0]")));
+    Analog_widgetItem[13] = new QTreeWidgetItem(Analog,QStringList(QString("ana_reserve_out(19)[7:0]")));
+    Analog_widgetItem[14] = new QTreeWidgetItem(Analog,QStringList(QString("ana_reserve_out(1a)[7:0]")));
+    Analog_widgetItem[15] = new QTreeWidgetItem(Analog,QStringList(QString("ana_reserve_out(1b)[7:0]")));
+    for(i=0; i<16; i++)
+    {
+        Analog_read_pushButton[i].setText(QStringLiteral("读取"));
+        Analog_write_pushButton[i].setText(QStringLiteral("写入"));
+        ui->treeWidget->setItemWidget(Analog_widgetItem[i],1,&Analog_lineEdit[i]);
+        ui->treeWidget->setItemWidget(Analog_widgetItem[i],2,&Analog_read_pushButton[i]);
+        ui->treeWidget->setItemWidget(Analog_widgetItem[i],3,&Analog_write_pushButton[i]);
+    }
+
+    //创建Pixel Setting 子节点
+    QTreeWidgetItem *Pixel_widgetItem[11];
+    Pixel_widgetItem[0] = new QTreeWidgetItem(Pixel,QStringList(QString("pixel_qch_bias_ctrl(28)[7:4]")));
+    Pixel_widgetItem[1] = new QTreeWidgetItem(Pixel,QStringList(QString("pixel_cd_bias_ctrl(28)[3:0]")));
+    Pixel_widgetItem[2] = new QTreeWidgetItem(Pixel,QStringList(QString("pixel_cntr_enb(29)[4]")));
+    Pixel_widgetItem[3] = new QTreeWidgetItem(Pixel,QStringList(QString("pixel_bypass(29)[3]")));
+    Pixel_widgetItem[4] = new QTreeWidgetItem(Pixel,QStringList(QString("pixel_th1(29)[2]")));
+    Pixel_widgetItem[5] = new QTreeWidgetItem(Pixel,QStringList(QString("pixel_th0(29)[1]")));
+    Pixel_widgetItem[6] = new QTreeWidgetItem(Pixel,QStringList(QString("pixel_mode(29)[0]")));
+    Pixel_widgetItem[7] = new QTreeWidgetItem(Pixel,QStringList(QString("pixel_col_sel_2(30)[7:4]")));
+    Pixel_widgetItem[8] = new QTreeWidgetItem(Pixel,QStringList(QString("pixel_col_sel_1(30)[3:0]")));
+    Pixel_widgetItem[9] = new QTreeWidgetItem(Pixel,QStringList(QString("pixel_reserve_out(31)[7:0]")));
+    Pixel_widgetItem[10] = new QTreeWidgetItem(Pixel,QStringList(QString("pixel_reserve_out(32)[7:0]")));
+    for(i=0; i<11; i++)
+    {
+        Pixel_read_pushButton[i].setText(QStringLiteral("读取"));
+        Pixel_write_pushButton[i].setText(QStringLiteral("写入"));
+        ui->treeWidget->setItemWidget(Pixel_widgetItem[i],1,&Pixel_lineEdit[i]);
+        ui->treeWidget->setItemWidget(Pixel_widgetItem[i],2,&Pixel_read_pushButton[i]);
+        ui->treeWidget->setItemWidget(Pixel_widgetItem[i],3,&Pixel_write_pushButton[i]);
+    }
+
+    //创建Top Setting 子节点
+    QTreeWidgetItem *Top_widgetItem[4];
+    Top_widgetItem[0] = new QTreeWidgetItem(Top,QStringList(QString("top_reserve_out(33)[7:0]")));
+    Top_widgetItem[1] = new QTreeWidgetItem(Top,QStringList(QString("top_reserve_out(34)[7:0]")));
+    Top_widgetItem[2] = new QTreeWidgetItem(Top,QStringList(QString("top_reserve_out(35)[7:0]")));
+    Top_widgetItem[3] = new QTreeWidgetItem(Top,QStringList(QString("top_reserve_out(36)[7:0]")));
+    for(i=0; i<4; i++)
+    {
+        Top_read_pushButton[i].setText(QStringLiteral("读取"));
+        Top_write_pushButton[i].setText(QStringLiteral("写入"));
+        ui->treeWidget->setItemWidget(Top_widgetItem[i],1,&Top_lineEdit[i]);
+        ui->treeWidget->setItemWidget(Top_widgetItem[i],2,&Top_read_pushButton[i]);
+        ui->treeWidget->setItemWidget(Top_widgetItem[i],3,&Top_write_pushButton[i]);
+    }
+
+
+    //创建Delayline Setting 子节点
+    QTreeWidgetItem *Delayline_widgetItem[7];
+    Delayline_widgetItem[0] = new QTreeWidgetItem(Delayline,QStringList(QString("r_test_dl_in_en(37)[7:3]")));
+    Delayline_widgetItem[1] = new QTreeWidgetItem(Delayline,QStringList(QString("r_test_dl_width(37)[2:0]")));
+    Delayline_widgetItem[2] = new QTreeWidgetItem(Delayline,QStringList(QString("r_test_dl_in_0(38)[7:0]")));
+    Delayline_widgetItem[3] = new QTreeWidgetItem(Delayline,QStringList(QString("r_test_dl_in_1(39)[7:0]")));
+    Delayline_widgetItem[4] = new QTreeWidgetItem(Delayline,QStringList(QString("r_test_dl_in_2(40)[7:0]")));
+    Delayline_widgetItem[5] = new QTreeWidgetItem(Delayline,QStringList(QString("r_test_dl_in_3(41)[7:0]")));
+    Delayline_widgetItem[6] = new QTreeWidgetItem(Delayline,QStringList(QString("r_test_dl_in_4(42)[7:0]")));
+    for(i=0; i<7; i++)
+    {
+        Delayline_read_pushButton[i].setText(QStringLiteral("读取"));
+        Delayline_write_pushButton[i].setText(QStringLiteral("写入"));
+        ui->treeWidget->setItemWidget(Delayline_widgetItem[i],1,&Delayline_lineEdit[i]);
+        ui->treeWidget->setItemWidget(Delayline_widgetItem[i],2,&Delayline_read_pushButton[i]);
+        ui->treeWidget->setItemWidget(Delayline_widgetItem[i],3,&Delayline_write_pushButton[i]);
+    }
+
+    //创建MISC Setting 子节点
+    QTreeWidgetItem *MISC_widgetItem[8];
+    MISC_widgetItem[0] = new QTreeWidgetItem(MISC,QStringList(QString("r_tdc_start_rise_state(43)[7]")));
+    MISC_widgetItem[1] = new QTreeWidgetItem(MISC,QStringList(QString("r_tdc_start_rise(43)[6:4]")));
+    MISC_widgetItem[2] = new QTreeWidgetItem(MISC,QStringList(QString("r_tdc_start_fall_state(43)[3]")));
+    MISC_widgetItem[3] = new QTreeWidgetItem(MISC,QStringList(QString("r_tdc_start_fall(43)[2:0]")));
+    MISC_widgetItem[4] = new QTreeWidgetItem(MISC,QStringList(QString("r_pds(44)[7:0]")));
+    MISC_widgetItem[5] = new QTreeWidgetItem(MISC,QStringList(QString("r_pds(45)[7:0]")));
+    MISC_widgetItem[6] = new QTreeWidgetItem(MISC,QStringList(QString("r_pds(46)[7:0]")));
+    MISC_widgetItem[7] = new QTreeWidgetItem(MISC,QStringList(QString("r_pds(47)[7:0]")));
+
+    for(i=0; i<8; i++)
+    {
+        MISC_read_pushButton[i].setText(QStringLiteral("读取"));
+        MISC_write_pushButton[i].setText(QStringLiteral("写入"));
+        ui->treeWidget->setItemWidget(MISC_widgetItem[i],1,&MISC_lineEdit[i]);
+        ui->treeWidget->setItemWidget(MISC_widgetItem[i],2,&MISC_read_pushButton[i]);
+        ui->treeWidget->setItemWidget(MISC_widgetItem[i],3,&MISC_write_pushButton[i]);
+    }
+
+    //创建Others Setting 子节点
+    QTreeWidgetItem *Others_widgetItem[7];
+    Others_widgetItem[0] = new QTreeWidgetItem(Others,QStringList(QString("r_tdc_start_rise_state(43)[7]")));
+    Others_widgetItem[1] = new QTreeWidgetItem(Others,QStringList(QString("r_tdc_start_rise(43)[6:4]")));
+    Others_widgetItem[2] = new QTreeWidgetItem(Others,QStringList(QString("r_tdc_start_fall_state(43)[3]")));
+    Others_widgetItem[3] = new QTreeWidgetItem(Others,QStringList(QString("r_tdc_start_fall(43)[2:0]")));
+    Others_widgetItem[4] = new QTreeWidgetItem(Others,QStringList(QString("r_pds(44)[7:0]")));
+    Others_widgetItem[5] = new QTreeWidgetItem(Others,QStringList(QString("r_pds(45)[7:0]")));
+    Others_widgetItem[6] = new QTreeWidgetItem(Others,QStringList(QString("r_pds(46)[7:0]")));
+
+    for(i=0; i<7; i++)
+    {
+        Others_read_pushButton[i].setText(QStringLiteral("读取"));
+        Others_write_pushButton[i].setText(QStringLiteral("写入"));
+        ui->treeWidget->setItemWidget(Others_widgetItem[i],1,&Others_lineEdit[i]);
+        ui->treeWidget->setItemWidget(Others_widgetItem[i],2,&Others_read_pushButton[i]);
+        ui->treeWidget->setItemWidget(Others_widgetItem[i],3,&Others_write_pushButton[i]);
+    }
+
+
+
+
+
+
+
 }
 
 MainWindow::~MainWindow()

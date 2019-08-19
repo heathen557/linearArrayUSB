@@ -31,8 +31,8 @@ struct usb_device *ReceUSB_Msg::findUSBDev(const unsigned short idVendor,
     struct usb_bus *bus;
     struct usb_device *dev;
 
-    usb_find_busses(); /* find all busses */
-    usb_find_devices(); /* find all connected devices */
+//    usb_find_busses(); /* find all busses */
+//    usb_find_devices(); /* find all connected devices */
 
     for(bus = usb_get_busses(); bus; bus = bus->next)
     {
@@ -150,7 +150,9 @@ bool ReceUSB_Msg::System_Register_Write(int Address, QString &Data)
     Cmd.wValue = 0x0000;
     Cmd.wIndex = Address;  // need change
     Cmd.wLength = 0x0001;
-    data[0] = Data.toInt(NULL,16);    //need modify
+//    data[0] = Data.toInt(NULL,16);    //need modify
+    data[0] = quint8(Data.toInt(NULL,16));
+
     res = res && usb_control_msg(devHandle,Cmd.bRequestType,Cmd.bRequest,Cmd.wValue,Cmd.wIndex,data,1,transLen);
 
     return res;

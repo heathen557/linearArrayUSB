@@ -52,7 +52,7 @@
           <string notr="true"/>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="page">
           <property name="geometry">
@@ -296,6 +296,9 @@
           <layout class="QGridLayout" name="gridLayout_4">
            <item row="0" column="0">
             <widget class="QTreeWidget" name="treeWidget">
+             <property name="styleSheet">
+              <string notr="true">font: 9pt &quot;Times New Roman&quot;;</string>
+             </property>
              <column>
               <property name="text">
                <string notr="true">1</string>
@@ -308,14 +311,14 @@
              <item>
               <widget class="QPushButton" name="pushButton_2">
                <property name="text">
-                <string>批量读取</string>
+                <string>全部读取</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QPushButton" name="pushButton_3">
                <property name="text">
-                <string>批量写入</string>
+                <string>全部写入</string>
                </property>
               </widget>
              </item>

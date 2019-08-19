@@ -36,8 +36,46 @@ public:
     void initThread();              //要开启的线程的初始化函数
     void initConnect();             //家里信号与槽连接的初始化函数
 
-    QLineEdit *edit_1;
-    QPushButton pushButton;
+    QLineEdit TDC_lineEdit[13];
+    QPushButton TDC_read_pushButton[13];
+    QPushButton TDC_write_pushButton[13];
+
+    QLineEdit Integration_lineEdit[4];
+    QPushButton Integration_read_pushButton[4];
+    QPushButton Integration_write_pushButton[4];
+
+    QLineEdit MA_lineEdit[16];
+    QPushButton MA_read_pushButton[16];
+    QPushButton MA_write_pushButton[16];
+
+    QLineEdit Digital_lineEdit[10];
+    QPushButton Digital_read_pushButton[10];
+    QPushButton Digital_write_pushButton[10];
+
+    QLineEdit Analog_lineEdit[16];
+    QPushButton Analog_read_pushButton[16];
+    QPushButton Analog_write_pushButton[16];
+
+    QLineEdit Pixel_lineEdit[16];
+    QPushButton Pixel_read_pushButton[16];
+    QPushButton Pixel_write_pushButton[16];
+
+    QLineEdit Top_lineEdit[16];
+    QPushButton Top_read_pushButton[16];
+    QPushButton Top_write_pushButton[16];
+
+    QLineEdit Delayline_lineEdit[7];
+    QPushButton Delayline_read_pushButton[7];
+    QPushButton Delayline_write_pushButton[7];
+
+    QLineEdit MISC_lineEdit[8];
+    QPushButton MISC_read_pushButton[8];
+    QPushButton MISC_write_pushButton[8];
+
+    QLineEdit Others_lineEdit[7];
+    QPushButton Others_read_pushButton[7];
+    QPushButton Others_write_pushButton[7];
+
 
     bool isLinkSuccess;
 
