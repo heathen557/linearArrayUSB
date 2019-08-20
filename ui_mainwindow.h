@@ -138,18 +138,18 @@ public:
 
         toolBox = new QToolBox(frame);
         toolBox->setObjectName(QStringLiteral("toolBox"));
-        toolBox->setMaximumSize(QSize(250, 16777215));
+        toolBox->setMaximumSize(QSize(320, 16777215));
         toolBox->setStyleSheet(QStringLiteral(""));
         page = new QWidget();
         page->setObjectName(QStringLiteral("page"));
-        page->setGeometry(QRect(0, 0, 250, 408));
+        page->setGeometry(QRect(0, 0, 320, 408));
         gridLayout_3 = new QGridLayout(page);
         gridLayout_3->setSpacing(6);
         gridLayout_3->setContentsMargins(11, 11, 11, 11);
         gridLayout_3->setObjectName(QStringLiteral("gridLayout_3"));
         groupBox_4 = new QGroupBox(page);
         groupBox_4->setObjectName(QStringLiteral("groupBox_4"));
-        groupBox_4->setMaximumSize(QSize(16777215, 130));
+        groupBox_4->setMaximumSize(QSize(230, 130));
         groupBox_4->setStyleSheet(QString::fromUtf8("font:10pt \"\351\273\221\344\275\223\";"));
         gridLayout_8 = new QGridLayout(groupBox_4);
         gridLayout_8->setSpacing(6);
@@ -208,7 +208,7 @@ public:
 
         groupBox_6 = new QGroupBox(page);
         groupBox_6->setObjectName(QStringLiteral("groupBox_6"));
-        groupBox_6->setMaximumSize(QSize(16777215, 115));
+        groupBox_6->setMaximumSize(QSize(230, 115));
         groupBox_6->setStyleSheet(QString::fromUtf8("font:10pt \"\351\273\221\344\275\223\";\n"
 ""));
         gridLayout_9 = new QGridLayout(groupBox_6);
@@ -303,10 +303,10 @@ public:
 
         gridLayout_3->addItem(verticalSpacer, 4, 0, 1, 1);
 
-        toolBox->addItem(page, QString::fromUtf8("             \345\270\270\347\224\250\351\205\215\347\275\256"));
+        toolBox->addItem(page, QString::fromUtf8("                  \345\270\270\347\224\250\351\205\215\347\275\256"));
         page_2 = new QWidget();
         page_2->setObjectName(QStringLiteral("page_2"));
-        page_2->setGeometry(QRect(0, 0, 250, 408));
+        page_2->setGeometry(QRect(0, 0, 320, 408));
         gridLayout_4 = new QGridLayout(page_2);
         gridLayout_4->setSpacing(6);
         gridLayout_4->setContentsMargins(11, 11, 11, 11);
@@ -336,7 +336,7 @@ public:
 
         gridLayout_4->addLayout(horizontalLayout, 1, 0, 1, 1);
 
-        toolBox->addItem(page_2, QString::fromUtf8("          \350\256\276\345\244\207\345\257\204\345\255\230\345\231\250\351\205\215\347\275\256"));
+        toolBox->addItem(page_2, QString::fromUtf8("               \350\256\276\345\244\207\345\257\204\345\255\230\345\231\250\351\205\215\347\275\256"));
 
         gridLayout_2->addWidget(toolBox, 0, 0, 1, 1);
 
@@ -462,10 +462,10 @@ public:
         loadSetting_pushButton->setText(QApplication::translate("MainWindow", "\345\212\240\350\275\275\351\205\215\347\275\256\351\233\206", Q_NULLPTR));
         saveSetting_pushButton->setText(QApplication::translate("MainWindow", "\344\277\235\345\255\230\351\205\215\347\275\256\351\233\206", Q_NULLPTR));
         pushButton_5->setText(QApplication::translate("MainWindow", "\346\222\255\346\224\276", Q_NULLPTR));
-        toolBox->setItemText(toolBox->indexOf(page), QApplication::translate("MainWindow", "             \345\270\270\347\224\250\351\205\215\347\275\256", Q_NULLPTR));
+        toolBox->setItemText(toolBox->indexOf(page), QApplication::translate("MainWindow", "                  \345\270\270\347\224\250\351\205\215\347\275\256", Q_NULLPTR));
         pushButton_2->setText(QApplication::translate("MainWindow", "\345\205\250\351\203\250\350\257\273\345\217\226", Q_NULLPTR));
         pushButton_3->setText(QApplication::translate("MainWindow", "\345\205\250\351\203\250\345\206\231\345\205\245", Q_NULLPTR));
-        toolBox->setItemText(toolBox->indexOf(page_2), QApplication::translate("MainWindow", "          \350\256\276\345\244\207\345\257\204\345\255\230\345\231\250\351\205\215\347\275\256", Q_NULLPTR));
+        toolBox->setItemText(toolBox->indexOf(page_2), QApplication::translate("MainWindow", "               \350\256\276\345\244\207\345\257\204\345\255\230\345\231\250\351\205\215\347\275\256", Q_NULLPTR));
         groupBox_2->setTitle(QApplication::translate("MainWindow", "\347\273\237\350\256\241\344\277\241\346\201\257\344\270\216\346\227\245\345\277\227", Q_NULLPTR));
         label_11->setText(QApplication::translate("MainWindow", "        TOF/PEAK\344\277\241\346\201\257\347\273\237\350\256\241", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem = tableWidget_2->horizontalHeaderItem(0);

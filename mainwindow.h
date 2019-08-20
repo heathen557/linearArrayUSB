@@ -146,7 +146,7 @@ private slots:
 
     void reReadSysSlot(QString str);  //读取系统指令 返回槽函数
 
-    void reReadDevSlot(QString str); //读取设备指令 返回槽函数
+    void reReadDevSlot(int regesiterAddress,QString str); //读取设备指令 返回槽函数
 
     void showSaveFileDialog();
 
@@ -200,6 +200,10 @@ private slots:
     void Others_read_slot(int);
 
     void Others_write_slot(int);
+
+    void on_treeWidget_itemClicked(QTreeWidgetItem *item, int column);
+
+    void on_treeWidget_itemExpanded(QTreeWidgetItem *item);
 
 signals:
     void openLinkSignal(int ,int); //打开连接

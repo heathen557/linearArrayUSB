@@ -48,7 +48,7 @@ void MainWindow::initConnect()
     connect(this,SIGNAL(loadSettingSignal(QString,bool)),recvUsbMsg_obj,SLOT(loadSettingSlot(QString,bool)));
     connect(this,SIGNAL(saveSettingSignal(QString,int,bool)),recvUsbMsg_obj,SLOT(saveSettingSlot(QString,int,bool)));
     connect(recvUsbMsg_obj,SIGNAL(reReadSysSignal(QString)),this,SLOT(reReadSysSlot(QString)));
-    connect(recvUsbMsg_obj,SIGNAL(reReadDevSignal(QString)),this,SLOT(reReadDevSlot(QString)));
+    connect(recvUsbMsg_obj,SIGNAL(reReadDevSignal(int,QString)),this,SLOT(reReadDevSlot(int,QString)));
 
     //主函数与数据处理线程的 信号与槽的连接
     connect(dealUsbMsg_obj,SIGNAL(statisticsValueSignal(float,float,float,float)),this,SLOT(statisticsValueSlot(float, float, float,float)));
@@ -119,14 +119,13 @@ void MainWindow::initGUI()
 //设备寄存器读写的界面的初始化函数
 void MainWindow::initTreeWidget()
 {
-//    connect(&pushButton,SIGNAL(clicked()),this,SLOT(pushButton_slot()));
     ui->treeWidget->clear();
     ui->treeWidget->setColumnCount(4);
-    ui->treeWidget->setColumnWidth(0,100);
+    ui->treeWidget->setColumnWidth(0,170);
     ui->treeWidget->setColumnWidth(1,35);
     ui->treeWidget->setColumnWidth(2,35);
     ui->treeWidget->setColumnWidth(3,35);
-//    ui->treeWidget->setHeaderLabel(QStringLiteral("寄存器设置"));    //设置标题
+
     QStringList strList;
     strList.append(QStringLiteral("寄存器名称"));
     strList.append(QStringLiteral("数据"));
@@ -183,6 +182,7 @@ void MainWindow::initTreeWidget()
     TDC_write_signalMapper = new QSignalMapper(this);
     for(i=0; i<13; i++)
     {
+        TDC_lineEdit[i].setAlignment(Qt::AlignCenter);
         TDC_read_pushButton[i].setText(QStringLiteral("读取"));
         TDC_write_pushButton[i].setText(QStringLiteral("写入"));
         ui->treeWidget->setItemWidget(TDC_widgetItem[i],1,&TDC_lineEdit[i]);
@@ -683,11 +683,7 @@ void MainWindow::on_pushButton_5_clicked()
 }
 
 
-//读取设备指令返回信息的槽函数
-void MainWindow::reReadDevSlot(QString str)
-{
 
-}
 
 //USB连接信号响应的槽函数
 void MainWindow::linkInfoSlot(int flagNum)
@@ -840,16 +836,171 @@ void MainWindow::showSettingParaSlot(int FrameNum,int TOFmax)
 
 
 /**************************单个寄存器配置相关的槽函数***************************************************/
-//读取TDC 槽函数
+//读取TDC 槽函数   TDC_number 在节点中的序号
 void MainWindow::TDC_read_slot(int TDC_number)
 {
+    if(!isLinkSuccess)
+    {
+        QMessageBox::information(NULL,QStringLiteral("告警"),QStringLiteral("设备未连接"));
+        return;
+    }
+    int hardWareAddress = 216;
     qDebug()<<"read TDC_number = "<<TDC_number<<endl;
+    switch (TDC_number) {
+    case 0:
+        emit readDevSignal(hardWareAddress,0,false);
+        break;
+    case 1:
+        emit readDevSignal(hardWareAddress,1,false);
+        break;
+    case 2:
+        emit readDevSignal(hardWareAddress,1,false);
+    case 3:
+        emit readDevSignal(hardWareAddress,2,false);
+        break;
+    case 4:
+        emit readDevSignal(hardWareAddress,3,false);
+        break;
+    case 5:
+        emit readDevSignal(hardWareAddress,3,false);
+    case 6:
+        emit readDevSignal(hardWareAddress,4,false);
+        break;
+    case 7:
+        emit readDevSignal(hardWareAddress,4,false);
+        break;
+    case 8:
+        emit readDevSignal(hardWareAddress,5,false);
+    case 9:
+        emit readDevSignal(hardWareAddress,5,false);
+        break;
+    case 10:
+        emit readDevSignal(hardWareAddress,5,false);
+        break;
+    case 11:
+        emit readDevSignal(hardWareAddress,5,false);
+        break;
+    case 12:
+        emit readDevSignal(hardWareAddress,5,false);
+        break;
+    default:
+        break;
+    }
 
 }
 //写入TDC 槽函数
+//对于写入寄存器 address resisterAddress 都是十进制数   data是十六进制数
 void MainWindow::TDC_write_slot(int TDC_number)
 {
     qDebug()<<"write TDC_number = "<<TDC_number<<endl;
+    int hardWareAddress = 216;
+    switch (TDC_number) {
+    case 0:{
+        int data = TDC_lineEdit[0].text().toInt(NULL,16);   //此命令只指定最低位，故不需要做位操作
+        emit writeDevSignal(hardWareAddress, 0 , QString::number(data,16), false);
+        TDC_lineEdit[0].setText("");
+        break;
+    }case 1:{
+        int data = (TDC_lineEdit[1].text().toInt(NULL,16)<<4)+ TDC_lineEdit[2].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 1 , QString::number(data,16), false);
+        TDC_lineEdit[1].setText("");
+        TDC_lineEdit[2].setText("");
+        break;
+    }case 2:{
+        int data = (TDC_lineEdit[1].text().toInt(NULL,16)<<4)+ TDC_lineEdit[2].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 1 , QString::number(data,16), false);
+        TDC_lineEdit[1].setText("");
+        TDC_lineEdit[2].setText("");
+        break;
+    }case 3:{
+        int data = TDC_lineEdit[3].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 2 , QString::number(data,16), false);
+        TDC_lineEdit[3].setText("");
+        break;
+    }case 4:{
+        int data = (TDC_lineEdit[4].text().toInt(NULL,16)<<4)+ TDC_lineEdit[5].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 3 , QString::number(data,16), false);
+        TDC_lineEdit[4].setText("");
+        TDC_lineEdit[5].setText("");
+        break;
+    }case 5:{
+        int data = (TDC_lineEdit[4].text().toInt(NULL,16)<<4)+ TDC_lineEdit[5].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 3 , QString::number(data,16), false);
+        TDC_lineEdit[4].setText("");
+        TDC_lineEdit[5].setText("");
+    }case 6:{
+        int data = (TDC_lineEdit[6].text().toInt(NULL,16)<<4)+ TDC_lineEdit[7].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 4 , QString::number(data,16), false);
+        TDC_lineEdit[6].setText("");
+        TDC_lineEdit[7].setText("");
+        break;
+    }case 7:{
+        int data = (TDC_lineEdit[6].text().toInt(NULL,16)<<4)+ TDC_lineEdit[7].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 4 , QString::number(data,16), false);
+        TDC_lineEdit[6].setText("");
+        TDC_lineEdit[7].setText("");
+        break;
+    }case 8:{
+        int data = (TDC_lineEdit[8].text().toInt(NULL,16)<<7)+(TDC_lineEdit[9].text().toInt(NULL,16)<<6)+
+                (TDC_lineEdit[10].text().toInt(NULL,16)<<5) + (TDC_lineEdit[11].text().toInt(NULL,16)<<4)+
+                TDC_lineEdit[12].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 5 , QString::number(data,16), false);
+        TDC_lineEdit[8].setText("");
+        TDC_lineEdit[9].setText("");
+        TDC_lineEdit[10].setText("");
+        TDC_lineEdit[11].setText("");
+        TDC_lineEdit[12].setText("");
+        break;
+    }case 9:{
+        int data = (TDC_lineEdit[8].text().toInt(NULL,16)<<7)+(TDC_lineEdit[9].text().toInt(NULL,16)<<6)+
+                (TDC_lineEdit[10].text().toInt(NULL,16)<<5) + (TDC_lineEdit[11].text().toInt(NULL,16)<<4)+
+                TDC_lineEdit[12].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 5 , QString::number(data,16), false);
+        TDC_lineEdit[8].setText("");
+        TDC_lineEdit[9].setText("");
+        TDC_lineEdit[10].setText("");
+        TDC_lineEdit[11].setText("");
+        TDC_lineEdit[12].setText("");
+        break;
+    }case 10:{
+        int data = (TDC_lineEdit[8].text().toInt(NULL,16)<<7)+(TDC_lineEdit[9].text().toInt(NULL,16)<<6)+
+                (TDC_lineEdit[10].text().toInt(NULL,16)<<5) + (TDC_lineEdit[11].text().toInt(NULL,16)<<4)+
+                TDC_lineEdit[12].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 5 , QString::number(data,16), false);
+        TDC_lineEdit[8].setText("");
+        TDC_lineEdit[9].setText("");
+        TDC_lineEdit[10].setText("");
+        TDC_lineEdit[11].setText("");
+        TDC_lineEdit[12].setText("");
+        break;
+    }case 11:{
+        int data = (TDC_lineEdit[8].text().toInt(NULL,16)<<7)+(TDC_lineEdit[9].text().toInt(NULL,16)<<6)+
+                (TDC_lineEdit[10].text().toInt(NULL,16)<<5) + (TDC_lineEdit[11].text().toInt(NULL,16)<<4)+
+                TDC_lineEdit[12].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 5 , QString::number(data,16), false);
+        TDC_lineEdit[8].setText("");
+        TDC_lineEdit[9].setText("");
+        TDC_lineEdit[10].setText("");
+        TDC_lineEdit[11].setText("");
+        TDC_lineEdit[12].setText("");
+        break;
+    }case 12:{
+        int data = (TDC_lineEdit[8].text().toInt(NULL,16)<<7)+(TDC_lineEdit[9].text().toInt(NULL,16)<<6)+
+                (TDC_lineEdit[10].text().toInt(NULL,16)<<5) + (TDC_lineEdit[11].text().toInt(NULL,16)<<4)+
+                TDC_lineEdit[12].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 5 , QString::number(data,16), false);
+        TDC_lineEdit[8].setText("");
+        TDC_lineEdit[9].setText("");
+        TDC_lineEdit[10].setText("");
+        TDC_lineEdit[11].setText("");
+        TDC_lineEdit[12].setText("");
+        qDebug()<<"ten jinzhi="<<data<<"    16jinzhi="<<QString::number(data,16)<<endl;
+        break;
+    }
+
+    default:
+        break;
+    }
 }
 
 
@@ -963,23 +1114,106 @@ void MainWindow::Others_write_slot(int Others_number)
 }
 
 
+/*******************统一接收寄存器信号的 槽函数 **************************/
+
+//读取设备指令返回信息的槽函数
+//对于读取寄存器 address registerAddress data 都是十进制
+void MainWindow::reReadDevSlot(int regesiterAddress,QString str)
+{
+    qDebug()<<"regesiterAddress = "<<regesiterAddress<<"  str="<<str<<endl;
+
+    quint8 data =  quint8(str.toInt());
+    switch (regesiterAddress) {
+    case 0:{
+        int sfw_rst = data & 0x01;
+        TDC_lineEdit[0].setText(QString::number(sfw_rst,16).toUpper());
+        break;
+    }
+    case 1:{
+        int r_cnt_rst_dly1 = (data & 0xF0)>>4;
+        TDC_lineEdit[1].setText(QString::number(r_cnt_rst_dly1,16).toUpper());
+        int r_syncnt_rst_width = data & 0x0F;
+        TDC_lineEdit[2].setText(QString::number(r_syncnt_rst_width,16).toUpper());
+        break;
+    }
+    case 2:{
+        int r_cnt_hld_dly2 = data;
+        TDC_lineEdit[3].setText(QString::number(r_cnt_hld_dly2,16).toUpper());
+        break;
+    }
+    case 3:{
+        int r_tdc_rdck_dly1 = (data & 0xF0)>>4;
+        TDC_lineEdit[4].setText(QString::number(r_tdc_rdck_dly1,16).toUpper());
+        int r_tdc_redn_dly = data & 0x0F;
+        TDC_lineEdit[5].setText(QString::number(r_tdc_redn_dly,16).toUpper());
+        break;
+    }
+    case 4:{
+        int r_tdc_cnt_rst_dly2 = (data & 0xF0)>>4;
+        TDC_lineEdit[6].setText(QString::number(r_tdc_cnt_rst_dly2,16).toUpper());
+        int r_tdc_rdck_cyc = data & 0x0F;
+        TDC_lineEdit[7].setText(QString::number(r_tdc_rdck_cyc,16).toUpper());
+        break;
+    }
+    case 5:{
+        int r_rising_latch = (data & 0x80)>>7;
+        TDC_lineEdit[8].setText(QString::number(r_rising_latch,16).toUpper());
+        int r_tdc_read_en_same = (data & 0x40)>>6;
+        TDC_lineEdit[9].setText(QString::number(r_tdc_read_en_same,16).toUpper());
+        int r_slower_clk = (data & 0x20)>>5;
+        TDC_lineEdit[10].setText(QString::number(r_slower_clk,16).toUpper());
+        int r_faster_clk = (data & 0x10)>>4;
+        TDC_lineEdit[11].setText(QString::number(r_faster_clk,16).toUpper());
+        int r_cnt_hld_dly1 = data & 0x0F;
+        TDC_lineEdit[12].setText(QString::number(r_cnt_hld_dly1,16).toUpper());
+
+        qDebug()<<"rece the data = "<<data<<endl;
+        break;
+    }
+
+    }
+
+
+}
 
 
 
+/************************QtreeWidget 触发相关的槽函数***********************************/
+
+//对于读取寄存器 address registerAddress data 都是十进制
+//对于写入寄存器 address resisterAddress 都是十进制数   data是十六进制数
 
 
+//QTreeWidget 展开时触发的槽函数
+//根据文字的内容获取标识，然后读取所有的寄存器的内容 方便下一步修改
+void MainWindow::on_treeWidget_itemExpanded(QTreeWidgetItem *item)
+{
+    if(!isLinkSuccess)
+    {
+        QMessageBox::information(NULL,QStringLiteral("告警"),QStringLiteral("设备未连接"));
+        return;
+    }
+
+    int hardWareAddress = 216;     //统一的为0xD8
+    qDebug()<<"item on_treeWidget_itemExpanded "<<item->text(0);
+
+    if("TDC" == item->text(0))
+    {
+        emit readDevSignal(hardWareAddress,0,false);
+        emit readDevSignal(hardWareAddress,1,false);
+        emit readDevSignal(hardWareAddress,2,false);
+        emit readDevSignal(hardWareAddress,3,false);
+        emit readDevSignal(hardWareAddress,4,false);
+        emit readDevSignal(hardWareAddress,5,false);
+    }
+
+}
 
 
-
-
-
-
-
-
-
-
-
-
-
+//点击某一个item时，触发的槽函数，方便后期做注释
+void MainWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
+{
+    qDebug()<<"item on_treeWidget_itemClicked "<<item->text(0);
+}
 
 

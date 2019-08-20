@@ -44,7 +44,7 @@
         <widget class="QToolBox" name="toolBox">
          <property name="maximumSize">
           <size>
-           <width>250</width>
+           <width>320</width>
            <height>16777215</height>
           </size>
          </property>
@@ -59,19 +59,19 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>250</width>
+            <width>320</width>
             <height>408</height>
            </rect>
           </property>
           <attribute name="label">
-           <string>             常用配置</string>
+           <string>                  常用配置</string>
           </attribute>
           <layout class="QGridLayout" name="gridLayout_3">
            <item row="0" column="0">
             <widget class="QGroupBox" name="groupBox_4">
              <property name="maximumSize">
               <size>
-               <width>16777215</width>
+               <width>230</width>
                <height>130</height>
               </size>
              </property>
@@ -152,7 +152,7 @@
             <widget class="QGroupBox" name="groupBox_6">
              <property name="maximumSize">
               <size>
-               <width>16777215</width>
+               <width>230</width>
                <height>115</height>
               </size>
              </property>
@@ -286,12 +286,12 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>250</width>
+            <width>320</width>
             <height>408</height>
            </rect>
           </property>
           <attribute name="label">
-           <string>          设备寄存器配置</string>
+           <string>               设备寄存器配置</string>
           </attribute>
           <layout class="QGridLayout" name="gridLayout_4">
            <item row="0" column="0">
