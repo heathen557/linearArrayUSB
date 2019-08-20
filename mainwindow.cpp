@@ -142,7 +142,7 @@ void MainWindow::initTreeWidget()
     QTreeWidgetItem *Digital = new QTreeWidgetItem(ui->treeWidget,QStringList(QString("Digital")));
     QTreeWidgetItem *Analog = new QTreeWidgetItem(ui->treeWidget,QStringList(QString("Analog")));
     QTreeWidgetItem *Pixel = new QTreeWidgetItem(ui->treeWidget,QStringList(QString("Pixel")));
-    QTreeWidgetItem *Top = new QTreeWidgetItem(ui->treeWidget,QStringList(QString("Top Setting")));
+    QTreeWidgetItem *Top = new QTreeWidgetItem(ui->treeWidget,QStringList(QString("Top")));
     QTreeWidgetItem *Delayline = new QTreeWidgetItem(ui->treeWidget,QStringList(QString("Delayline")));
     QTreeWidgetItem *MISC = new QTreeWidgetItem(ui->treeWidget,QStringList(QString("MISC")));
     QTreeWidgetItem *Others = new QTreeWidgetItem(ui->treeWidget,QStringList(QString("Others")));
@@ -892,6 +892,12 @@ void MainWindow::TDC_read_slot(int TDC_number)
 //对于写入寄存器 address resisterAddress 都是十进制数   data是十六进制数
 void MainWindow::TDC_write_slot(int TDC_number)
 {
+    if(!isLinkSuccess)
+    {
+        QMessageBox::information(NULL,QStringLiteral("告警"),QStringLiteral("设备未连接"));
+        return;
+    }
+
     qDebug()<<"write TDC_number = "<<TDC_number<<endl;
     int hardWareAddress = 216;
     switch (TDC_number) {
@@ -1008,23 +1014,91 @@ void MainWindow::TDC_write_slot(int TDC_number)
 //读取Integration 槽函数
 void MainWindow::Integration_read_slot(int Integration_number)
 {
+    if(!isLinkSuccess)
+    {
+        QMessageBox::information(NULL,QStringLiteral("告警"),QStringLiteral("设备未连接"));
+        return;
+    }
+
+    int hardWareAddress = 216;
     qDebug()<<"read Integration_number = "<<Integration_number<<endl;
+    switch (Integration_number) {
+    case 0:
+        emit readDevSignal(hardWareAddress,6,false);
+        break;
+    case 1:
+        emit readDevSignal(hardWareAddress,7,false);
+        break;
+    case 2:
+        emit readDevSignal(hardWareAddress,7,false);
+        break;
+    case 3:
+        emit readDevSignal(hardWareAddress,8,false);
+        break;
+    default:
+        break;
+    }
 }
 //写入读取Integration 槽函数
 void MainWindow::Integration_write_slot(int Integration_number)
 {
+    if(!isLinkSuccess)
+    {
+        QMessageBox::information(NULL,QStringLiteral("告警"),QStringLiteral("设备未连接"));
+        return;
+    }
+    int hardWareAddress = 216;
      qDebug()<<"write Integration_number = "<<Integration_number<<endl;
+
+     switch (Integration_number) {
+     case 0:{
+         int data  = Integration_lineEdit[0].text().toInt(NULL,16);
+         emit writeDevSignal(hardWareAddress, 6 , QString::number(data,16), false);
+         Integration_lineEdit[0].setText("");
+         break;
+     }
+     case 1:{
+         int data = (Integration_lineEdit[1].text().toInt(NULL,16)<<4) + Integration_lineEdit[2].text().toInt(NULL,16);
+         emit writeDevSignal(hardWareAddress, 7 , QString::number(data,16), false);
+         Integration_lineEdit[1].setText("");
+         Integration_lineEdit[2].setText("");
+         break;
+     }case 2:{
+         int data = (Integration_lineEdit[1].text().toInt(NULL,16)<<4) + Integration_lineEdit[2].text().toInt(NULL,16);
+         emit writeDevSignal(hardWareAddress, 7 , QString::number(data,16), false);
+         Integration_lineEdit[1].setText("");
+         Integration_lineEdit[2].setText("");
+         break;
+     }case 3:{
+         int data = Integration_lineEdit[3].text().toInt(NULL,16);
+         emit writeDevSignal(hardWareAddress, 8 , QString::number(data,16), false);
+         Integration_lineEdit[3].setText("");
+     }
+
+     default:
+         break;
+     }
 }
 
 
 //读取 MA 槽函数
 void MainWindow::MA_read_slot(int MA_number)
 {
+    if(!isLinkSuccess)
+    {
+        QMessageBox::information(NULL,QStringLiteral("告警"),QStringLiteral("设备未连接"));
+        return;
+    }
     qDebug()<<"read MA_number = "<<MA_number<<endl;
 }
 //写入 MA 槽函数
 void MainWindow::MA_write_slot(int MA_number)
 {
+    if(!isLinkSuccess)
+    {
+        QMessageBox::information(NULL,QStringLiteral("告警"),QStringLiteral("设备未连接"));
+        return;
+    }
     qDebug()<<"write MA_number = "<<MA_number<<endl;
 }
 
@@ -1032,11 +1106,21 @@ void MainWindow::MA_write_slot(int MA_number)
 //读取Digital槽函数
 void MainWindow::Digital_read_slot(int Digital_number)
 {
+    if(!isLinkSuccess)
+    {
+        QMessageBox::information(NULL,QStringLiteral("告警"),QStringLiteral("设备未连接"));
+        return;
+    }
     qDebug()<<"read Digital_number = "<<Digital_number<<endl;
 }
 //写入Digital槽函数
 void MainWindow::Digital_write_slot(int Digital_number)
 {
+    if(!isLinkSuccess)
+    {
+        QMessageBox::information(NULL,QStringLiteral("告警"),QStringLiteral("设备未连接"));
+        return;
+    }
     qDebug()<<"write Digital_number = "<<Digital_number<<endl;
 }
 
@@ -1045,11 +1129,21 @@ void MainWindow::Digital_write_slot(int Digital_number)
 //读取Analog槽函数
 void MainWindow::Analog_read_slot(int Analog_number)
 {
+    if(!isLinkSuccess)
+    {
+        QMessageBox::information(NULL,QStringLiteral("告警"),QStringLiteral("设备未连接"));
+        return;
+    }
     qDebug()<<"read Analog_number = "<<Analog_number<<endl;
 }
 //写入Analog槽函数
 void MainWindow::Analog_write_slot(int Analog_number)
 {
+    if(!isLinkSuccess)
+    {
+        QMessageBox::information(NULL,QStringLiteral("告警"),QStringLiteral("设备未连接"));
+        return;
+    }
     qDebug()<<"write Analog_number = "<<Analog_number<<endl;
 }
 
@@ -1057,11 +1151,21 @@ void MainWindow::Analog_write_slot(int Analog_number)
 //读取Pixel槽函数
 void MainWindow::Pixel_read_slot(int Pixel_number)
 {
+    if(!isLinkSuccess)
+    {
+        QMessageBox::information(NULL,QStringLiteral("告警"),QStringLiteral("设备未连接"));
+        return;
+    }
     qDebug()<<"read Pixel_number = "<<Pixel_number<<endl;
 }
 //写入Pixel槽函数
 void MainWindow::Pixel_write_slot(int Pixel_number)
 {
+    if(!isLinkSuccess)
+    {
+        QMessageBox::information(NULL,QStringLiteral("告警"),QStringLiteral("设备未连接"));
+        return;
+    }
     qDebug()<<"write Pixel_number = "<<Pixel_number<<endl;
 }
 
@@ -1069,11 +1173,21 @@ void MainWindow::Pixel_write_slot(int Pixel_number)
 //读取Top槽函数
 void MainWindow::Top_read_slot(int Top_number)
 {
+    if(!isLinkSuccess)
+    {
+        QMessageBox::information(NULL,QStringLiteral("告警"),QStringLiteral("设备未连接"));
+        return;
+    }
     qDebug()<<"read Top_number = "<<Top_number<<endl;
 }
 //寫入Top槽函数
 void MainWindow::Top_write_slot(int Top_number)
 {
+    if(!isLinkSuccess)
+    {
+        QMessageBox::information(NULL,QStringLiteral("告警"),QStringLiteral("设备未连接"));
+        return;
+    }
     qDebug()<<"write Top_number = "<<Top_number<<endl;
 }
 
@@ -1081,11 +1195,21 @@ void MainWindow::Top_write_slot(int Top_number)
 //读取Delayline槽函数
 void MainWindow::Delayline_read_slot(int Delayline_number)
 {
+    if(!isLinkSuccess)
+    {
+        QMessageBox::information(NULL,QStringLiteral("告警"),QStringLiteral("设备未连接"));
+        return;
+    }
     qDebug()<<"read Delayline_number = "<<Delayline_number<<endl;
 }
 //写入Delayline槽函数
 void MainWindow::Delayline_write_slot(int Delayline_number)
 {
+    if(!isLinkSuccess)
+    {
+        QMessageBox::information(NULL,QStringLiteral("告警"),QStringLiteral("设备未连接"));
+        return;
+    }
     qDebug()<<"write Delayline_number = "<<Delayline_number<<endl;
 }
 
@@ -1093,11 +1217,21 @@ void MainWindow::Delayline_write_slot(int Delayline_number)
 //读取MISC槽函数
 void MainWindow::MISC_read_slot(int MISC_number)
 {
+    if(!isLinkSuccess)
+    {
+        QMessageBox::information(NULL,QStringLiteral("告警"),QStringLiteral("设备未连接"));
+        return;
+    }
     qDebug()<<"read MISC_number = "<<MISC_number<<endl;
 }
 //写入MISC槽函数
 void MainWindow::MISC_write_slot(int MISC_number)
 {
+    if(!isLinkSuccess)
+    {
+        QMessageBox::information(NULL,QStringLiteral("告警"),QStringLiteral("设备未连接"));
+        return;
+    }
     qDebug()<<"write MISC_number = "<<MISC_number<<endl;
 }
 
@@ -1105,11 +1239,21 @@ void MainWindow::MISC_write_slot(int MISC_number)
 //读取Others槽函数
 void MainWindow::Others_read_slot(int Others_number)
 {
+    if(!isLinkSuccess)
+    {
+        QMessageBox::information(NULL,QStringLiteral("告警"),QStringLiteral("设备未连接"));
+        return;
+    }
     qDebug()<<"read Others_number = "<<Others_number<<endl;
 }
 //写入Others槽函数
 void MainWindow::Others_write_slot(int Others_number)
 {
+    if(!isLinkSuccess)
+    {
+        QMessageBox::information(NULL,QStringLiteral("告警"),QStringLiteral("设备未连接"));
+        return;
+    }
     qDebug()<<"write Others_number = "<<Others_number<<endl;
 }
 
@@ -1128,34 +1272,29 @@ void MainWindow::reReadDevSlot(int regesiterAddress,QString str)
         int sfw_rst = data & 0x01;
         TDC_lineEdit[0].setText(QString::number(sfw_rst,16).toUpper());
         break;
-    }
-    case 1:{
+    }case 1:{
         int r_cnt_rst_dly1 = (data & 0xF0)>>4;
         TDC_lineEdit[1].setText(QString::number(r_cnt_rst_dly1,16).toUpper());
         int r_syncnt_rst_width = data & 0x0F;
         TDC_lineEdit[2].setText(QString::number(r_syncnt_rst_width,16).toUpper());
         break;
-    }
-    case 2:{
+    }case 2:{
         int r_cnt_hld_dly2 = data;
         TDC_lineEdit[3].setText(QString::number(r_cnt_hld_dly2,16).toUpper());
         break;
-    }
-    case 3:{
+    }case 3:{
         int r_tdc_rdck_dly1 = (data & 0xF0)>>4;
         TDC_lineEdit[4].setText(QString::number(r_tdc_rdck_dly1,16).toUpper());
         int r_tdc_redn_dly = data & 0x0F;
         TDC_lineEdit[5].setText(QString::number(r_tdc_redn_dly,16).toUpper());
         break;
-    }
-    case 4:{
+    }case 4:{
         int r_tdc_cnt_rst_dly2 = (data & 0xF0)>>4;
         TDC_lineEdit[6].setText(QString::number(r_tdc_cnt_rst_dly2,16).toUpper());
         int r_tdc_rdck_cyc = data & 0x0F;
         TDC_lineEdit[7].setText(QString::number(r_tdc_rdck_cyc,16).toUpper());
         break;
-    }
-    case 5:{
+    }case 5:{
         int r_rising_latch = (data & 0x80)>>7;
         TDC_lineEdit[8].setText(QString::number(r_rising_latch,16).toUpper());
         int r_tdc_read_en_same = (data & 0x40)>>6;
@@ -1166,8 +1305,20 @@ void MainWindow::reReadDevSlot(int regesiterAddress,QString str)
         TDC_lineEdit[11].setText(QString::number(r_faster_clk,16).toUpper());
         int r_cnt_hld_dly1 = data & 0x0F;
         TDC_lineEdit[12].setText(QString::number(r_cnt_hld_dly1,16).toUpper());
-
-        qDebug()<<"rece the data = "<<data<<endl;
+        break;
+    }case 6:{
+        int r_integ = data;
+        Integration_lineEdit[0].setText(QString::number(r_integ,16).toUpper());
+        break;
+    }case 7:{
+        int r_hts = (data & 0x30)>>4;
+        Integration_lineEdit[1].setText(QString::number(r_hts,16).toUpper());
+        int r_integ = data & 0x0F;
+        Integration_lineEdit[2].setText(QString::number(r_integ,16).toUpper());
+        break;
+    }case 8:{
+        int r_hts = data;
+        Integration_lineEdit[3].setText(QString::number(r_hts,16).toUpper());
         break;
     }
 
@@ -1205,6 +1356,11 @@ void MainWindow::on_treeWidget_itemExpanded(QTreeWidgetItem *item)
         emit readDevSignal(hardWareAddress,3,false);
         emit readDevSignal(hardWareAddress,4,false);
         emit readDevSignal(hardWareAddress,5,false);
+    }else if("Integration" == item->text(0))
+    {
+        emit readDevSignal(hardWareAddress,6,false);
+        emit readDevSignal(hardWareAddress,7,false);
+        emit readDevSignal(hardWareAddress,8,false);
     }
 
 }
