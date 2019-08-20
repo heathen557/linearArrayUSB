@@ -208,6 +208,7 @@ bool ReceUSB_Msg::Device_Register_Write(int slavedId,int Address,QString &Data)
     int transLen = 0;
     uchar data[1];
     struct usb_ctrl_setup Cmd;
+
     Cmd.bRequestType = 0x40;
     Cmd.bRequest = 0x01;
     Cmd.wValue = 0x0000;

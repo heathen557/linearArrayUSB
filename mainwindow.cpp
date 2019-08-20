@@ -178,6 +178,9 @@ void MainWindow::initTreeWidget()
     TDC_widgetItem[10] = new QTreeWidgetItem(TDC,QStringList(QString("r_slower_clk(5)[5]")));
     TDC_widgetItem[11] = new QTreeWidgetItem(TDC,QStringList(QString("r_faster_clk(5)[4]")));
     TDC_widgetItem[12] = new QTreeWidgetItem(TDC,QStringList(QString("r_cnt_hld_dly1(5)[3:0]")));
+
+    TDC_read_signalMapper = new QSignalMapper(this);
+    TDC_write_signalMapper = new QSignalMapper(this);
     for(i=0; i<13; i++)
     {
         TDC_read_pushButton[i].setText(QStringLiteral("读取"));
@@ -185,7 +188,15 @@ void MainWindow::initTreeWidget()
         ui->treeWidget->setItemWidget(TDC_widgetItem[i],1,&TDC_lineEdit[i]);
         ui->treeWidget->setItemWidget(TDC_widgetItem[i],2,&TDC_read_pushButton[i]);
         ui->treeWidget->setItemWidget(TDC_widgetItem[i],3,&TDC_write_pushButton[i]);
+
+        connect(&TDC_read_pushButton[i],SIGNAL(clicked()),TDC_read_signalMapper,SLOT(map()));
+        TDC_read_signalMapper->setMapping(&TDC_read_pushButton[i],i);
+        connect(&TDC_write_pushButton[i],SIGNAL(clicked()),TDC_write_signalMapper,SLOT(map()));
+        TDC_write_signalMapper->setMapping(&TDC_write_pushButton[i],i);
     }
+    connect(TDC_read_signalMapper,SIGNAL(mapped(int)),this,SLOT(TDC_read_slot(int)));
+    connect(TDC_write_signalMapper,SIGNAL(mapped(int)),this,SLOT(TDC_write_slot(int)));
+
 
     //创建Integration子节点
     QTreeWidgetItem *Integration_widgetItem[4];
@@ -193,6 +204,8 @@ void MainWindow::initTreeWidget()
     Integration_widgetItem[1] = new QTreeWidgetItem(Integration,QStringList(QString("r_hts(7)[5:4]")));
     Integration_widgetItem[2] = new QTreeWidgetItem(Integration,QStringList(QString("r_integ(7)[3:0]")));
     Integration_widgetItem[3] = new QTreeWidgetItem(Integration,QStringList(QString("r_hts(8)[7:0]")));
+    Integration_read_signalMapper = new QSignalMapper(this);
+    Integration_write_signalMapper = new QSignalMapper(this);
     for(i=0; i<4; i++)
     {
         Integration_read_pushButton[i].setText(QStringLiteral("读取"));
@@ -200,7 +213,14 @@ void MainWindow::initTreeWidget()
         ui->treeWidget->setItemWidget(Integration_widgetItem[i],1,&Integration_lineEdit[i]);
         ui->treeWidget->setItemWidget(Integration_widgetItem[i],2,&Integration_read_pushButton[i]);
         ui->treeWidget->setItemWidget(Integration_widgetItem[i],3,&Integration_write_pushButton[i]);
+
+        connect(&Integration_read_pushButton[i],SIGNAL(clicked()),Integration_read_signalMapper,SLOT(map()));
+        Integration_read_signalMapper->setMapping(&Integration_read_pushButton[i],i);
+        connect(&Integration_write_pushButton[i],SIGNAL(clicked()),Integration_write_signalMapper,SLOT(map()));
+        Integration_write_signalMapper->setMapping(&Integration_write_pushButton[i],i);
     }
+    connect(Integration_read_signalMapper,SIGNAL(mapped(int)),this,SLOT(Integration_read_slot(int)));
+    connect(Integration_write_signalMapper,SIGNAL(mapped(int)),this,SLOT(Integration_write_slot(int)));
 
     //创建MA 子节点
     QTreeWidgetItem *MA_widgetItem[16];
@@ -220,6 +240,9 @@ void MainWindow::initTreeWidget()
     MA_widgetItem[13] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_wd(f)[7:4]")));
     MA_widgetItem[14] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_we(10)[3:0]")));
     MA_widgetItem[15] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_wf(10)[7:4]")));
+    MA_read_signalMapper = new QSignalMapper(this);
+    MA_write_signalMapper = new QSignalMapper(this);
+
     for(i=0; i<16; i++)
     {
         MA_read_pushButton[i].setText(QStringLiteral("读取"));
@@ -227,7 +250,15 @@ void MainWindow::initTreeWidget()
         ui->treeWidget->setItemWidget(MA_widgetItem[i],1,&MA_lineEdit[i]);
         ui->treeWidget->setItemWidget(MA_widgetItem[i],2,&MA_read_pushButton[i]);
         ui->treeWidget->setItemWidget(MA_widgetItem[i],3,&MA_write_pushButton[i]);
+
+        connect(&MA_read_pushButton[i],SIGNAL(clicked()),MA_read_signalMapper,SLOT(map()));
+        MA_read_signalMapper->setMapping(&MA_read_pushButton[i],i);
+        connect(&MA_write_pushButton[i],SIGNAL(clicked()),MA_write_signalMapper,SLOT(map()));
+        MA_write_signalMapper->setMapping(&MA_write_pushButton[i],i);
     }
+    connect(MA_read_signalMapper,SIGNAL(mapped(int)),this,SLOT(MA_read_slot(int)));
+    connect(MA_write_signalMapper,SIGNAL(mapped(int)),this,SLOT(MA_write_slot(int)));
+
 
     //创建Digital子节点
     QTreeWidgetItem *Digital_widgetItem[10];
@@ -241,6 +272,8 @@ void MainWindow::initTreeWidget()
     Digital_widgetItem[7] = new QTreeWidgetItem(Digital,QStringList(QString("r_row_start(13)[4:0]")));
     Digital_widgetItem[8] = new QTreeWidgetItem(Digital,QStringList(QString("r_high_bits(13)[7]")));
     Digital_widgetItem[9] = new QTreeWidgetItem(Digital,QStringList(QString("r_row_end(14)[5:0]")));
+    Digital_read_signalMapper = new QSignalMapper(this);
+    Digital_write_signalMapper= new QSignalMapper(this);
     for(i=0 ;i<10; i++)
     {
         Digital_read_pushButton[i].setText(QStringLiteral("读取"));
@@ -248,7 +281,14 @@ void MainWindow::initTreeWidget()
         ui->treeWidget->setItemWidget(Digital_widgetItem[i],1,&Digital_lineEdit[i]);
         ui->treeWidget->setItemWidget(Digital_widgetItem[i],2,&Digital_read_pushButton[i]);
         ui->treeWidget->setItemWidget(Digital_widgetItem[i],3,&Digital_write_pushButton[i]);
+        connect(&Digital_read_pushButton[i],SIGNAL(clicked()),Digital_read_signalMapper,SLOT(map()));
+        Digital_read_signalMapper->setMapping(&Digital_read_pushButton[i],i);
+        connect(&Digital_write_pushButton[i],SIGNAL(clicked()),Digital_write_signalMapper,SLOT(map()));
+        Digital_write_signalMapper->setMapping(&Digital_write_pushButton[i],i);
     }
+    connect(Digital_read_signalMapper,SIGNAL(mapped(int)),this,SLOT(Digital_read_slot(int)));
+    connect(Digital_write_signalMapper,SIGNAL(mapped(int)),this,SLOT(Digital_write_slot(int)));
+
 
 
     //创建Analog子节点
@@ -269,6 +309,8 @@ void MainWindow::initTreeWidget()
     Analog_widgetItem[13] = new QTreeWidgetItem(Analog,QStringList(QString("ana_reserve_out(19)[7:0]")));
     Analog_widgetItem[14] = new QTreeWidgetItem(Analog,QStringList(QString("ana_reserve_out(1a)[7:0]")));
     Analog_widgetItem[15] = new QTreeWidgetItem(Analog,QStringList(QString("ana_reserve_out(1b)[7:0]")));
+    Analog_read_signalMapper = new QSignalMapper(this);
+    Analog_write_signalMapper = new QSignalMapper(this);
     for(i=0; i<16; i++)
     {
         Analog_read_pushButton[i].setText(QStringLiteral("读取"));
@@ -276,7 +318,15 @@ void MainWindow::initTreeWidget()
         ui->treeWidget->setItemWidget(Analog_widgetItem[i],1,&Analog_lineEdit[i]);
         ui->treeWidget->setItemWidget(Analog_widgetItem[i],2,&Analog_read_pushButton[i]);
         ui->treeWidget->setItemWidget(Analog_widgetItem[i],3,&Analog_write_pushButton[i]);
+        connect(&Analog_read_pushButton[i],SIGNAL(clicked()),Analog_read_signalMapper,SLOT(map()));
+        Analog_read_signalMapper->setMapping(&Analog_read_pushButton[i],i);
+        connect(&Analog_write_pushButton[i],SIGNAL(clicked()),Analog_write_signalMapper,SLOT(map()));
+        Analog_write_signalMapper->setMapping(&Analog_write_pushButton[i],i);
     }
+    connect(Analog_read_signalMapper,SIGNAL(mapped(int)),this,SLOT(Analog_read_slot(int)));
+    connect(Analog_write_signalMapper,SIGNAL(mapped(int)),this,SLOT(Analog_write_slot(int)));
+
+
 
     //创建Pixel Setting 子节点
     QTreeWidgetItem *Pixel_widgetItem[11];
@@ -291,6 +341,8 @@ void MainWindow::initTreeWidget()
     Pixel_widgetItem[8] = new QTreeWidgetItem(Pixel,QStringList(QString("pixel_col_sel_1(30)[3:0]")));
     Pixel_widgetItem[9] = new QTreeWidgetItem(Pixel,QStringList(QString("pixel_reserve_out(31)[7:0]")));
     Pixel_widgetItem[10] = new QTreeWidgetItem(Pixel,QStringList(QString("pixel_reserve_out(32)[7:0]")));
+    Pixel_read_signalMapper = new QSignalMapper(this);
+    Pixel_write_signalMapper = new QSignalMapper(this);
     for(i=0; i<11; i++)
     {
         Pixel_read_pushButton[i].setText(QStringLiteral("读取"));
@@ -298,7 +350,14 @@ void MainWindow::initTreeWidget()
         ui->treeWidget->setItemWidget(Pixel_widgetItem[i],1,&Pixel_lineEdit[i]);
         ui->treeWidget->setItemWidget(Pixel_widgetItem[i],2,&Pixel_read_pushButton[i]);
         ui->treeWidget->setItemWidget(Pixel_widgetItem[i],3,&Pixel_write_pushButton[i]);
+        connect(&Pixel_read_pushButton[i],SIGNAL(clicked()),Pixel_read_signalMapper,SLOT(map()));
+        Pixel_read_signalMapper->setMapping(&Pixel_read_pushButton[i],i);
+        connect(&Pixel_write_pushButton[i],SIGNAL(clicked()),Pixel_write_signalMapper,SLOT(map()));
+        Pixel_write_signalMapper->setMapping(&Pixel_write_pushButton[i],i);
     }
+    connect(Pixel_read_signalMapper,SIGNAL(mapped(int)),this,SLOT(Pixel_read_slot(int)));
+    connect(Pixel_write_signalMapper,SIGNAL(mapped(int)),this,SLOT(Pixel_write_slot(int)));
+
 
     //创建Top Setting 子节点
     QTreeWidgetItem *Top_widgetItem[4];
@@ -306,6 +365,8 @@ void MainWindow::initTreeWidget()
     Top_widgetItem[1] = new QTreeWidgetItem(Top,QStringList(QString("top_reserve_out(34)[7:0]")));
     Top_widgetItem[2] = new QTreeWidgetItem(Top,QStringList(QString("top_reserve_out(35)[7:0]")));
     Top_widgetItem[3] = new QTreeWidgetItem(Top,QStringList(QString("top_reserve_out(36)[7:0]")));
+    Top_read_signalMapper = new QSignalMapper(this);
+    Top_write_signalMapper = new QSignalMapper(this);
     for(i=0; i<4; i++)
     {
         Top_read_pushButton[i].setText(QStringLiteral("读取"));
@@ -313,7 +374,13 @@ void MainWindow::initTreeWidget()
         ui->treeWidget->setItemWidget(Top_widgetItem[i],1,&Top_lineEdit[i]);
         ui->treeWidget->setItemWidget(Top_widgetItem[i],2,&Top_read_pushButton[i]);
         ui->treeWidget->setItemWidget(Top_widgetItem[i],3,&Top_write_pushButton[i]);
+        connect(&Top_read_pushButton[i],SIGNAL(clicked()),Top_read_signalMapper,SLOT(map()));
+        Top_read_signalMapper->setMapping(&Top_read_pushButton[i],i);
+        connect(&Top_write_pushButton[i],SIGNAL(clicked()),Top_write_signalMapper,SLOT(map()));
+        Top_write_signalMapper->setMapping(&Top_write_pushButton[i],i);
     }
+    connect(Top_read_signalMapper,SIGNAL(mapped(int)),this,SLOT(Top_read_slot(int)));
+    connect(Top_write_signalMapper,SIGNAL(mapped(int)),this,SLOT(Top_write_slot(int)));
 
 
     //创建Delayline Setting 子节点
@@ -325,6 +392,8 @@ void MainWindow::initTreeWidget()
     Delayline_widgetItem[4] = new QTreeWidgetItem(Delayline,QStringList(QString("r_test_dl_in_2(40)[7:0]")));
     Delayline_widgetItem[5] = new QTreeWidgetItem(Delayline,QStringList(QString("r_test_dl_in_3(41)[7:0]")));
     Delayline_widgetItem[6] = new QTreeWidgetItem(Delayline,QStringList(QString("r_test_dl_in_4(42)[7:0]")));
+    Delayline_read_signalMapper = new QSignalMapper(this);
+    Delayline_write_signalMapper = new QSignalMapper(this);
     for(i=0; i<7; i++)
     {
         Delayline_read_pushButton[i].setText(QStringLiteral("读取"));
@@ -332,7 +401,14 @@ void MainWindow::initTreeWidget()
         ui->treeWidget->setItemWidget(Delayline_widgetItem[i],1,&Delayline_lineEdit[i]);
         ui->treeWidget->setItemWidget(Delayline_widgetItem[i],2,&Delayline_read_pushButton[i]);
         ui->treeWidget->setItemWidget(Delayline_widgetItem[i],3,&Delayline_write_pushButton[i]);
+        connect(&Delayline_read_pushButton[i],SIGNAL(clicked()),Delayline_read_signalMapper,SLOT(map()));
+        Delayline_read_signalMapper->setMapping(&Delayline_read_pushButton[i],i);
+        connect(&Delayline_write_pushButton[i],SIGNAL(clicked()),Delayline_write_signalMapper,SLOT(map()));
+        Delayline_write_signalMapper->setMapping(&Delayline_write_pushButton[i],i);
     }
+    connect(Delayline_read_signalMapper,SIGNAL(mapped(int)),this,SLOT(Delayline_read_slot(int)));
+    connect(Delayline_write_signalMapper,SIGNAL(mapped(int)),this,SLOT(Delayline_write_slot(int)));
+
 
     //创建MISC Setting 子节点
     QTreeWidgetItem *MISC_widgetItem[8];
@@ -344,6 +420,8 @@ void MainWindow::initTreeWidget()
     MISC_widgetItem[5] = new QTreeWidgetItem(MISC,QStringList(QString("r_pds(45)[7:0]")));
     MISC_widgetItem[6] = new QTreeWidgetItem(MISC,QStringList(QString("r_pds(46)[7:0]")));
     MISC_widgetItem[7] = new QTreeWidgetItem(MISC,QStringList(QString("r_pds(47)[7:0]")));
+    MISC_read_signalMapper = new QSignalMapper(this);
+    MISC_write_signalMapper = new QSignalMapper(this);
 
     for(i=0; i<8; i++)
     {
@@ -352,7 +430,14 @@ void MainWindow::initTreeWidget()
         ui->treeWidget->setItemWidget(MISC_widgetItem[i],1,&MISC_lineEdit[i]);
         ui->treeWidget->setItemWidget(MISC_widgetItem[i],2,&MISC_read_pushButton[i]);
         ui->treeWidget->setItemWidget(MISC_widgetItem[i],3,&MISC_write_pushButton[i]);
+        connect(&MISC_read_pushButton[i],SIGNAL(clicked()),MISC_read_signalMapper,SLOT(map()));
+        MISC_read_signalMapper->setMapping(&MISC_read_pushButton[i],i);
+        connect(&MISC_write_pushButton[i],SIGNAL(clicked()),MISC_write_signalMapper,SLOT(map()));
+        MISC_write_signalMapper->setMapping(&MISC_write_pushButton[i],i);
     }
+    connect(MISC_read_signalMapper,SIGNAL(mapped(int)),this,SLOT(MISC_read_slot(int)));
+    connect(MISC_write_signalMapper,SIGNAL(mapped(int)),this,SLOT(MISC_write_slot(int)));
+
 
     //创建Others Setting 子节点
     QTreeWidgetItem *Others_widgetItem[7];
@@ -363,7 +448,8 @@ void MainWindow::initTreeWidget()
     Others_widgetItem[4] = new QTreeWidgetItem(Others,QStringList(QString("r_pds(44)[7:0]")));
     Others_widgetItem[5] = new QTreeWidgetItem(Others,QStringList(QString("r_pds(45)[7:0]")));
     Others_widgetItem[6] = new QTreeWidgetItem(Others,QStringList(QString("r_pds(46)[7:0]")));
-
+    Others_read_signalMapper = new QSignalMapper(this);
+    Others_write_signalMapper = new QSignalMapper(this);
     for(i=0; i<7; i++)
     {
         Others_read_pushButton[i].setText(QStringLiteral("读取"));
@@ -371,12 +457,13 @@ void MainWindow::initTreeWidget()
         ui->treeWidget->setItemWidget(Others_widgetItem[i],1,&Others_lineEdit[i]);
         ui->treeWidget->setItemWidget(Others_widgetItem[i],2,&Others_read_pushButton[i]);
         ui->treeWidget->setItemWidget(Others_widgetItem[i],3,&Others_write_pushButton[i]);
+        connect(&Others_read_pushButton[i],SIGNAL(clicked()),Others_read_signalMapper,SLOT(map()));
+        Others_read_signalMapper->setMapping(&Others_read_pushButton[i],i);
+        connect(&Others_write_pushButton[i],SIGNAL(clicked()),Others_write_signalMapper,SLOT(map()));
+        Others_write_signalMapper->setMapping(&Others_write_pushButton[i],i);
     }
-
-
-
-
-
+    connect(Others_read_signalMapper,SIGNAL(mapped(int)),this,SLOT(Others_read_slot(int)));
+    connect(Others_write_signalMapper,SIGNAL(mapped(int)),this,SLOT(Others_write_slot(int)));
 
 
 }
@@ -750,3 +837,149 @@ void MainWindow::showSettingParaSlot(int FrameNum,int TOFmax)
 
     qDebug()<<"showFrameNum = "<<showFrameNum<<"  showTOFmax ="<<showTOFmax<<endl;
 }
+
+
+/**************************单个寄存器配置相关的槽函数***************************************************/
+//读取TDC 槽函数
+void MainWindow::TDC_read_slot(int TDC_number)
+{
+    qDebug()<<"read TDC_number = "<<TDC_number<<endl;
+
+}
+//写入TDC 槽函数
+void MainWindow::TDC_write_slot(int TDC_number)
+{
+    qDebug()<<"write TDC_number = "<<TDC_number<<endl;
+}
+
+
+
+//读取Integration 槽函数
+void MainWindow::Integration_read_slot(int Integration_number)
+{
+    qDebug()<<"read Integration_number = "<<Integration_number<<endl;
+}
+//写入读取Integration 槽函数
+void MainWindow::Integration_write_slot(int Integration_number)
+{
+     qDebug()<<"write Integration_number = "<<Integration_number<<endl;
+}
+
+
+//读取 MA 槽函数
+void MainWindow::MA_read_slot(int MA_number)
+{
+    qDebug()<<"read MA_number = "<<MA_number<<endl;
+}
+//写入 MA 槽函数
+void MainWindow::MA_write_slot(int MA_number)
+{
+    qDebug()<<"write MA_number = "<<MA_number<<endl;
+}
+
+
+//读取Digital槽函数
+void MainWindow::Digital_read_slot(int Digital_number)
+{
+    qDebug()<<"read Digital_number = "<<Digital_number<<endl;
+}
+//写入Digital槽函数
+void MainWindow::Digital_write_slot(int Digital_number)
+{
+    qDebug()<<"write Digital_number = "<<Digital_number<<endl;
+}
+
+
+
+//读取Analog槽函数
+void MainWindow::Analog_read_slot(int Analog_number)
+{
+    qDebug()<<"read Analog_number = "<<Analog_number<<endl;
+}
+//写入Analog槽函数
+void MainWindow::Analog_write_slot(int Analog_number)
+{
+    qDebug()<<"write Analog_number = "<<Analog_number<<endl;
+}
+
+
+//读取Pixel槽函数
+void MainWindow::Pixel_read_slot(int Pixel_number)
+{
+    qDebug()<<"read Pixel_number = "<<Pixel_number<<endl;
+}
+//写入Pixel槽函数
+void MainWindow::Pixel_write_slot(int Pixel_number)
+{
+    qDebug()<<"write Pixel_number = "<<Pixel_number<<endl;
+}
+
+
+//读取Top槽函数
+void MainWindow::Top_read_slot(int Top_number)
+{
+    qDebug()<<"read Top_number = "<<Top_number<<endl;
+}
+//寫入Top槽函数
+void MainWindow::Top_write_slot(int Top_number)
+{
+    qDebug()<<"write Top_number = "<<Top_number<<endl;
+}
+
+
+//读取Delayline槽函数
+void MainWindow::Delayline_read_slot(int Delayline_number)
+{
+    qDebug()<<"read Delayline_number = "<<Delayline_number<<endl;
+}
+//写入Delayline槽函数
+void MainWindow::Delayline_write_slot(int Delayline_number)
+{
+    qDebug()<<"write Delayline_number = "<<Delayline_number<<endl;
+}
+
+
+//读取MISC槽函数
+void MainWindow::MISC_read_slot(int MISC_number)
+{
+    qDebug()<<"read MISC_number = "<<MISC_number<<endl;
+}
+//写入MISC槽函数
+void MainWindow::MISC_write_slot(int MISC_number)
+{
+    qDebug()<<"write MISC_number = "<<MISC_number<<endl;
+}
+
+
+//读取Others槽函数
+void MainWindow::Others_read_slot(int Others_number)
+{
+    qDebug()<<"read Others_number = "<<Others_number<<endl;
+}
+//写入Others槽函数
+void MainWindow::Others_write_slot(int Others_number)
+{
+    qDebug()<<"write Others_number = "<<Others_number<<endl;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
