@@ -264,16 +264,16 @@ void MainWindow::initTreeWidget()
 
     //创建Digital子节点
     QTreeWidgetItem *Digital_widgetItem[10];
-    Digital_widgetItem[0] = new QTreeWidgetItem(Digital,QStringList(QString("r_spi_en(11)[7]")));
-    Digital_widgetItem[1] = new QTreeWidgetItem(Digital,QStringList(QString("r_dvp_clk_sel(11)[6:4]")));
-    Digital_widgetItem[2] = new QTreeWidgetItem(Digital,QStringList(QString("r_clk_divider(11)[3:0]")));
-    Digital_widgetItem[3] = new QTreeWidgetItem(Digital,QStringList(QString("r_sramout_clksel(12)[7]")));
-    Digital_widgetItem[4] = new QTreeWidgetItem(Digital,QStringList(QString("r_raw_out_mode(12)[6]")));
-    Digital_widgetItem[5] = new QTreeWidgetItem(Digital,QStringList(QString("r_dvp_sram_output_mode(12)[5]")));
-    Digital_widgetItem[6] = new QTreeWidgetItem(Digital,QStringList(QString("r_sram_output_cycles(12)[4:0]")));
-    Digital_widgetItem[7] = new QTreeWidgetItem(Digital,QStringList(QString("r_row_start(13)[4:0]")));
-    Digital_widgetItem[8] = new QTreeWidgetItem(Digital,QStringList(QString("r_high_bits(13)[7]")));
-    Digital_widgetItem[9] = new QTreeWidgetItem(Digital,QStringList(QString("r_row_end(14)[5:0]")));
+    Digital_widgetItem[0] = new QTreeWidgetItem(Digital,QStringList(QString("r_spi_en(17)[7]")));
+    Digital_widgetItem[1] = new QTreeWidgetItem(Digital,QStringList(QString("r_dvp_clk_sel(17)[6:4]")));
+    Digital_widgetItem[2] = new QTreeWidgetItem(Digital,QStringList(QString("r_clk_divider(17)[3:0]")));
+    Digital_widgetItem[3] = new QTreeWidgetItem(Digital,QStringList(QString("r_sramout_clksel(18)[7]")));
+    Digital_widgetItem[4] = new QTreeWidgetItem(Digital,QStringList(QString("r_raw_out_mode(18)[6]")));
+    Digital_widgetItem[5] = new QTreeWidgetItem(Digital,QStringList(QString("r_dvp_sram_output_mode(18)[5]")));
+    Digital_widgetItem[6] = new QTreeWidgetItem(Digital,QStringList(QString("r_sram_output_cycles(18)[4:0]")));
+    Digital_widgetItem[7] = new QTreeWidgetItem(Digital,QStringList(QString("r_row_start(19)[4:0]")));
+    Digital_widgetItem[8] = new QTreeWidgetItem(Digital,QStringList(QString("r_high_bits(19)[7]")));
+    Digital_widgetItem[9] = new QTreeWidgetItem(Digital,QStringList(QString("r_row_end(20)[5:0]")));
     Digital_read_signalMapper = new QSignalMapper(this);
     Digital_write_signalMapper= new QSignalMapper(this);
     for(i=0 ;i<10; i++)
@@ -1284,6 +1284,45 @@ void MainWindow::Digital_read_slot(int Digital_number)
         return;
     }
     qDebug()<<"read Digital_number = "<<Digital_number<<endl;
+
+    int hardWareAddress = 216;
+
+    switch (Digital_number) {
+    case 0:
+        emit readDevSignal(hardWareAddress,17,false);
+        break;
+    case 1:
+        emit readDevSignal(hardWareAddress,17,false);
+        break;
+    case 2:
+        emit readDevSignal(hardWareAddress,17,false);
+        break;
+    case 3:
+        emit readDevSignal(hardWareAddress,18,false);
+        break;
+    case 4:
+        emit readDevSignal(hardWareAddress,18,false);
+        break;
+    case 5:
+        emit readDevSignal(hardWareAddress,18,false);
+        break;
+    case 6:
+        emit readDevSignal(hardWareAddress,18,false);
+        break;
+    case 7:
+        emit readDevSignal(hardWareAddress,19,false);
+        break;
+    case 8:
+        emit readDevSignal(hardWareAddress,19,false);
+        break;
+    case 9:
+        emit readDevSignal(hardWareAddress,20,false);
+        break;
+    default:
+        break;
+    }
+
+
 }
 //写入Digital槽函数
 void MainWindow::Digital_write_slot(int Digital_number)
@@ -1294,6 +1333,95 @@ void MainWindow::Digital_write_slot(int Digital_number)
         return;
     }
     qDebug()<<"write Digital_number = "<<Digital_number<<endl;
+    int hardWareAddress = 216;
+    switch (Digital_number) {
+    case 0:{
+        int data  = (Digital_lineEdit[0].text().toInt(NULL,16)<<7) + (Digital_lineEdit[1].text().toInt(NULL,16)<<4) +
+                Digital_lineEdit[2].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 17 , QString::number(data,16), false);
+        Digital_lineEdit[0].setText("");
+        Digital_lineEdit[1].setText("");
+        Digital_lineEdit[2].setText("");
+        break;
+    }case 1:{
+        int data  = (Digital_lineEdit[0].text().toInt(NULL,16)<<7) + (Digital_lineEdit[1].text().toInt(NULL,16)<<4) +
+                Digital_lineEdit[2].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 17 , QString::number(data,16), false);
+        Digital_lineEdit[0].setText("");
+        Digital_lineEdit[1].setText("");
+        Digital_lineEdit[2].setText("");
+        break;
+    }case 2:{
+        int data  = (Digital_lineEdit[0].text().toInt(NULL,16)<<7) + (Digital_lineEdit[1].text().toInt(NULL,16)<<4) +
+                Digital_lineEdit[2].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 17 , QString::number(data,16), false);
+        Digital_lineEdit[0].setText("");
+        Digital_lineEdit[1].setText("");
+        Digital_lineEdit[2].setText("");
+        break;
+    }case 3:{
+        int data = (Digital_lineEdit[3].text().toInt(NULL,16)<<7) + (Digital_lineEdit[4].text().toInt(NULL,16)<<6) +
+                (Digital_lineEdit[5].text().toInt(NULL,16)<<5) + Digital_lineEdit[6].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 18 , QString::number(data,16), false);
+        Digital_lineEdit[3].setText("");
+        Digital_lineEdit[4].setText("");
+        Digital_lineEdit[5].setText("");
+        Digital_lineEdit[6].setText("");
+        break;
+    }case 4:{
+        int data = (Digital_lineEdit[3].text().toInt(NULL,16)<<7) + (Digital_lineEdit[4].text().toInt(NULL,16)<<6) +
+                (Digital_lineEdit[5].text().toInt(NULL,16)<<5) + Digital_lineEdit[6].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 18 , QString::number(data,16), false);
+        Digital_lineEdit[3].setText("");
+        Digital_lineEdit[4].setText("");
+        Digital_lineEdit[5].setText("");
+        Digital_lineEdit[6].setText("");
+        break;
+    }case 5:{
+        int data = (Digital_lineEdit[3].text().toInt(NULL,16)<<7) + (Digital_lineEdit[4].text().toInt(NULL,16)<<6) +
+                (Digital_lineEdit[5].text().toInt(NULL,16)<<5) + Digital_lineEdit[6].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 18 , QString::number(data,16), false);
+        Digital_lineEdit[3].setText("");
+        Digital_lineEdit[4].setText("");
+        Digital_lineEdit[5].setText("");
+        Digital_lineEdit[6].setText("");
+        break;
+    }case 6:{
+        int data = (Digital_lineEdit[3].text().toInt(NULL,16)<<7) + (Digital_lineEdit[4].text().toInt(NULL,16)<<6) +
+                (Digital_lineEdit[5].text().toInt(NULL,16)<<5) + Digital_lineEdit[6].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 18 , QString::number(data,16), false);
+        Digital_lineEdit[3].setText("");
+        Digital_lineEdit[4].setText("");
+        Digital_lineEdit[5].setText("");
+        Digital_lineEdit[6].setText("");
+        break;
+    }case 7:{
+        int data = Digital_lineEdit[7].text().toInt(NULL,16) + (Digital_lineEdit[8].text().toInt(NULL,16)<<7);
+        emit writeDevSignal(hardWareAddress, 19 , QString::number(data,16), false);
+        Digital_lineEdit[7].setText("");
+        Digital_lineEdit[8].setText("");
+        break;
+    }case 8:{
+        int data = Digital_lineEdit[7].text().toInt(NULL,16) + (Digital_lineEdit[8].text().toInt(NULL,16)<<7);
+        emit writeDevSignal(hardWareAddress, 19 , QString::number(data,16), false);
+        Digital_lineEdit[7].setText("");
+        Digital_lineEdit[8].setText("");
+        break;
+    }case 9:{
+        int data = Digital_lineEdit[9].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 20 , QString::number(data,16), false);
+        Digital_lineEdit[9].setText("");
+        break;
+    }
+
+
+
+
+    }
+
+
+
+
 }
 
 
@@ -1540,6 +1668,34 @@ void MainWindow::reReadDevSlot(int regesiterAddress,QString str)
         int r_ma_wf = (data & 0xF0)>>4;
         MA_lineEdit[15].setText(QString::number(r_ma_wf,16).toUpper());
         break;
+    }case 17:{
+        int r_spi_en = (data & 0x80)>>7;
+        Digital_lineEdit[0].setText(QString::number(r_spi_en,16).toUpper());
+        int r_dvp_clk_sel = (data & 0x70)>>4;
+        Digital_lineEdit[1].setText(QString::number(r_dvp_clk_sel,16).toUpper());
+        int r_clk_divider = data & 0x0F;
+        Digital_lineEdit[2].setText(QString::number(r_clk_divider,16).toUpper());
+        break;
+    }case 18:{
+        int r_sramout_clksel = (data & 0x80)>>7;
+        Digital_lineEdit[3].setText(QString::number(r_sramout_clksel,16).toUpper());
+        int r_raw_out_mode = (data & 0x40)>>6;
+        Digital_lineEdit[4].setText(QString::number(r_raw_out_mode,16).toUpper());
+        int r_dvp_sram_output_mode = (data & 0x20)>>5;
+        Digital_lineEdit[5].setText(QString::number(r_dvp_sram_output_mode,16).toUpper());
+        int r_sram_output_cycles = data & 0x1F;
+        Digital_lineEdit[6].setText(QString::number(r_sram_output_cycles,16).toUpper());
+        break;
+    }case 19:{
+        int r_row_start = data & 0x1F;
+        Digital_lineEdit[7].setText(QString::number(r_row_start,16).toUpper());
+        int r_high_bits = (data & 0x80)>>7;
+        Digital_lineEdit[8].setText(QString::number(r_high_bits,16).toUpper());
+        break;
+    }case 20:{
+        int r_row_end = data & 0x3F;
+        Digital_lineEdit[9].setText(QString::number(r_row_end,16).toUpper());
+        break;
     }
 
 
@@ -1592,6 +1748,12 @@ void MainWindow::on_treeWidget_itemExpanded(QTreeWidgetItem *item)
         emit readDevSignal(hardWareAddress,14,false);
         emit readDevSignal(hardWareAddress,15,false);
         emit readDevSignal(hardWareAddress,16,false);
+    }else if("Digital" == item->text(0))
+    {
+        emit readDevSignal(hardWareAddress,17,false);
+        emit readDevSignal(hardWareAddress,18,false);
+        emit readDevSignal(hardWareAddress,19,false);
+        emit readDevSignal(hardWareAddress,20,false);
     }
 
 }
