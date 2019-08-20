@@ -208,6 +208,7 @@ void MainWindow::initTreeWidget()
     Integration_write_signalMapper = new QSignalMapper(this);
     for(i=0; i<4; i++)
     {
+        Integration_lineEdit[i].setAlignment(Qt::AlignCenter);
         Integration_read_pushButton[i].setText(QStringLiteral("读取"));
         Integration_write_pushButton[i].setText(QStringLiteral("写入"));
         ui->treeWidget->setItemWidget(Integration_widgetItem[i],1,&Integration_lineEdit[i]);
@@ -226,25 +227,26 @@ void MainWindow::initTreeWidget()
     QTreeWidgetItem *MA_widgetItem[16];
     MA_widgetItem[0] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_w0(9)[3:0]")));
     MA_widgetItem[1] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_w1(9)[7:4]")));
-    MA_widgetItem[2] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_w2(a)[3:0]")));
-    MA_widgetItem[3] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_w3(a)[7:4]")));
-    MA_widgetItem[4] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_w4(b)[3:0]")));
-    MA_widgetItem[5] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_w5(b)[7:4]")));
-    MA_widgetItem[6] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_w6(c)[3:0]")));
-    MA_widgetItem[7] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_w7(c)[7:4]")));
-    MA_widgetItem[8] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_w8(d)[3:0]")));
-    MA_widgetItem[9] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_w9(d)[7:4]")));
-    MA_widgetItem[10] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_wa(e)[3:0]")));
-    MA_widgetItem[11] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_wb(e)[7:4]")));
-    MA_widgetItem[12] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_wc(f)[3:0]")));
-    MA_widgetItem[13] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_wd(f)[7:4]")));
-    MA_widgetItem[14] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_we(10)[3:0]")));
-    MA_widgetItem[15] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_wf(10)[7:4]")));
+    MA_widgetItem[2] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_w2(10)[3:0]")));
+    MA_widgetItem[3] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_w3(10)[7:4]")));
+    MA_widgetItem[4] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_w4(11)[3:0]")));
+    MA_widgetItem[5] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_w5(11)[7:4]")));
+    MA_widgetItem[6] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_w6(12)[3:0]")));
+    MA_widgetItem[7] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_w7(12)[7:4]")));
+    MA_widgetItem[8] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_w8(13)[3:0]")));
+    MA_widgetItem[9] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_w9(13)[7:4]")));
+    MA_widgetItem[10] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_wa(14)[3:0]")));
+    MA_widgetItem[11] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_wb(14)[7:4]")));
+    MA_widgetItem[12] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_wc(15)[3:0]")));
+    MA_widgetItem[13] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_wd(15)[7:4]")));
+    MA_widgetItem[14] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_we(16)[3:0]")));
+    MA_widgetItem[15] = new QTreeWidgetItem(MA,QStringList(QString("r_ma_wf(16)[7:4]")));
     MA_read_signalMapper = new QSignalMapper(this);
     MA_write_signalMapper = new QSignalMapper(this);
 
     for(i=0; i<16; i++)
     {
+        MA_lineEdit[i].setAlignment(Qt::AlignCenter);
         MA_read_pushButton[i].setText(QStringLiteral("读取"));
         MA_write_pushButton[i].setText(QStringLiteral("写入"));
         ui->treeWidget->setItemWidget(MA_widgetItem[i],1,&MA_lineEdit[i]);
@@ -276,6 +278,7 @@ void MainWindow::initTreeWidget()
     Digital_write_signalMapper= new QSignalMapper(this);
     for(i=0 ;i<10; i++)
     {
+        Digital_lineEdit[i].setAlignment(Qt::AlignCenter);
         Digital_read_pushButton[i].setText(QStringLiteral("读取"));
         Digital_write_pushButton[i].setText(QStringLiteral("写入"));
         ui->treeWidget->setItemWidget(Digital_widgetItem[i],1,&Digital_lineEdit[i]);
@@ -313,6 +316,7 @@ void MainWindow::initTreeWidget()
     Analog_write_signalMapper = new QSignalMapper(this);
     for(i=0; i<16; i++)
     {
+        Analog_lineEdit[i].setAlignment(Qt::AlignCenter);
         Analog_read_pushButton[i].setText(QStringLiteral("读取"));
         Analog_write_pushButton[i].setText(QStringLiteral("写入"));
         ui->treeWidget->setItemWidget(Analog_widgetItem[i],1,&Analog_lineEdit[i]);
@@ -345,6 +349,7 @@ void MainWindow::initTreeWidget()
     Pixel_write_signalMapper = new QSignalMapper(this);
     for(i=0; i<11; i++)
     {
+        Pixel_lineEdit[i].setAlignment(Qt::AlignCenter);
         Pixel_read_pushButton[i].setText(QStringLiteral("读取"));
         Pixel_write_pushButton[i].setText(QStringLiteral("写入"));
         ui->treeWidget->setItemWidget(Pixel_widgetItem[i],1,&Pixel_lineEdit[i]);
@@ -369,6 +374,7 @@ void MainWindow::initTreeWidget()
     Top_write_signalMapper = new QSignalMapper(this);
     for(i=0; i<4; i++)
     {
+        Top_lineEdit[i].setAlignment(Qt::AlignCenter);
         Top_read_pushButton[i].setText(QStringLiteral("读取"));
         Top_write_pushButton[i].setText(QStringLiteral("写入"));
         ui->treeWidget->setItemWidget(Top_widgetItem[i],1,&Top_lineEdit[i]);
@@ -396,6 +402,7 @@ void MainWindow::initTreeWidget()
     Delayline_write_signalMapper = new QSignalMapper(this);
     for(i=0; i<7; i++)
     {
+        Delayline_lineEdit[i].setAlignment(Qt::AlignCenter);
         Delayline_read_pushButton[i].setText(QStringLiteral("读取"));
         Delayline_write_pushButton[i].setText(QStringLiteral("写入"));
         ui->treeWidget->setItemWidget(Delayline_widgetItem[i],1,&Delayline_lineEdit[i]);
@@ -425,6 +432,7 @@ void MainWindow::initTreeWidget()
 
     for(i=0; i<8; i++)
     {
+        MISC_lineEdit[i].setAlignment(Qt::AlignCenter);
         MISC_read_pushButton[i].setText(QStringLiteral("读取"));
         MISC_write_pushButton[i].setText(QStringLiteral("写入"));
         ui->treeWidget->setItemWidget(MISC_widgetItem[i],1,&MISC_lineEdit[i]);
@@ -452,6 +460,7 @@ void MainWindow::initTreeWidget()
     Others_write_signalMapper = new QSignalMapper(this);
     for(i=0; i<7; i++)
     {
+        Others_lineEdit[i].setAlignment(Qt::AlignCenter);
         Others_read_pushButton[i].setText(QStringLiteral("读取"));
         Others_write_pushButton[i].setText(QStringLiteral("写入"));
         ui->treeWidget->setItemWidget(Others_widgetItem[i],1,&Others_lineEdit[i]);
@@ -1073,6 +1082,7 @@ void MainWindow::Integration_write_slot(int Integration_number)
          int data = Integration_lineEdit[3].text().toInt(NULL,16);
          emit writeDevSignal(hardWareAddress, 8 , QString::number(data,16), false);
          Integration_lineEdit[3].setText("");
+         break;
      }
 
      default:
@@ -1090,6 +1100,63 @@ void MainWindow::MA_read_slot(int MA_number)
         return;
     }
     qDebug()<<"read MA_number = "<<MA_number<<endl;
+
+    int hardWareAddress = 216;
+
+    switch (MA_number) {
+    case 0:
+        emit readDevSignal(hardWareAddress,9,false);
+        break;
+    case 1:
+        emit readDevSignal(hardWareAddress,9,false);
+        break;
+    case 2:
+        emit readDevSignal(hardWareAddress,10,false);
+        break;
+    case 3:
+        emit readDevSignal(hardWareAddress,10,false);
+        break;
+    case 4:
+        emit readDevSignal(hardWareAddress,11,false);
+        break;
+    case 5:
+        emit readDevSignal(hardWareAddress,11,false);
+        break;
+    case 6:
+        emit readDevSignal(hardWareAddress,12,false);
+        break;
+    case 7:
+        emit readDevSignal(hardWareAddress,12,false);
+        break;
+    case 8:
+        emit readDevSignal(hardWareAddress,13,false);
+        break;
+    case 9:
+        emit readDevSignal(hardWareAddress,13,false);
+        break;
+    case 10:
+        emit readDevSignal(hardWareAddress,14,false);
+        break;
+    case 11:
+        emit readDevSignal(hardWareAddress,14,false);
+        break;
+    case 12:
+        emit readDevSignal(hardWareAddress,15,false);
+        break;
+    case 13:
+        emit readDevSignal(hardWareAddress,15,false);
+        break;
+    case 14:
+        emit readDevSignal(hardWareAddress,16,false);
+        break;
+    case 15:
+        emit readDevSignal(hardWareAddress,16,false);
+        break;
+    default:
+        break;
+    }
+
+
 }
 //写入 MA 槽函数
 void MainWindow::MA_write_slot(int MA_number)
@@ -1099,7 +1166,112 @@ void MainWindow::MA_write_slot(int MA_number)
         QMessageBox::information(NULL,QStringLiteral("告警"),QStringLiteral("设备未连接"));
         return;
     }
+    int hardWareAddress = 216;
     qDebug()<<"write MA_number = "<<MA_number<<endl;
+
+    switch (MA_number) {
+    case 0:{
+        int data  = MA_lineEdit[0].text().toInt(NULL,16) + (MA_lineEdit[1].text().toInt(NULL,16)<<4) ;
+        emit writeDevSignal(hardWareAddress, 9 , QString::number(data,16), false);
+        MA_lineEdit[0].setText("");
+        MA_lineEdit[1].setText("");
+        break;
+    }
+    case 1:{
+        int data  = MA_lineEdit[0].text().toInt(NULL,16) + (MA_lineEdit[1].text().toInt(NULL,16)<<4) ;
+        emit writeDevSignal(hardWareAddress, 9 , QString::number(data,16), false);
+        MA_lineEdit[0].setText("");
+        MA_lineEdit[1].setText("");
+        break;
+    }case 2:{
+        int data = MA_lineEdit[2].text().toInt(NULL,16) + (MA_lineEdit[3].text().toInt(NULL,16)<<4) ;
+        emit writeDevSignal(hardWareAddress, 10 , QString::number(data,16), false);
+        MA_lineEdit[2].setText("");
+        MA_lineEdit[3].setText("");
+        break;
+    }case 3:{
+        int data = MA_lineEdit[2].text().toInt(NULL,16) + (MA_lineEdit[3].text().toInt(NULL,16)<<4) ;
+        emit writeDevSignal(hardWareAddress, 10 , QString::number(data,16), false);
+        MA_lineEdit[2].setText("");
+        MA_lineEdit[3].setText("");
+        break;
+    }case 4:{
+        int data = MA_lineEdit[4].text().toInt(NULL,16) + (MA_lineEdit[5].text().toInt(NULL,16)<<4) ;
+        emit writeDevSignal(hardWareAddress, 11 , QString::number(data,16), false);
+        MA_lineEdit[4].setText("");
+        MA_lineEdit[5].setText("");
+        break;
+    }case 5:{
+        int data = MA_lineEdit[4].text().toInt(NULL,16) + (MA_lineEdit[5].text().toInt(NULL,16)<<4) ;
+        emit writeDevSignal(hardWareAddress, 11 , QString::number(data,16), false);
+        MA_lineEdit[4].setText("");
+        MA_lineEdit[5].setText("");
+        break;
+    }case 6:{
+        int data = MA_lineEdit[6].text().toInt(NULL,16) + (MA_lineEdit[7].text().toInt(NULL,16)<<4) ;
+        emit writeDevSignal(hardWareAddress, 12 , QString::number(data,16), false);
+        MA_lineEdit[6].setText("");
+        MA_lineEdit[7].setText("");
+        break;
+    }case 7:{
+        int data = MA_lineEdit[6].text().toInt(NULL,16) + (MA_lineEdit[7].text().toInt(NULL,16)<<4) ;
+        emit writeDevSignal(hardWareAddress, 12 , QString::number(data,16), false);
+        MA_lineEdit[6].setText("");
+        MA_lineEdit[7].setText("");
+        break;
+    }case 8:{
+        int data = MA_lineEdit[8].text().toInt(NULL,16) + (MA_lineEdit[9].text().toInt(NULL,16)<<4) ;
+        emit writeDevSignal(hardWareAddress, 13 , QString::number(data,16), false);
+        MA_lineEdit[8].setText("");
+        MA_lineEdit[9].setText("");
+        break;
+    }case 9:{
+        int data = MA_lineEdit[8].text().toInt(NULL,16) + (MA_lineEdit[9].text().toInt(NULL,16)<<4) ;
+        emit writeDevSignal(hardWareAddress, 13 , QString::number(data,16), false);
+        MA_lineEdit[8].setText("");
+        MA_lineEdit[9].setText("");
+        break;
+    }case 10:{
+        int data = MA_lineEdit[10].text().toInt(NULL,16) + (MA_lineEdit[11].text().toInt(NULL,16)<<4) ;
+        emit writeDevSignal(hardWareAddress, 14 , QString::number(data,16), false);
+        MA_lineEdit[10].setText("");
+        MA_lineEdit[11].setText("");
+        break;
+    }case 11:{
+        int data = MA_lineEdit[10].text().toInt(NULL,16) + (MA_lineEdit[11].text().toInt(NULL,16)<<4) ;
+        emit writeDevSignal(hardWareAddress, 14 , QString::number(data,16), false);
+        MA_lineEdit[10].setText("");
+        MA_lineEdit[11].setText("");
+        break;
+    }case 12:{
+        int data = MA_lineEdit[12].text().toInt(NULL,16) + (MA_lineEdit[13].text().toInt(NULL,16)<<4) ;
+        emit writeDevSignal(hardWareAddress, 15 , QString::number(data,16), false);
+        MA_lineEdit[12].setText("");
+        MA_lineEdit[13].setText("");
+        break;
+    }case 13:{
+        int data = MA_lineEdit[12].text().toInt(NULL,16) + (MA_lineEdit[13].text().toInt(NULL,16)<<4) ;
+        emit writeDevSignal(hardWareAddress, 15 , QString::number(data,16), false);
+        MA_lineEdit[12].setText("");
+        MA_lineEdit[13].setText("");
+        break;
+    }case 14:{
+        int data = MA_lineEdit[14].text().toInt(NULL,16) + (MA_lineEdit[15].text().toInt(NULL,16)<<4) ;
+        emit writeDevSignal(hardWareAddress, 16 , QString::number(data,16), false);
+        MA_lineEdit[14].setText("");
+        MA_lineEdit[15].setText("");
+        break;
+    }case 15:{
+        int data = MA_lineEdit[14].text().toInt(NULL,16) + (MA_lineEdit[15].text().toInt(NULL,16)<<4) ;
+        emit writeDevSignal(hardWareAddress, 16 , QString::number(data,16), false);
+        MA_lineEdit[14].setText("");
+        MA_lineEdit[15].setText("");
+        break;
+    }
+
+    default:
+        break;
+    }
 }
 
 
@@ -1320,7 +1492,56 @@ void MainWindow::reReadDevSlot(int regesiterAddress,QString str)
         int r_hts = data;
         Integration_lineEdit[3].setText(QString::number(r_hts,16).toUpper());
         break;
+    }case 9:{
+        int r_ma_w0 = data & 0x0F;
+        MA_lineEdit[0].setText(QString::number(r_ma_w0,16).toUpper());
+        int r_ma_w1 = (data & 0xF0)>>4;
+        MA_lineEdit[1].setText(QString::number(r_ma_w1,16).toUpper());
+        break;
+    }case 10:{
+        int r_ma_w2 = data & 0x0F;
+        MA_lineEdit[2].setText(QString::number(r_ma_w2,16).toUpper());
+        int r_ma_w3 = (data & 0xF0)>>4;
+        MA_lineEdit[3].setText(QString::number(r_ma_w3,16).toUpper());
+        break;
+    }case 11:{
+        int r_ma_w4 = data & 0x0F;
+        MA_lineEdit[4].setText(QString::number(r_ma_w4,16).toUpper());
+        int r_ma_w5 = (data & 0xF0)>>4;
+        MA_lineEdit[5].setText(QString::number(r_ma_w5,16).toUpper());
+        break;
+    }case 12:{
+        int r_ma_w6 = data & 0x0F;
+        MA_lineEdit[6].setText(QString::number(r_ma_w6,16).toUpper());
+        int r_ma_w7 = (data & 0xF0)>>4;
+        MA_lineEdit[7].setText(QString::number(r_ma_w7,16).toUpper());
+        break;
+    }case 13:{
+        int r_ma_w8 = data & 0x0F;
+        MA_lineEdit[8].setText(QString::number(r_ma_w8,16).toUpper());
+        int r_ma_w9 = (data & 0xF0)>>4;
+        MA_lineEdit[9].setText(QString::number(r_ma_w9,16).toUpper());
+        break;
+    }case 14:{
+        int r_ma_wa = data & 0x0F;
+        MA_lineEdit[10].setText(QString::number(r_ma_wa,16).toUpper());
+        int r_ma_wb = (data & 0xF0)>>4;
+        MA_lineEdit[11].setText(QString::number(r_ma_wb,16).toUpper());
+        break;
+    }case 15:{
+        int r_ma_wc = data & 0x0F;
+        MA_lineEdit[12].setText(QString::number(r_ma_wc,16).toUpper());
+        int r_ma_wd = (data & 0xF0)>>4;
+        MA_lineEdit[13].setText(QString::number(r_ma_wd,16).toUpper());
+        break;
+    }case 16:{
+        int r_ma_we = data & 0x0F;
+        MA_lineEdit[14].setText(QString::number(r_ma_we,16).toUpper());
+        int r_ma_wf = (data & 0xF0)>>4;
+        MA_lineEdit[15].setText(QString::number(r_ma_wf,16).toUpper());
+        break;
     }
+
 
     }
 
@@ -1361,6 +1582,16 @@ void MainWindow::on_treeWidget_itemExpanded(QTreeWidgetItem *item)
         emit readDevSignal(hardWareAddress,6,false);
         emit readDevSignal(hardWareAddress,7,false);
         emit readDevSignal(hardWareAddress,8,false);
+    }else if("MA" == item->text(0))
+    {
+        emit readDevSignal(hardWareAddress,9,false);
+        emit readDevSignal(hardWareAddress,10,false);
+        emit readDevSignal(hardWareAddress,11,false);
+        emit readDevSignal(hardWareAddress,12,false);
+        emit readDevSignal(hardWareAddress,13,false);
+        emit readDevSignal(hardWareAddress,14,false);
+        emit readDevSignal(hardWareAddress,15,false);
+        emit readDevSignal(hardWareAddress,16,false);
     }
 
 }
