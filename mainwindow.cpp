@@ -2265,12 +2265,6 @@ void MainWindow::Top_write_slot(int Top_number)
     }default:
         break;
 
-
-
-
-
-
-
     }
 
 
@@ -2290,6 +2284,38 @@ void MainWindow::Delayline_read_slot(int Delayline_number)
         return;
     }
     qDebug()<<"read Delayline_number = "<<Delayline_number<<endl;
+
+    int hardWareAddress = 216;
+
+    switch (Delayline_number) {
+    case 0:
+        emit readDevSignal(hardWareAddress,37,false);
+        break;
+    case 1:
+        emit readDevSignal(hardWareAddress,37,false);
+        break;
+    case 2:
+        emit readDevSignal(hardWareAddress,38,false);
+        break;
+    case 3:
+        emit readDevSignal(hardWareAddress,39,false);
+        break;
+    case 4:
+        emit readDevSignal(hardWareAddress,40,false);
+        break;
+    case 5:
+        emit readDevSignal(hardWareAddress,41,false);
+        break;
+    case 6:
+        emit readDevSignal(hardWareAddress,42,false);
+        break;
+     default:
+        break;
+    }
+
+
+
+
 }
 //写入Delayline槽函数
 void MainWindow::Delayline_write_slot(int Delayline_number)
@@ -2300,6 +2326,51 @@ void MainWindow::Delayline_write_slot(int Delayline_number)
         return;
     }
     qDebug()<<"write Delayline_number = "<<Delayline_number<<endl;
+    int hardWareAddress = 216;
+    switch (Delayline_number) {
+    case 0:{
+        int data = (Delayline_lineEdit[0].text().toInt(NULL,16)<<3) + Delayline_lineEdit[1].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 37 , QString::number(data,16), false);
+        Delayline_lineEdit[0].setText("");
+        Delayline_lineEdit[1].setText("");
+        break;
+    }case 1:{
+        int data = (Delayline_lineEdit[0].text().toInt(NULL,16)<<3) + Delayline_lineEdit[1].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 37 , QString::number(data,16), false);
+        Delayline_lineEdit[0].setText("");
+        Delayline_lineEdit[1].setText("");
+        break;
+    }case 2:{
+        int data =  Delayline_lineEdit[2].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 38 , QString::number(data,16), false);
+        Delayline_lineEdit[2].setText("");
+        break;
+    }case 3:{
+        int data =  Delayline_lineEdit[3].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 39 , QString::number(data,16), false);
+        Delayline_lineEdit[3].setText("");
+        break;
+    }case 4:{
+        int data =  Delayline_lineEdit[4].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 40 , QString::number(data,16), false);
+        Delayline_lineEdit[4].setText("");
+        break;
+    }case 5:{
+        int data =  Delayline_lineEdit[5].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 41 , QString::number(data,16), false);
+        Delayline_lineEdit[5].setText("");
+        break;
+    }case 6:{
+        int data =  Delayline_lineEdit[6].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 42 , QString::number(data,16), false);
+        Delayline_lineEdit[6].setText("");
+        break;
+    }
+
+    }
+
+
+
 }
 
 
@@ -2629,6 +2700,32 @@ void MainWindow::reReadDevSlot(int regesiterAddress,QString str)
         int top_reserve_out_36_5 = (data & 0x80)>>7;
         Top_lineEdit[12].setText(QString::number(top_reserve_out_36_5,16).toUpper());
         break;
+    }case 37:{
+        int r_test_dl_in_en = (data & 0xF8)>>3;
+        Delayline_lineEdit[0].setText(QString::number(r_test_dl_in_en,16).toUpper());
+        int r_test_dl_width = data & 0x07;
+        Delayline_lineEdit[1].setText(QString::number(r_test_dl_width,16).toUpper());
+        break;
+    }case 38:{
+        int r_test_dl_in_0 = data &0xFF;
+        Delayline_lineEdit[2].setText(QString::number(r_test_dl_in_0,16).toUpper());
+        break;
+    }case 39:{
+        int r_test_dl_in_1 = data &0xFF;
+        Delayline_lineEdit[3].setText(QString::number(r_test_dl_in_1,16).toUpper());
+        break;
+    }case 40:{
+        int r_test_dl_in_2 = data &0xFF;
+        Delayline_lineEdit[4].setText(QString::number(r_test_dl_in_2,16).toUpper());
+        break;
+    }case 41:{
+        int r_test_dl_in_3 = data &0xFF;
+        Delayline_lineEdit[5].setText(QString::number(r_test_dl_in_3,16).toUpper());
+        break;
+    }case 42:{
+        int r_test_dl_in_4 = data &0xFF;
+        Delayline_lineEdit[6].setText(QString::number(r_test_dl_in_4,16).toUpper());
+        break;
     }
 
 
@@ -2715,6 +2812,14 @@ void MainWindow::on_treeWidget_itemExpanded(QTreeWidgetItem *item)
         emit readDevSignal(hardWareAddress,34,false);
         emit readDevSignal(hardWareAddress,35,false);
         emit readDevSignal(hardWareAddress,36,false);
+    }else if("Delayline" == item->text(0))
+    {
+        emit readDevSignal(hardWareAddress,37,false);
+        emit readDevSignal(hardWareAddress,38,false);
+        emit readDevSignal(hardWareAddress,39,false);
+        emit readDevSignal(hardWareAddress,40,false);
+        emit readDevSignal(hardWareAddress,41,false);
+        emit readDevSignal(hardWareAddress,42,false);
     }
 
 }
