@@ -73,9 +73,9 @@ public:
     QSignalMapper *Pixel_read_signalMapper;
     QSignalMapper *Pixel_write_signalMapper;
 
-    QLineEdit Top_lineEdit[16];
-    QPushButton Top_read_pushButton[16];
-    QPushButton Top_write_pushButton[16];
+    QLineEdit Top_lineEdit[13];
+    QPushButton Top_read_pushButton[13];
+    QPushButton Top_write_pushButton[13];
     QSignalMapper *Top_read_signalMapper;
     QSignalMapper *Top_write_signalMapper;
 

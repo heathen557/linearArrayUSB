@@ -382,14 +382,24 @@ void MainWindow::initTreeWidget()
 
 
     //创建Top Setting 子节点
-    QTreeWidgetItem *Top_widgetItem[4];
-    Top_widgetItem[0] = new QTreeWidgetItem(Top,QStringList(QString("top_reserve_out(33)[7:0]")));
-    Top_widgetItem[1] = new QTreeWidgetItem(Top,QStringList(QString("top_reserve_out(34)[7:0]")));
-    Top_widgetItem[2] = new QTreeWidgetItem(Top,QStringList(QString("top_reserve_out(35)[7:0]")));
-    Top_widgetItem[3] = new QTreeWidgetItem(Top,QStringList(QString("top_reserve_out(36)[7:0]")));
+    QTreeWidgetItem *Top_widgetItem[13];
+    Top_widgetItem[0] = new QTreeWidgetItem(Top,QStringList(QString("top_reserve_out[3:0](33)[3:0]")));
+    Top_widgetItem[1] = new QTreeWidgetItem(Top,QStringList(QString("top_reserve_out[4](33)[4]")));
+    Top_widgetItem[2] = new QTreeWidgetItem(Top,QStringList(QString("top_reserve_out[7:5](33)[7:5]")));
+    Top_widgetItem[3] = new QTreeWidgetItem(Top,QStringList(QString("top_reserve_out[8](34)[0]")));
+    Top_widgetItem[4] = new QTreeWidgetItem(Top,QStringList(QString("top_reserve_out[12:9](34)[4:1]")));
+    Top_widgetItem[5] = new QTreeWidgetItem(Top,QStringList(QString("top_reserve_out[15:13](34)[7:5]")));
+    Top_widgetItem[6] = new QTreeWidgetItem(Top,QStringList(QString("top_reserve_out[18:16](35)[2:0]")));
+    Top_widgetItem[7] = new QTreeWidgetItem(Top,QStringList(QString("top_reserve_out[23:19](35)[7:3]")));
+    Top_widgetItem[8] = new QTreeWidgetItem(Top,QStringList(QString("top_reserve_out[24](36)[0]")));
+    Top_widgetItem[9] = new QTreeWidgetItem(Top,QStringList(QString("top_reserve_out[26:25](36)[2:1]")));
+    Top_widgetItem[10] = new QTreeWidgetItem(Top,QStringList(QString("top_reserve_out[28:27](36)[4:3]")));
+    Top_widgetItem[11] = new QTreeWidgetItem(Top,QStringList(QString("top_reserve_out[30:29](36)[6:5]")));
+    Top_widgetItem[12] = new QTreeWidgetItem(Top,QStringList(QString("top_reserve_out[31](36)[7]")));
+
     Top_read_signalMapper = new QSignalMapper(this);
     Top_write_signalMapper = new QSignalMapper(this);
-    for(i=0; i<4; i++)
+    for(i=0; i<13; i++)
     {
         Top_lineEdit[i].setAlignment(Qt::AlignCenter);
         Top_read_pushButton[i].setText(QStringLiteral("读取"));
@@ -2078,6 +2088,53 @@ void MainWindow::Top_read_slot(int Top_number)
         return;
     }
     qDebug()<<"read Top_number = "<<Top_number<<endl;
+
+    int hardWareAddress = 216;
+
+    switch (Top_number) {
+    case 0:
+        emit readDevSignal(hardWareAddress,33,false);
+        break;
+    case 1:
+        emit readDevSignal(hardWareAddress,33,false);
+        break;
+    case 2:
+        emit readDevSignal(hardWareAddress,33,false);
+        break;
+    case 3:
+        emit readDevSignal(hardWareAddress,34,false);
+        break;
+    case 4:
+        emit readDevSignal(hardWareAddress,34,false);
+        break;
+    case 5:
+        emit readDevSignal(hardWareAddress,34,false);
+        break;
+    case 6:
+        emit readDevSignal(hardWareAddress,35,false);
+        break;
+    case 7:
+        emit readDevSignal(hardWareAddress,35,false);
+        break;
+    case 8:
+        emit readDevSignal(hardWareAddress,36,false);
+        break;
+    case 9:
+        emit readDevSignal(hardWareAddress,36,false);
+        break;
+    case 10:
+        emit readDevSignal(hardWareAddress,36,false);
+        break;
+    case 11:
+        emit readDevSignal(hardWareAddress,36,false);
+        break;
+    case 12:
+        emit readDevSignal(hardWareAddress,36,false);
+        break;
+    }
+
+
+
 }
 //寫入Top槽函数
 void MainWindow::Top_write_slot(int Top_number)
@@ -2088,6 +2145,139 @@ void MainWindow::Top_write_slot(int Top_number)
         return;
     }
     qDebug()<<"write Top_number = "<<Top_number<<endl;
+    int hardWareAddress = 216;
+    switch (Top_number) {
+    case 0:{
+        int data = Top_lineEdit[0].text().toInt(NULL,16) + (Top_lineEdit[1].text().toInt(NULL,16)<<4)+
+                   (Top_lineEdit[2].text().toInt(NULL,16)<<5);
+        emit writeDevSignal(hardWareAddress, 33 , QString::number(data,16), false);
+        Top_lineEdit[0].setText("");
+        Top_lineEdit[1].setText("");
+        Top_lineEdit[2].setText("");
+        break;
+    }case 1:{
+        int data = Top_lineEdit[0].text().toInt(NULL,16) + (Top_lineEdit[1].text().toInt(NULL,16)<<4)+
+                   (Top_lineEdit[2].text().toInt(NULL,16)<<5);
+        emit writeDevSignal(hardWareAddress, 33 , QString::number(data,16), false);
+        Top_lineEdit[0].setText("");
+        Top_lineEdit[1].setText("");
+        Top_lineEdit[2].setText("");
+        break;
+    }case 2:{
+        int data = Top_lineEdit[0].text().toInt(NULL,16) + (Top_lineEdit[1].text().toInt(NULL,16)<<4)+
+                   (Top_lineEdit[2].text().toInt(NULL,16)<<5);
+        emit writeDevSignal(hardWareAddress, 33 , QString::number(data,16), false);
+        Top_lineEdit[0].setText("");
+        Top_lineEdit[1].setText("");
+        Top_lineEdit[2].setText("");
+        break;
+    }case 3:{
+        int data = Top_lineEdit[3].text().toInt(NULL,16) + (Top_lineEdit[4].text().toInt(NULL,16)<<1)+
+                   (Top_lineEdit[5].text().toInt(NULL,16)<<5);
+        emit writeDevSignal(hardWareAddress, 34 , QString::number(data,16), false);
+        Top_lineEdit[3].setText("");
+        Top_lineEdit[4].setText("");
+        Top_lineEdit[5].setText("");
+        break;
+    }case 4:{
+        int data = Top_lineEdit[3].text().toInt(NULL,16) + (Top_lineEdit[4].text().toInt(NULL,16)<<1)+
+                   (Top_lineEdit[5].text().toInt(NULL,16)<<5);
+        emit writeDevSignal(hardWareAddress, 34 , QString::number(data,16), false);
+        Top_lineEdit[3].setText("");
+        Top_lineEdit[4].setText("");
+        Top_lineEdit[5].setText("");
+        break;
+    }case 5:{
+        int data = Top_lineEdit[3].text().toInt(NULL,16) + (Top_lineEdit[4].text().toInt(NULL,16)<<1)+
+                   (Top_lineEdit[5].text().toInt(NULL,16)<<5);
+        emit writeDevSignal(hardWareAddress, 34 , QString::number(data,16), false);
+        Top_lineEdit[3].setText("");
+        Top_lineEdit[4].setText("");
+        Top_lineEdit[5].setText("");
+        break;
+    }case 6:{
+        int data = Top_lineEdit[6].text().toInt(NULL,16) + (Top_lineEdit[7].text().toInt(NULL,16)<<3);
+        emit writeDevSignal(hardWareAddress, 35 , QString::number(data,16), false);
+        Top_lineEdit[6].setText("");
+        Top_lineEdit[7].setText("");
+        break;
+    }case 7:{
+        int data = Top_lineEdit[6].text().toInt(NULL,16) + (Top_lineEdit[7].text().toInt(NULL,16)<<3);
+        emit writeDevSignal(hardWareAddress, 35 , QString::number(data,16), false);
+        Top_lineEdit[6].setText("");
+        Top_lineEdit[7].setText("");
+        break;
+    }case 8:{
+        int data = Top_lineEdit[8].text().toInt(NULL,16) + (Top_lineEdit[9].text().toInt(NULL,16)<<1) +
+                (Top_lineEdit[10].text().toInt(NULL,16)<<3) + (Top_lineEdit[11].text().toInt(NULL,16)<<5) +
+                (Top_lineEdit[12].text().toInt(NULL,16)<<7) ;
+        emit writeDevSignal(hardWareAddress, 36 , QString::number(data,16), false);
+        Top_lineEdit[8].setText("");
+        Top_lineEdit[9].setText("");
+        Top_lineEdit[10].setText("");
+        Top_lineEdit[11].setText("");
+        Top_lineEdit[12].setText("");
+        break;
+    }case 9:{
+        int data = Top_lineEdit[8].text().toInt(NULL,16) + (Top_lineEdit[9].text().toInt(NULL,16)<<1) +
+                (Top_lineEdit[10].text().toInt(NULL,16)<<3) + (Top_lineEdit[11].text().toInt(NULL,16)<<5) +
+                (Top_lineEdit[12].text().toInt(NULL,16)<<7) ;
+        emit writeDevSignal(hardWareAddress, 36 , QString::number(data,16), false);
+        Top_lineEdit[8].setText("");
+        Top_lineEdit[9].setText("");
+        Top_lineEdit[10].setText("");
+        Top_lineEdit[11].setText("");
+        Top_lineEdit[12].setText("");
+        break;
+    }case 10:{
+        int data = Top_lineEdit[8].text().toInt(NULL,16) + (Top_lineEdit[9].text().toInt(NULL,16)<<1) +
+                (Top_lineEdit[10].text().toInt(NULL,16)<<3) + (Top_lineEdit[11].text().toInt(NULL,16)<<5) +
+                (Top_lineEdit[12].text().toInt(NULL,16)<<7) ;
+        emit writeDevSignal(hardWareAddress, 36 , QString::number(data,16), false);
+        Top_lineEdit[8].setText("");
+        Top_lineEdit[9].setText("");
+        Top_lineEdit[10].setText("");
+        Top_lineEdit[11].setText("");
+        Top_lineEdit[12].setText("");
+        break;
+    }case 11:{
+        int data = Top_lineEdit[8].text().toInt(NULL,16) + (Top_lineEdit[9].text().toInt(NULL,16)<<1) +
+                (Top_lineEdit[10].text().toInt(NULL,16)<<3) + (Top_lineEdit[11].text().toInt(NULL,16)<<5) +
+                (Top_lineEdit[12].text().toInt(NULL,16)<<7) ;
+        emit writeDevSignal(hardWareAddress, 36 , QString::number(data,16), false);
+        Top_lineEdit[8].setText("");
+        Top_lineEdit[9].setText("");
+        Top_lineEdit[10].setText("");
+        Top_lineEdit[11].setText("");
+        Top_lineEdit[12].setText("");
+        break;
+    }case 12:{
+        int data = Top_lineEdit[8].text().toInt(NULL,16) + (Top_lineEdit[9].text().toInt(NULL,16)<<1) +
+                (Top_lineEdit[10].text().toInt(NULL,16)<<3) + (Top_lineEdit[11].text().toInt(NULL,16)<<5) +
+                (Top_lineEdit[12].text().toInt(NULL,16)<<7) ;
+        emit writeDevSignal(hardWareAddress, 36 , QString::number(data,16), false);
+        Top_lineEdit[8].setText("");
+        Top_lineEdit[9].setText("");
+        Top_lineEdit[10].setText("");
+        Top_lineEdit[11].setText("");
+        Top_lineEdit[12].setText("");
+        break;
+    }default:
+        break;
+
+
+
+
+
+
+
+    }
+
+
+
+
+
+
 }
 
 
@@ -2405,7 +2595,48 @@ void MainWindow::reReadDevSlot(int regesiterAddress,QString str)
         int pixel_reserve_out_32_6 = (data & 0x80)>>7;
         Pixel_lineEdit[16].setText(QString::number(pixel_reserve_out_32_6,16).toUpper());
         break;
+    }case 33:{
+        int top_reserve_out_33_1 = data & 0x0F;
+        Top_lineEdit[0].setText(QString::number(top_reserve_out_33_1,16).toUpper());
+        int top_reserve_out_33_2 = (data & 0x10)>>4;
+        Top_lineEdit[1].setText(QString::number(top_reserve_out_33_2,16).toUpper());
+        int top_reserve_out_33_3 = (data & 0xE0)>>5;
+        Top_lineEdit[2].setText(QString::number(top_reserve_out_33_3,16).toUpper());
+        break;
+    }case 34:{
+        int top_reserve_out_34_1 = data & 0x01;
+        Top_lineEdit[3].setText(QString::number(top_reserve_out_34_1,16).toUpper());
+        int top_reserve_out_34_2 = (data & 0x1E)>>1;
+        Top_lineEdit[4].setText(QString::number(top_reserve_out_34_2,16).toUpper());
+        int top_reserve_out_34_3 = (data & 0xE0)>>5;
+        Top_lineEdit[5].setText(QString::number(top_reserve_out_34_3,16).toUpper());
+        break;
+    }case 35:{
+        int top_reserve_out_35_1 = data & 0x07;
+        Top_lineEdit[6].setText(QString::number(top_reserve_out_35_1,16).toUpper());
+        int top_reserve_out_35_2 = (data & 0xF8)>>3;
+        Top_lineEdit[7].setText(QString::number(top_reserve_out_35_2,16).toUpper());
+        break;
+    }case 36:{
+        int top_reserve_out_36_1 = data & 0x01;
+        Top_lineEdit[8].setText(QString::number(top_reserve_out_36_1,16).toUpper());
+        int top_reserve_out_36_2 = (data & 0x06)>>1;
+        Top_lineEdit[9].setText(QString::number(top_reserve_out_36_2,16).toUpper());
+        int top_reserve_out_36_3 = (data & 0x18)>>3;
+        Top_lineEdit[10].setText(QString::number(top_reserve_out_36_3,16).toUpper());
+        int top_reserve_out_36_4 = (data & 0x60)>>5;
+        Top_lineEdit[11].setText(QString::number(top_reserve_out_36_4,16).toUpper());
+        int top_reserve_out_36_5 = (data & 0x80)>>7;
+        Top_lineEdit[12].setText(QString::number(top_reserve_out_36_5,16).toUpper());
+        break;
     }
+
+
+
+
+
+
+
 
     }
 
@@ -2478,6 +2709,12 @@ void MainWindow::on_treeWidget_itemExpanded(QTreeWidgetItem *item)
         emit readDevSignal(hardWareAddress,30,false);
         emit readDevSignal(hardWareAddress,31,false);
         emit readDevSignal(hardWareAddress,32,false);
+    }else if("Top" == item->text(0))
+    {
+        emit readDevSignal(hardWareAddress,33,false);
+        emit readDevSignal(hardWareAddress,34,false);
+        emit readDevSignal(hardWareAddress,35,false);
+        emit readDevSignal(hardWareAddress,36,false);
     }
 
 }
