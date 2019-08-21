@@ -18,6 +18,7 @@
 #include<filesave.h>
 #include<showsettingdia.h>
 #include<QSignalMapper>
+#include<QLabel>
 
 
 namespace Ui {
@@ -122,6 +123,8 @@ public:
     fileSave fileSaveDia;
 
     showSettingDia showSettingDia_;
+
+    QLabel explainLabel;
 
 
 private:

@@ -26,6 +26,8 @@ MainWindow::MainWindow(QWidget *parent) :
     showFrameNum = 1;
     showTOFmax = 10;
 
+    ui->statusBar->addWidget(&explainLabel);
+    ui->statusBar->setStyleSheet(QString("QStatusBar::item{border:0px}"));
 
     initTreeWidget();
     initGUI();
@@ -3063,6 +3065,404 @@ void MainWindow::on_treeWidget_itemExpanded(QTreeWidgetItem *item)
 void MainWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
 {
     qDebug()<<"item on_treeWidget_itemClicked "<<item->text(0);
+
+    QString itemName = item->text(0);
+    if("sfw_rst(0)[0]" == itemName)
+    {
+        explainLabel.setText("0:streaming;  1:sleep");
+    }else if("r_cnt_rst_dly1(1)[7:4]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("计数器解除hold，到计数器解除复位之间的时间间隔"));
+    }else if("r_syncnt_rst_width(1)[3:0]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("syncnt_rst脉冲宽度"));
+    }else if("r_cnt_hld_dly2(2)[7:0]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("计数器解除复位后，到计数器重新hold之间的时间间隔，保持住coarse_cnt，一旦hold拉高就停止计数保持，hold拉低后复位coarse_cnt"));
+    }else if("r_tdc_rdck_dly1(3)[7:4]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("开始读计数器，到第一个读clk上升沿到来之间的时间间隔"));
+    }else if("r_tdc_redn_dly(3)[3:0]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("计数器hold后，到开始读计数器之间的时间间隔，x+1"));
+    }else if("r_tdc_cnt_rst_dly2(4)[7:4]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("读完计数器，到计数器重新进入复位状态之间的时间间隔"));
+    }else if("r_tdc_rdck_cyc(4)[3:0]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("读取4次计数器对应的周期数（时长），四次读所占时长，2^(x+2)+2^(x-2)"));
+    }else if("r_rising_latch(5)[7]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("Hitogram & MA锁存TDC数据时用tdc_read_clk的上升沿还是下降沿"));
+    }else if("r_tdc_read_en_same(5)[6]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("是否同时读取32个TDC，设为1"));
+    }else if("r_slower_clk(5)[5]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("系统时钟的一半，设为0"));
+
+    }else if("r_faster_clk(5)[4]" == itemName)
+    {
+       explainLabel.setText(QStringLiteral("系统时钟的两倍，设为0"));
+    }else if("r_cnt_hld_dly1(5)[3:0]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("syncnt_rst结束后到计数器解除hold的时间间隔"));
+    }
+
+    /**************Integration******************/
+
+    else if("r_integ(6)[7:0]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("r_integ[7:0]，单次曝光时长，默认值750个cycle，对应75M时钟的10us"));
+    }else if("r_hts(7)[5:4]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("r_hts[9:8]，每行曝光总次数，默认值100，即完成单行曝光所需的时长为1ms"));
+    }else if("r_integ(7)[3:0]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("r_integ[11:8]"));
+    }else if("r_hts(8)[7:0]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("r_hts[7:0]"));
+    }
+
+    /***************MA**************************/
+    else if("r_ma_w0(9)[3:0]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("Moving-Average加权系数0"));
+    }else if("r_ma_w1(9)[7:4]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("Moving-Average加权系数1"));
+    }else if("r_ma_w2(10)[3:0]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("Moving-Average加权系数2"));
+    }else if("r_ma_w3(10)[7:4]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("Moving-Average加权系数3"));
+    }else if("r_ma_w4(11)[3:0]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("Moving-Average加权系数4"));
+    }else if("r_ma_w5(11)[7:4]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("Moving-Average加权系数5"));
+    }else if("r_ma_w6(12)[3:0]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("Moving-Average加权系数6"));
+    }else if("r_ma_w7(12)[7:4]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("Moving-Average加权系数7"));
+    }else if("r_ma_w8(13)[3:0]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("Moving-Average加权系数8"));
+    }else if("r_ma_w9(13)[7:4]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("Moving-Average加权系数9"));
+    }else if("r_ma_wa(14)[3:0]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("Moving-Average加权系数10"));
+    }else if("r_ma_wb(14)[7:4]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("Moving-Average加权系数11"));
+    }else if("r_ma_wc(15)[3:0]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("Moving-Average加权系数12"));
+    }else if("r_ma_wd(15)[7:4]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("Moving-Average加权系数13"));
+    }else if("r_ma_we(16)[3:0]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("Moving-Average加权系数14"));
+    }else if("r_ma_wf(16)[7:4]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("Moving-Average加权系数15"));
+    }
+
+
+/*******************Digital ***************************************/
+    else if("r_spi_en(17)[7]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("SPI时钟使能：1-使能SPI时钟，关闭DVP时钟；0-关闭SPI时钟，使能DVP时钟"));
+    }else if("r_dvp_clk_sel(17)[6:4]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("DVP的时钟选择:2'h1:dvpclk=sclk/2; 2'h3:dvp_clk=sclk/4; others:dvp_clk=sclk; dvp_clk的时钟频率 default是01，为全速75MHZ/2=37.5MHZ; 在bypassDSP模式下需要改为00 全速输出"));
+    }else if("r_clk_divider(17)[3:0]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("SPI输出的时钟频率，默认值为3; 0-2分频；1-4分频；2-6分频；3-8分频"));
+    }else if("r_sramout_clksel(18)[7]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("SRAM模式下，时钟模式选择：1-mclk，0-mclk二分频S4悬空"));
+    }else if("r_raw_out_mode(18)[6]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("BYPASS模式下，关闭Histogram&MA模块时钟"));
+    }else if("r_dvp_sram_output_mode(18)[5]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("DVP输出的选择 0：直接输出TDC原始数据  1：输出SRAM内的直方图数据"));
+    }else if("r_sram_output_cycles(18)[4:0"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("留给读取SRAM的时间，以单次激光曝光cycle为单位"));
+    }else if("r_row_start(19)[4:0]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("TDC测量的起始行，bit5有高级功能"));
+    }else if("r_high_bits(19)[7]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("仅用于BYPASS模式，置1输出raw_data的低13位和3bit raw_cnt；置0输出raw_data的全14位和raw_cnt的高2位"));
+    }else if("r_row_end(20)[5:0]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("TDC测量的结束行，bit5有高级功能"));
+    }
+
+
+/*****************Analog****************************/
+    else if("dl_sel_dly(21)[2:0]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("选择电容并入时钟传输线路上，3'b000:并入的电容最小；3'b111：并入的电容最大"));
+    }    else if("dl_sel_long(21)[3]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("1'b0：选择短延迟链路；1'b1：选择长延迟链路"));
+    }    else if("dl_en(21)[4]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("1'b0：pixel输出的stop信号直通到TDC；1'b1：延迟模块使能，DSP输出的stop信号经过延迟模块后到TDC"));
+    }    else if("tdc_syncnt_en_global(21)[5]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("Enable TDC synchronous counter"));
+    }    else if("tdc_ckdrv_en(21)[6]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("Enable FTDC clock driver"));
+    }    else if("sel_cnt_mode(21)[7]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("new to control raw_cnt+1 or +1 only"));
+    }    else if("pll_coarse_cnt_cksel(22)[4:0]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("TDC coarse counter reference clock"));
+    }    else if("pll_lpf_rc(22)[7:6]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("PLL LPF resistor cntrl, 00=10K; 01=8.8K; 10=7.4K; 11=5.9K"));
+    }    else if("pll_div_ctrl(23)[6:0]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("Fb clock divider ratio"));
+    }    else if("enb_pclk(24)[7]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("PLL 600MHz输出时钟测试使能位，1'b0：PLL输出到clk MUX的通路关闭；1'b1：PLL输出到clk MUX的通路打开"));
+    }    else if("r_tdc_start_re(24)[6]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("1 - tdc_start_o激光脉冲为低有效；0 - tdc_start_o激光脉冲为高有效；"));
+    }    else if("mclk_div_rst(24)[5]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("mclk divider reset"));
+    }    else if("mclk_div_ctrl(24)[4:0]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("PLL给DSP部分的时钟频率选择，默认值为600M的8分频（75MHz）"));
+    }    else if("ana_reserve_out[0](25)[0]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("ana_reserve_out<0> ana_bias模块测试使能控制位，1b'0：ana_bias模块不可以测试；1b'1：ana_bias模块可以测试"));
+    }    else if("ana_reserve_out[3:1](25)[3:1]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("ana_reserve_out<3:1> ana_bias模块中bias_ctrl<2:0>"));
+    }    else if("ana_reserve_out[4](25)[4]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("ana_reserve_out<4> ana_bias模块的使能控制，1b'0：ana_bias模块可以工作；1b'1：ana_bias模块关闭"));
+    }    else if("ana_reserve_out[7:5](25)[7:5]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("ana_reserve_out<8:5> vcsel_drv模块中sw_bias<3:0>,default值待定"));
+    }    else if("ana_reserve_out[8](26)[0]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("ana_reserve_out<8:5> vcsel_drv模块中sw_bias<3:0>,default值待定"));
+    }    else if("ana_reserve_out[12:9](26)[4:1]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("ana_reserve_out<12:9> vcsel_drv模块中th_bias<3:0>,default值待定"));
+    }    else if("ana_reserve_out[13](26)[5]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("ana_reserve_out<13> vcsel_drv模块中trig模式选择，1b'0:选择芯片内部的信号做trig；1b'1：选择芯片外部信号做trig（EXT_DRV引脚）"));
+    }    else if("ana_reserve_out[15:14](26)[7:6]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("ana_reserve_out<17:14> 无功能"));
+    }    else if("ana_reserve_out[17:16](27)[1:0]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("ana_reserve_out<17:14> 无功能"));
+    }    else if("ana_reserve_out[19:18](27)[3:2]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("ana_reserve_out<19:18> pll模块中icp_ctrl<1:0> CP电流控制位，default：2b'10"));
+    }    else if("ana_reserve_out[20](27)[4]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("ana_reserve_out<20> pll模块中pfd_dly_sel，PFD的死区控制，default:1b’1"));
+    }    else if("ana_reserve_out[22:21](27)[6:5]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("ana_reserve_out<22:21> ana_mux选择控制，2b'11：选择28uA输出到ANA_T2引脚上做测试；default:2b'11"));
+    }    else if("ana_reserve_out[23](27)[7]"== itemName)
+    {
+        explainLabel.setText(QStringLiteral("ana_reserve_out<23> 无功能"));
+    }
+
+/*****************pixel *************************************/
+    else if("pixel_qch_bias_ctrl(28)[7:4]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("Passive rst current"));
+    }    else if("pixel_cd_bias_ctrl(28)[3:0]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("CD window width setting"));
+    }    else if("pixel_cntr_enb(29)[4]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("模拟内部悬空"));
+    }    else if("pixel_bypass(29)[3]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("模拟内部悬空"));
+    }    else if("pixel_th1(29)[2]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("设置SPAD触发个数的门限"));
+    }    else if("pixel_th0(29)[1]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("设置SPAD触发个数的门限"));
+    }    else if("pixel_mode(29)[0]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("pixel模式，置0即可"));
+    }   else if("pixel_col_sel_2(30)[7:4]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("选择16~31列中某一列的pixel的Dout输出"));
+    }    else if("pixel_col_sel_1(30)[3:0]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("选择0~15列中某一列的pixel的Dout输出"));
+    }    else if("pixel_reserve_out[4:0](31)[4:0]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("pixel_reserve_out<4:0>=vcsel_drv模块中sw_trim<4:0>；  "));
+    }    else if("pixel_reserve_out[7:5](31)[7:5]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("pixel_reserve_out<8:5>=vcsel_drv模块中eq_trim<3:0>；测试时全部置0 "));
+    }    else if("pixel_reserve_out[8](32)[0]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("pixel_reserve_out<8:5>=vcsel_drv模块中eq_trim<3:0>；测试时全部置0 "));
+    }    else if("pixel_reserve_out[9](32)[1]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("pixel_reserve_out<9>=vcsel_drv模块中vcsel_ibleed_en；"));
+    }    else if("pixel_reserve_out[10](32)[2]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("pixel_reserve_out<10>=vcsel_drv模块中vcsel_ith_en； "));
+    }    else if("pixel_reserve_out[11](32)[3]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("pixel_reserve_out<11>=vcsel_drv模块中osc_en；测试时置1 "));
+    }    else if("pixel_reserve_out[14:12](32)[6:4]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("pixel_reserve_out<14:12>=vcsel_drv模块中delay<2:0>控制，测试时全部置0"));
+    }    else if("pixel_reserve_out[15](32)[7]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral(""));
+    }
+
+/************top**************************/
+    else if("top_reserve_out[3:0](33)[3:0]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("top_reserve_out<3:0> RC OSC内部电容控制字，fixed cap(min)=1.6pF，binary code，step=150fF，max=3.85pF，default=4b'1000；"));
+    }else if("top_reserve_out[4](33)[4]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("top_reserve_out<4> RC OSC模块的使能控制，1‘b1=RC OSC可以工作；1b'0=RC OSC模块关闭; default=1b'0；"));
+    }else if("top_reserve_out[7:5](33)[7:5]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("top_reserve_out<8:5> RC OSC内部正温度系数电阻控制字，温度测试时可以调试此reg值，default=4b’0010；"));
+    }else if("top_reserve_out[8](34)[0]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("top_reserve_out<8:5> RC OSC内部正温度系数电阻控制字，温度测试时可以调试此reg值，default=4b’0010；"));
+    }else if("top_reserve_out[12:9](34)[4:1]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("top_reserve_out<12:9> RC OSC内部负温度系数电阻控制字，温度测试是可以调试此reg值，default=4b'1000；"));
+    }else if("top_reserve_out[15:13](34)[7:5]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("top_reserve_out<15:13> RC OSC内部充电电流控制字，default=3b‘100；"));
+    }else if("top_reserve_out[18:16](35)[2:0]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("top_reserve_out<18:16> RC OSC内部比较器偏置电流控制字，default=3b‘100；"));
+    }else if("top_reserve_out[23:19](35)[7:3]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("top_reserve_out<24:19> 无功能；"));
+    }else if("top_reserve_out[24](36)[0]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("top_reserve_out<24:19> 无功能；"));
+    }else if("top_reserve_out[26:25](36)[2:1]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("top_reserve_out<26:25> trig_sel的选择控制位，2b'00选择tx_trig1; 2b'01选择tx_trig2; 2b'10选择从数字过来的tx信号。Default=2b‘00；"));
+    }else if("top_reserve_out[28:27](36)[4:3]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("top_reserve_out<28:27> trig_width控制位，2b'00：脉宽最小；2b'11：脉宽最宽.Default=2b‘00；"));
+    }else if("top_reserve_out[30:29](36)[6:5]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("top_reserve_out<30:29> A4 clock测试选择位，选择不同的clk到PCLK引脚做测试。2b'00：clock输出低电平；2b’01: clock输出低电平；2b'10: clock输出DSP的时钟（default=75MHz）；2b'11: clock选择PLL的输出做测试（default=600MHz），Default=2b‘00；"));
+    }else if("top_reserve_out[31](36)[7]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("top_reserve_out<31> 无功能"));
+    }
+
+
+    /*************Delayline****************/
+    else if("r_test_dl_in_en(37)[7:3]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("delayline使能，默认使能"));
+    }else if("r_test_dl_width(37)[2:0]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("delayline脉冲宽度"));
+    }else if("r_test_dl_in_0(38)[7:0]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("delayline脉冲间隔0"));
+    }else if("r_test_dl_in_1(39)[7:0]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("delayline脉冲间隔1"));
+    }else if("r_test_dl_in_2(40)[7:0]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("delayline脉冲间隔2"));
+    }else if("r_test_dl_in_3(41)[7:0]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("delayline脉冲间隔3"));
+    }else if("r_test_dl_in_4(42)[7:0]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("delayline脉冲间隔4"));
+    }
+
+    /*********************MISC**************/
+    else if("r_tdc_start_rise_state(43)[7]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("给激光TX的信号，TX激光使能脉冲在CNT_HLD_DLY1和CNT_RST_DLY1这两个中的哪个状态开始上升沿"));
+    }else if("r_tdc_start_rise(43)[6:4]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("给激光TX的信号，TX激光使能脉冲上升沿到来时对应状态的计数器"));
+    }else if("r_tdc_start_fall_state(43)[3]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("给激光TX的信号，TX激光使能脉冲在CNT_HLD_DLY1和CNT_RST_DLY1这两个中的哪个状态开始下降沿"));
+    } else if("r_tdc_start_fall(43)[2:0]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("给激光TX的信号，TX激光使能脉冲下降沿到来时对应状态的计数器"));
+    }else if("r_pds(44)[7:0]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("驱动能力"));
+    }else if("r_pds(45)[7:0]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("驱动能力"));
+    }else if("r_pds(46)[7:0]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("驱动能力"));
+    }else if("r_pds(47)[7:0]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("驱动能力"));
+    }
+
+
+    /**********OTHERS***********/
+    else if("pll_pwdn(48)[7]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("PLL power down"));
+    }else if("pll_test_en(48)[6]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("Enable external vctrl(可以片外补偿)"));
+    }else if("pll_div_rst(48)[5]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("PLL fb clock divider reset"));
+    }else if("r_reduce_cnt(48)[4]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("high直方图运算的raw_cnt除以2"));
+    }else if("Noise_reg(48)[3:0]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral("用来设置噪声滤除门限{Noise_reg, 6'h3F}，当TDC值大于该值时滤除"));
+    }else if("rhigh_hts(49)[7:0]" == itemName)
+    {
+        explainLabel.setText(QStringLiteral(""));
+    }
+
+
 }
 
 
