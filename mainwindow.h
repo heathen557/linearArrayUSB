@@ -91,9 +91,9 @@ public:
     QSignalMapper *MISC_read_signalMapper;
     QSignalMapper *MISC_write_signalMapper;
 
-    QLineEdit Others_lineEdit[7];
-    QPushButton Others_read_pushButton[7];
-    QPushButton Others_write_pushButton[7];
+    QLineEdit Others_lineEdit[6];
+    QPushButton Others_read_pushButton[6];
+    QPushButton Others_write_pushButton[6];
     QSignalMapper *Others_read_signalMapper;
     QSignalMapper *Others_write_signalMapper;
 

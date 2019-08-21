@@ -476,16 +476,16 @@ void MainWindow::initTreeWidget()
 
     //创建Others Setting 子节点
     QTreeWidgetItem *Others_widgetItem[7];
-    Others_widgetItem[0] = new QTreeWidgetItem(Others,QStringList(QString("r_tdc_start_rise_state(43)[7]")));
-    Others_widgetItem[1] = new QTreeWidgetItem(Others,QStringList(QString("r_tdc_start_rise(43)[6:4]")));
-    Others_widgetItem[2] = new QTreeWidgetItem(Others,QStringList(QString("r_tdc_start_fall_state(43)[3]")));
-    Others_widgetItem[3] = new QTreeWidgetItem(Others,QStringList(QString("r_tdc_start_fall(43)[2:0]")));
-    Others_widgetItem[4] = new QTreeWidgetItem(Others,QStringList(QString("r_pds(44)[7:0]")));
-    Others_widgetItem[5] = new QTreeWidgetItem(Others,QStringList(QString("r_pds(45)[7:0]")));
-    Others_widgetItem[6] = new QTreeWidgetItem(Others,QStringList(QString("r_pds(46)[7:0]")));
+    Others_widgetItem[0] = new QTreeWidgetItem(Others,QStringList(QString("pll_pwdn(48)[7]")));
+    Others_widgetItem[1] = new QTreeWidgetItem(Others,QStringList(QString("pll_test_en(48)[6]")));
+    Others_widgetItem[2] = new QTreeWidgetItem(Others,QStringList(QString("pll_div_rst(48)[5]")));
+    Others_widgetItem[3] = new QTreeWidgetItem(Others,QStringList(QString("r_reduce_cnt(48)[4]")));
+    Others_widgetItem[4] = new QTreeWidgetItem(Others,QStringList(QString("Noise_reg(48)[3:0]")));
+    Others_widgetItem[5] = new QTreeWidgetItem(Others,QStringList(QString("rhigh_hts(49)[7:0]")));
+
     Others_read_signalMapper = new QSignalMapper(this);
     Others_write_signalMapper = new QSignalMapper(this);
-    for(i=0; i<7; i++)
+    for(i=0; i<6; i++)
     {
         Others_lineEdit[i].setAlignment(Qt::AlignCenter);
         Others_read_pushButton[i].setText(QStringLiteral("读取"));
@@ -2498,6 +2498,32 @@ void MainWindow::Others_read_slot(int Others_number)
         return;
     }
     qDebug()<<"read Others_number = "<<Others_number<<endl;
+
+    int hardWareAddress = 216;
+
+    switch (Others_number) {
+    case 0:
+        emit readDevSignal(hardWareAddress,48,false);
+        break;
+    case 1:
+        emit readDevSignal(hardWareAddress,48,false);
+        break;
+    case 2:
+        emit readDevSignal(hardWareAddress,48,false);
+        break;
+    case 3:
+        emit readDevSignal(hardWareAddress,48,false);
+        break;
+    case 4:
+        emit readDevSignal(hardWareAddress,48,false);
+        break;
+    case 5:
+        emit readDevSignal(hardWareAddress,49,false);
+        break;
+     default:
+        break;
+    }
+
 }
 //写入Others槽函数
 void MainWindow::Others_write_slot(int Others_number)
@@ -2508,6 +2534,74 @@ void MainWindow::Others_write_slot(int Others_number)
         return;
     }
     qDebug()<<"write Others_number = "<<Others_number<<endl;
+    int hardWareAddress = 216;
+    switch (Others_number) {
+    case 0:{
+        int data = (Others_lineEdit[0].text().toInt(NULL,16)<<7) + (Others_lineEdit[1].text().toInt(NULL,16)<<6) +
+                (Others_lineEdit[2].text().toInt(NULL,16)<<5) + (Others_lineEdit[3].text().toInt(NULL,16)<<4) +
+                Others_lineEdit[4].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 48 , QString::number(data,16), false);
+        Others_lineEdit[0].setText("");
+        Others_lineEdit[1].setText("");
+        Others_lineEdit[2].setText("");
+        Others_lineEdit[3].setText("");
+        Others_lineEdit[4].setText("");
+        break;
+    }case 1:{
+        int data = (Others_lineEdit[0].text().toInt(NULL,16)<<7) + (Others_lineEdit[1].text().toInt(NULL,16)<<6) +
+                (Others_lineEdit[2].text().toInt(NULL,16)<<5) + (Others_lineEdit[3].text().toInt(NULL,16)<<4) +
+                Others_lineEdit[4].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 48 , QString::number(data,16), false);
+        Others_lineEdit[0].setText("");
+        Others_lineEdit[1].setText("");
+        Others_lineEdit[2].setText("");
+        Others_lineEdit[3].setText("");
+        Others_lineEdit[4].setText("");
+        break;
+    }case 2:{
+        int data = (Others_lineEdit[0].text().toInt(NULL,16)<<7) + (Others_lineEdit[1].text().toInt(NULL,16)<<6) +
+                (Others_lineEdit[2].text().toInt(NULL,16)<<5) + (Others_lineEdit[3].text().toInt(NULL,16)<<4) +
+                Others_lineEdit[4].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 48 , QString::number(data,16), false);
+        Others_lineEdit[0].setText("");
+        Others_lineEdit[1].setText("");
+        Others_lineEdit[2].setText("");
+        Others_lineEdit[3].setText("");
+        Others_lineEdit[4].setText("");
+        break;
+    }case 3:{
+        int data = (Others_lineEdit[0].text().toInt(NULL,16)<<7) + (Others_lineEdit[1].text().toInt(NULL,16)<<6) +
+                (Others_lineEdit[2].text().toInt(NULL,16)<<5) + (Others_lineEdit[3].text().toInt(NULL,16)<<4) +
+                Others_lineEdit[4].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 48 , QString::number(data,16), false);
+        Others_lineEdit[0].setText("");
+        Others_lineEdit[1].setText("");
+        Others_lineEdit[2].setText("");
+        Others_lineEdit[3].setText("");
+        Others_lineEdit[4].setText("");
+        break;
+    }case 4:{
+        int data = (Others_lineEdit[0].text().toInt(NULL,16)<<7) + (Others_lineEdit[1].text().toInt(NULL,16)<<6) +
+                (Others_lineEdit[2].text().toInt(NULL,16)<<5) + (Others_lineEdit[3].text().toInt(NULL,16)<<4) +
+                Others_lineEdit[4].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 48 , QString::number(data,16), false);
+        Others_lineEdit[0].setText("");
+        Others_lineEdit[1].setText("");
+        Others_lineEdit[2].setText("");
+        Others_lineEdit[3].setText("");
+        Others_lineEdit[4].setText("");
+        break;
+    }case 5:{
+        int data = Others_lineEdit[5].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 49 , QString::number(data,16), false);
+        Others_lineEdit[5].setText("");
+        break;
+    }
+
+}
+
+
+
 }
 
 
@@ -2845,6 +2939,21 @@ void MainWindow::reReadDevSlot(int regesiterAddress,QString str)
         int r_pds = data & 0xFF;
         MISC_lineEdit[7].setText(QString::number(r_pds,16).toUpper());
         break;
+    }case 48:{
+        int pll_pwdn = (data & 0x80)>>7;
+        Others_lineEdit[0].setText(QString::number(pll_pwdn,16).toUpper());
+        int pll_test_en = (data & 0x40)>>6;
+        Others_lineEdit[1].setText(QString::number(pll_test_en,16).toUpper());
+        int pll_div_rst = (data & 0x20)>>5;
+        Others_lineEdit[2].setText(QString::number(pll_div_rst,16).toUpper());
+        int r_reduce_cnt = (data & 0x10)>>4;
+        Others_lineEdit[3].setText(QString::number(r_reduce_cnt,16).toUpper());
+        int Noise_reg = data & 0x0F;
+        Others_lineEdit[4].setText(QString::number(Noise_reg,16).toUpper());
+        break;
+    }case 49:{
+        int rhigh_hts = data &0XFF;
+        Others_lineEdit[5].setText(QString::number(rhigh_hts,16).toUpper());
     }
 
 
@@ -2941,6 +3050,10 @@ void MainWindow::on_treeWidget_itemExpanded(QTreeWidgetItem *item)
         emit readDevSignal(hardWareAddress,45,false);
         emit readDevSignal(hardWareAddress,46,false);
         emit readDevSignal(hardWareAddress,47,false);
+    }else if("Others" == item->text(0))
+    {
+        emit readDevSignal(hardWareAddress,48,false);
+        emit readDevSignal(hardWareAddress,49,false);
     }
 
 }
