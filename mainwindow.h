@@ -67,9 +67,9 @@ public:
     QSignalMapper *Analog_read_signalMapper;
     QSignalMapper *Analog_write_signalMapper;
 
-    QLineEdit Pixel_lineEdit[16];
-    QPushButton Pixel_read_pushButton[16];
-    QPushButton Pixel_write_pushButton[16];
+    QLineEdit Pixel_lineEdit[17];
+    QPushButton Pixel_read_pushButton[17];
+    QPushButton Pixel_write_pushButton[17];
     QSignalMapper *Pixel_read_signalMapper;
     QSignalMapper *Pixel_write_signalMapper;
 
