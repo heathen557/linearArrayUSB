@@ -2383,6 +2383,36 @@ void MainWindow::MISC_read_slot(int MISC_number)
         return;
     }
     qDebug()<<"read MISC_number = "<<MISC_number<<endl;
+    int hardWareAddress = 216;
+
+    switch (MISC_number) {
+    case 0:
+        emit readDevSignal(hardWareAddress,43,false);
+        break;
+    case 1:
+        emit readDevSignal(hardWareAddress,43,false);
+        break;
+    case 2:
+        emit readDevSignal(hardWareAddress,43,false);
+        break;
+    case 3:
+        emit readDevSignal(hardWareAddress,43,false);
+        break;
+    case 4:
+        emit readDevSignal(hardWareAddress,44,false);
+        break;
+    case 5:
+        emit readDevSignal(hardWareAddress,45,false);
+        break;
+    case 6:
+        emit readDevSignal(hardWareAddress,46,false);
+        break;
+    case 7:
+        emit readDevSignal(hardWareAddress,47,false);
+        break;
+     default:
+        break;
+    }
 }
 //写入MISC槽函数
 void MainWindow::MISC_write_slot(int MISC_number)
@@ -2393,6 +2423,69 @@ void MainWindow::MISC_write_slot(int MISC_number)
         return;
     }
     qDebug()<<"write MISC_number = "<<MISC_number<<endl;
+    int hardWareAddress = 216;
+    switch (MISC_number) {
+    case 0:{
+        int data = (MISC_lineEdit[0].text().toInt(NULL,16)<<7) + (MISC_lineEdit[1].text().toInt(NULL,16)<<4) +
+                (MISC_lineEdit[2].text().toInt(NULL,16)<<3) + MISC_lineEdit[3].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 43 , QString::number(data,16), false);
+        MISC_lineEdit[0].setText("");
+        MISC_lineEdit[1].setText("");
+        MISC_lineEdit[2].setText("");
+        MISC_lineEdit[3].setText("");
+        break;
+    }case 1:{
+        int data = (MISC_lineEdit[0].text().toInt(NULL,16)<<7) + (MISC_lineEdit[1].text().toInt(NULL,16)<<4) +
+                (MISC_lineEdit[2].text().toInt(NULL,16)<<3) + MISC_lineEdit[3].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 43 , QString::number(data,16), false);
+        MISC_lineEdit[0].setText("");
+        MISC_lineEdit[1].setText("");
+        MISC_lineEdit[2].setText("");
+        MISC_lineEdit[3].setText("");
+        break;
+    }case 2:{
+        int data = (MISC_lineEdit[0].text().toInt(NULL,16)<<7) + (MISC_lineEdit[1].text().toInt(NULL,16)<<4) +
+                (MISC_lineEdit[2].text().toInt(NULL,16)<<3) + MISC_lineEdit[3].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 43 , QString::number(data,16), false);
+        MISC_lineEdit[0].setText("");
+        MISC_lineEdit[1].setText("");
+        MISC_lineEdit[2].setText("");
+        MISC_lineEdit[3].setText("");
+        break;
+        break;
+    }case 3:{
+        int data = (MISC_lineEdit[0].text().toInt(NULL,16)<<7) + (MISC_lineEdit[1].text().toInt(NULL,16)<<4) +
+                (MISC_lineEdit[2].text().toInt(NULL,16)<<3) + MISC_lineEdit[3].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 43 , QString::number(data,16), false);
+        MISC_lineEdit[0].setText("");
+        MISC_lineEdit[1].setText("");
+        MISC_lineEdit[2].setText("");
+        MISC_lineEdit[3].setText("");
+        break;
+        break;
+    }case 4:{
+        int data =  MISC_lineEdit[4].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 44 , QString::number(data,16), false);
+        MISC_lineEdit[4].setText("");
+        break;
+    }case 5:{
+        int data =  MISC_lineEdit[5].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 45 , QString::number(data,16), false);
+        MISC_lineEdit[5].setText("");
+        break;
+    }case 6:{
+        int data =  MISC_lineEdit[6].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 46 , QString::number(data,16), false);
+        MISC_lineEdit[6].setText("");
+        break;
+    }case 7:{
+        int data =  MISC_lineEdit[7].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 47 , QString::number(data,16), false);
+        MISC_lineEdit[7].setText("");
+        break;
+    }
+
+    }
 }
 
 
@@ -2726,12 +2819,33 @@ void MainWindow::reReadDevSlot(int regesiterAddress,QString str)
         int r_test_dl_in_4 = data &0xFF;
         Delayline_lineEdit[6].setText(QString::number(r_test_dl_in_4,16).toUpper());
         break;
+    }case 43:{
+        int r_tdc_start_rise_state = (data & 0x80)>>7;
+        MISC_lineEdit[0].setText(QString::number(r_tdc_start_rise_state,16).toUpper());
+        int r_tdc_start_rise = (data & 0x70)>>4;
+        MISC_lineEdit[1].setText(QString::number(r_tdc_start_rise,16).toUpper());
+        int r_tdc_start_fall_state = (data & 0x08)>>3;
+        MISC_lineEdit[2].setText(QString::number(r_tdc_start_fall_state,16).toUpper());
+        int r_tdc_start_fall = data & 0x07;
+        MISC_lineEdit[3].setText(QString::number(r_tdc_start_fall,16).toUpper());
+        break;
+    }case 44:{
+        int r_pds = data & 0xFF;
+        MISC_lineEdit[4].setText(QString::number(r_pds,16).toUpper());
+        break;
+    }case 45:{
+        int r_pds = data & 0xFF;
+        MISC_lineEdit[5].setText(QString::number(r_pds,16).toUpper());
+        break;
+    }case 46:{
+        int r_pds = data & 0xFF;
+        MISC_lineEdit[6].setText(QString::number(r_pds,16).toUpper());
+        break;
+    }case 47:{
+        int r_pds = data & 0xFF;
+        MISC_lineEdit[7].setText(QString::number(r_pds,16).toUpper());
+        break;
     }
-
-
-
-
-
 
 
 
@@ -2820,6 +2934,13 @@ void MainWindow::on_treeWidget_itemExpanded(QTreeWidgetItem *item)
         emit readDevSignal(hardWareAddress,40,false);
         emit readDevSignal(hardWareAddress,41,false);
         emit readDevSignal(hardWareAddress,42,false);
+    }else if("MISC" == item->text(0))
+    {
+        emit readDevSignal(hardWareAddress,43,false);
+        emit readDevSignal(hardWareAddress,44,false);
+        emit readDevSignal(hardWareAddress,45,false);
+        emit readDevSignal(hardWareAddress,46,false);
+        emit readDevSignal(hardWareAddress,47,false);
     }
 
 }
