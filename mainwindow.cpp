@@ -295,26 +295,37 @@ void MainWindow::initTreeWidget()
 
 
     //创建Analog子节点
-    QTreeWidgetItem *Analog_widgetItem[16];
-    Analog_widgetItem[0] = new QTreeWidgetItem(Analog,QStringList(QString("dl_sel_dly(15)[2:0]")));
-    Analog_widgetItem[1] = new QTreeWidgetItem(Analog,QStringList(QString("dl_sel_long(15)[3]")));
-    Analog_widgetItem[2] = new QTreeWidgetItem(Analog,QStringList(QString("dl_en(15)[4]")));
-    Analog_widgetItem[3] = new QTreeWidgetItem(Analog,QStringList(QString("tdc_syncnt_en_global(15)[5]")));
-    Analog_widgetItem[4] = new QTreeWidgetItem(Analog,QStringList(QString("tdc_ckdrv_en(15)[6]")));
-    Analog_widgetItem[5] = new QTreeWidgetItem(Analog,QStringList(QString("sel_cnt_mode(15)[7]")));
-    Analog_widgetItem[6] = new QTreeWidgetItem(Analog,QStringList(QString("pll_coarse_cnt_cksel(16)[4:0]")));
-    Analog_widgetItem[7] = new QTreeWidgetItem(Analog,QStringList(QString("pll_lpf_rc(16)[7:6]")));
-    Analog_widgetItem[8] = new QTreeWidgetItem(Analog,QStringList(QString("pll_div_ctrl(17)[6:0]")));
-    Analog_widgetItem[9] = new QTreeWidgetItem(Analog,QStringList(QString("enb_pclk(18)[7]")));
-    Analog_widgetItem[10] = new QTreeWidgetItem(Analog,QStringList(QString("r_tdc_start_re(18)[6]")));
-    Analog_widgetItem[11] = new QTreeWidgetItem(Analog,QStringList(QString("mclk_div_rst(18)[5]")));
-    Analog_widgetItem[12] = new QTreeWidgetItem(Analog,QStringList(QString("mclk_div_ctrl(18)[4:0]")));
-    Analog_widgetItem[13] = new QTreeWidgetItem(Analog,QStringList(QString("ana_reserve_out(19)[7:0]")));
-    Analog_widgetItem[14] = new QTreeWidgetItem(Analog,QStringList(QString("ana_reserve_out(1a)[7:0]")));
-    Analog_widgetItem[15] = new QTreeWidgetItem(Analog,QStringList(QString("ana_reserve_out(1b)[7:0]")));
+    QTreeWidgetItem *Analog_widgetItem[26];
+    Analog_widgetItem[0] = new QTreeWidgetItem(Analog,QStringList(QString("dl_sel_dly(21)[2:0]")));
+    Analog_widgetItem[1] = new QTreeWidgetItem(Analog,QStringList(QString("dl_sel_long(21)[3]")));
+    Analog_widgetItem[2] = new QTreeWidgetItem(Analog,QStringList(QString("dl_en(21)[4]")));
+    Analog_widgetItem[3] = new QTreeWidgetItem(Analog,QStringList(QString("tdc_syncnt_en_global(21)[5]")));
+    Analog_widgetItem[4] = new QTreeWidgetItem(Analog,QStringList(QString("tdc_ckdrv_en(21)[6]")));
+    Analog_widgetItem[5] = new QTreeWidgetItem(Analog,QStringList(QString("sel_cnt_mode(21)[7]")));
+    Analog_widgetItem[6] = new QTreeWidgetItem(Analog,QStringList(QString("pll_coarse_cnt_cksel(22)[4:0]")));
+    Analog_widgetItem[7] = new QTreeWidgetItem(Analog,QStringList(QString("pll_lpf_rc(22)[7:6]")));
+    Analog_widgetItem[8] = new QTreeWidgetItem(Analog,QStringList(QString("pll_div_ctrl(23)[6:0]")));
+    Analog_widgetItem[9] = new QTreeWidgetItem(Analog,QStringList(QString("enb_pclk(24)[7]")));
+    Analog_widgetItem[10] = new QTreeWidgetItem(Analog,QStringList(QString("r_tdc_start_re(24)[6]")));
+    Analog_widgetItem[11] = new QTreeWidgetItem(Analog,QStringList(QString("mclk_div_rst(24)[5]")));
+    Analog_widgetItem[12] = new QTreeWidgetItem(Analog,QStringList(QString("mclk_div_ctrl(24)[4:0]")));
+    Analog_widgetItem[13] = new QTreeWidgetItem(Analog,QStringList(QString("ana_reserve_out[0](25)[0]")));
+    Analog_widgetItem[14] = new QTreeWidgetItem(Analog,QStringList(QString("ana_reserve_out[3:1](25)[3:1]")));
+    Analog_widgetItem[15] = new QTreeWidgetItem(Analog,QStringList(QString("ana_reserve_out[4](25)[4]")));
+    Analog_widgetItem[16] = new QTreeWidgetItem(Analog,QStringList(QString("ana_reserve_out[7:5](25)[7:5]")));
+    Analog_widgetItem[17] = new QTreeWidgetItem(Analog,QStringList(QString("ana_reserve_out[8](26)[0]")));
+    Analog_widgetItem[18] = new QTreeWidgetItem(Analog,QStringList(QString("ana_reserve_out[12:9](26)[4:1]")));
+    Analog_widgetItem[19] = new QTreeWidgetItem(Analog,QStringList(QString("ana_reserve_out[13](26)[5]")));
+    Analog_widgetItem[20] = new QTreeWidgetItem(Analog,QStringList(QString("ana_reserve_out[15:14](26)[7:6]")));
+    Analog_widgetItem[21] = new QTreeWidgetItem(Analog,QStringList(QString("ana_reserve_out[17:16](27)[1:0]")));
+    Analog_widgetItem[22] = new QTreeWidgetItem(Analog,QStringList(QString("ana_reserve_out[19:18](27)[3:2]")));
+    Analog_widgetItem[23] = new QTreeWidgetItem(Analog,QStringList(QString("ana_reserve_out[20](27)[4]")));
+    Analog_widgetItem[24] = new QTreeWidgetItem(Analog,QStringList(QString("ana_reserve_out[22:21](27)[6:5]")));
+    Analog_widgetItem[25] = new QTreeWidgetItem(Analog,QStringList(QString("ana_reserve_out[23](27)[7]")));
+
     Analog_read_signalMapper = new QSignalMapper(this);
     Analog_write_signalMapper = new QSignalMapper(this);
-    for(i=0; i<16; i++)
+    for(i=0; i<26; i++)
     {
         Analog_lineEdit[i].setAlignment(Qt::AlignCenter);
         Analog_read_pushButton[i].setText(QStringLiteral("读取"));
@@ -1419,9 +1430,6 @@ void MainWindow::Digital_write_slot(int Digital_number)
 
     }
 
-
-
-
 }
 
 
@@ -1435,6 +1443,92 @@ void MainWindow::Analog_read_slot(int Analog_number)
         return;
     }
     qDebug()<<"read Analog_number = "<<Analog_number<<endl;
+    int hardWareAddress = 216;
+
+    switch (Analog_number) {
+    case 0:
+        emit readDevSignal(hardWareAddress,21,false);
+        break;
+    case 1:
+        emit readDevSignal(hardWareAddress,21,false);
+        break;
+    case 2:
+        emit readDevSignal(hardWareAddress,21,false);
+        break;
+    case 3:
+        emit readDevSignal(hardWareAddress,21,false);
+        break;
+    case 4:
+        emit readDevSignal(hardWareAddress,21,false);
+        break;
+    case 5:
+        emit readDevSignal(hardWareAddress,21,false);
+        break;
+    case 6:
+        emit readDevSignal(hardWareAddress,22,false);
+        break;
+    case 7:
+        emit readDevSignal(hardWareAddress,22,false);
+        break;
+    case 8:
+        emit readDevSignal(hardWareAddress,23,false);
+        break;
+    case 9:
+        emit readDevSignal(hardWareAddress,24,false);
+        break;
+    case 10:
+        emit readDevSignal(hardWareAddress,24,false);
+        break;
+    case 11:
+        emit readDevSignal(hardWareAddress,24,false);
+        break;
+    case 12:
+        emit readDevSignal(hardWareAddress,24,false);
+        break;
+    case 13:
+        emit readDevSignal(hardWareAddress,25,false);
+        break;
+    case 14:
+        emit readDevSignal(hardWareAddress,25,false);
+        break;
+    case 15:
+        emit readDevSignal(hardWareAddress,25,false);
+        break;
+    case 16:
+        emit readDevSignal(hardWareAddress,25,false);
+        break;
+    case 17:
+        emit readDevSignal(hardWareAddress,26,false);
+        break;
+    case 18:
+        emit readDevSignal(hardWareAddress,26,false);
+        break;
+    case 19:
+        emit readDevSignal(hardWareAddress,26,false);
+        break;
+    case 20:
+        emit readDevSignal(hardWareAddress,26,false);
+        break;
+    case 21:
+        emit readDevSignal(hardWareAddress,27,false);
+        break;
+    case 22:
+        emit readDevSignal(hardWareAddress,27,false);
+        break;
+    case 23:
+        emit readDevSignal(hardWareAddress,27,false);
+        break;
+    case 24:
+        emit readDevSignal(hardWareAddress,27,false);
+        break;
+    case 25:
+        emit readDevSignal(hardWareAddress,27,false);
+        break;
+    default:
+        break;
+
+    }
+
 }
 //写入Analog槽函数
 void MainWindow::Analog_write_slot(int Analog_number)
@@ -1445,6 +1539,270 @@ void MainWindow::Analog_write_slot(int Analog_number)
         return;
     }
     qDebug()<<"write Analog_number = "<<Analog_number<<endl;
+    int hardWareAddress = 216;
+    switch (Analog_number) {
+    case 0:{
+        int data = Analog_lineEdit[0].text().toInt(NULL,16) + (Analog_lineEdit[1].text().toInt(NULL,16)<<3) +
+                   (Analog_lineEdit[2].text().toInt(NULL,16)<<4) + (Analog_lineEdit[3].text().toInt(NULL,16)<<5) +
+                   (Analog_lineEdit[4].text().toInt(NULL,16)<<6) + (Analog_lineEdit[5].text().toInt(NULL,16)<<7);
+
+        emit writeDevSignal(hardWareAddress, 21 , QString::number(data,16), false);
+        Analog_lineEdit[0].setText("");
+        Analog_lineEdit[1].setText("");
+        Analog_lineEdit[2].setText("");
+        Analog_lineEdit[3].setText("");
+        Analog_lineEdit[4].setText("");
+        Analog_lineEdit[5].setText("");
+        break;
+    }case 1:{
+        int data = Analog_lineEdit[0].text().toInt(NULL,16) + (Analog_lineEdit[1].text().toInt(NULL,16)<<3) +
+                   (Analog_lineEdit[2].text().toInt(NULL,16)<<4) + (Analog_lineEdit[3].text().toInt(NULL,16)<<5) +
+                   (Analog_lineEdit[4].text().toInt(NULL,16)<<6) + (Analog_lineEdit[5].text().toInt(NULL,16)<<7);
+
+        emit writeDevSignal(hardWareAddress, 21 , QString::number(data,16), false);
+        Analog_lineEdit[0].setText("");
+        Analog_lineEdit[1].setText("");
+        Analog_lineEdit[2].setText("");
+        Analog_lineEdit[3].setText("");
+        Analog_lineEdit[4].setText("");
+        Analog_lineEdit[5].setText("");
+        break;
+    }case 2:{
+        int data = Analog_lineEdit[0].text().toInt(NULL,16) + (Analog_lineEdit[1].text().toInt(NULL,16)<<3) +
+                   (Analog_lineEdit[2].text().toInt(NULL,16)<<4) + (Analog_lineEdit[3].text().toInt(NULL,16)<<5) +
+                   (Analog_lineEdit[4].text().toInt(NULL,16)<<6) + (Analog_lineEdit[5].text().toInt(NULL,16)<<7);
+
+        emit writeDevSignal(hardWareAddress, 21 , QString::number(data,16), false);
+        Analog_lineEdit[0].setText("");
+        Analog_lineEdit[1].setText("");
+        Analog_lineEdit[2].setText("");
+        Analog_lineEdit[3].setText("");
+        Analog_lineEdit[4].setText("");
+        Analog_lineEdit[5].setText("");
+        break;
+    }case 3:{
+        int data = Analog_lineEdit[0].text().toInt(NULL,16) + (Analog_lineEdit[1].text().toInt(NULL,16)<<3) +
+                   (Analog_lineEdit[2].text().toInt(NULL,16)<<4) + (Analog_lineEdit[3].text().toInt(NULL,16)<<5) +
+                   (Analog_lineEdit[4].text().toInt(NULL,16)<<6) + (Analog_lineEdit[5].text().toInt(NULL,16)<<7);
+
+        emit writeDevSignal(hardWareAddress, 21 , QString::number(data,16), false);
+        Analog_lineEdit[0].setText("");
+        Analog_lineEdit[1].setText("");
+        Analog_lineEdit[2].setText("");
+        Analog_lineEdit[3].setText("");
+        Analog_lineEdit[4].setText("");
+        Analog_lineEdit[5].setText("");
+        break;
+    }case 4:{
+        int data = Analog_lineEdit[0].text().toInt(NULL,16) + (Analog_lineEdit[1].text().toInt(NULL,16)<<3) +
+                   (Analog_lineEdit[2].text().toInt(NULL,16)<<4) + (Analog_lineEdit[3].text().toInt(NULL,16)<<5) +
+                   (Analog_lineEdit[4].text().toInt(NULL,16)<<6) + (Analog_lineEdit[5].text().toInt(NULL,16)<<7);
+
+        emit writeDevSignal(hardWareAddress, 21 , QString::number(data,16), false);
+        Analog_lineEdit[0].setText("");
+        Analog_lineEdit[1].setText("");
+        Analog_lineEdit[2].setText("");
+        Analog_lineEdit[3].setText("");
+        Analog_lineEdit[4].setText("");
+        Analog_lineEdit[5].setText("");
+        break;
+    }case 5:{
+        int data = Analog_lineEdit[0].text().toInt(NULL,16) + (Analog_lineEdit[1].text().toInt(NULL,16)<<3) +
+                   (Analog_lineEdit[2].text().toInt(NULL,16)<<4) + (Analog_lineEdit[3].text().toInt(NULL,16)<<5) +
+                   (Analog_lineEdit[4].text().toInt(NULL,16)<<6) + (Analog_lineEdit[5].text().toInt(NULL,16)<<7);
+
+        emit writeDevSignal(hardWareAddress, 21 , QString::number(data,16), false);
+        Analog_lineEdit[0].setText("");
+        Analog_lineEdit[1].setText("");
+        Analog_lineEdit[2].setText("");
+        Analog_lineEdit[3].setText("");
+        Analog_lineEdit[4].setText("");
+        Analog_lineEdit[5].setText("");
+        break;
+    }case 6:{
+        int data = Analog_lineEdit[6].text().toInt(NULL,16) + (Analog_lineEdit[7].text().toInt(NULL,16)<<6);
+        emit writeDevSignal(hardWareAddress, 22 , QString::number(data,16), false);
+        Analog_lineEdit[6].setText("");
+        Analog_lineEdit[7].setText("");
+        break;
+    }case 7:{
+        int data = Analog_lineEdit[6].text().toInt(NULL,16) + (Analog_lineEdit[7].text().toInt(NULL,16)<<6);
+        emit writeDevSignal(hardWareAddress, 22 , QString::number(data,16), false);
+        Analog_lineEdit[6].setText("");
+        Analog_lineEdit[7].setText("");
+        break;
+    }case 8:{
+        int data = Analog_lineEdit[8].text().toInt(NULL,16) ;
+        emit writeDevSignal(hardWareAddress, 23 , QString::number(data,16), false);
+        Analog_lineEdit[8].setText("");
+        break;
+    }case 9:{
+        int data = (Analog_lineEdit[9].text().toInt(NULL,16)<<7) + (Analog_lineEdit[10].text().toInt(NULL,16)<<6) +
+                   (Analog_lineEdit[11].text().toInt(NULL,16)<<5) + Analog_lineEdit[12].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 24 , QString::number(data,16), false);
+        Analog_lineEdit[9].setText("");
+        Analog_lineEdit[10].setText("");
+        Analog_lineEdit[11].setText("");
+        Analog_lineEdit[12].setText("");
+        break;
+    }case 10:{
+        int data = (Analog_lineEdit[9].text().toInt(NULL,16)<<7) + (Analog_lineEdit[10].text().toInt(NULL,16)<<6) +
+                   (Analog_lineEdit[11].text().toInt(NULL,16)<<5) + Analog_lineEdit[12].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 24 , QString::number(data,16), false);
+        Analog_lineEdit[9].setText("");
+        Analog_lineEdit[10].setText("");
+        Analog_lineEdit[11].setText("");
+        Analog_lineEdit[12].setText("");
+        break;
+    }case 11:{
+        int data = (Analog_lineEdit[9].text().toInt(NULL,16)<<7) + (Analog_lineEdit[10].text().toInt(NULL,16)<<6) +
+                   (Analog_lineEdit[11].text().toInt(NULL,16)<<5) + Analog_lineEdit[12].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 24 , QString::number(data,16), false);
+        Analog_lineEdit[9].setText("");
+        Analog_lineEdit[10].setText("");
+        Analog_lineEdit[11].setText("");
+        Analog_lineEdit[12].setText("");
+        break;
+    }case 12:{
+        int data = (Analog_lineEdit[9].text().toInt(NULL,16)<<7) + (Analog_lineEdit[10].text().toInt(NULL,16)<<6) +
+                   (Analog_lineEdit[11].text().toInt(NULL,16)<<5) + Analog_lineEdit[12].text().toInt(NULL,16);
+        emit writeDevSignal(hardWareAddress, 24 , QString::number(data,16), false);
+        Analog_lineEdit[9].setText("");
+        Analog_lineEdit[10].setText("");
+        Analog_lineEdit[11].setText("");
+        Analog_lineEdit[12].setText("");
+        break;
+    }case 13:{
+        int data = Analog_lineEdit[13].text().toInt(NULL,16) + (Analog_lineEdit[14].text().toInt(NULL,16)<<1) +
+                   (Analog_lineEdit[15].text().toInt(NULL,16)<<4) + (Analog_lineEdit[16].text().toInt(NULL,16)<<5);
+        emit writeDevSignal(hardWareAddress, 25 , QString::number(data,16), false);
+        Analog_lineEdit[13].setText("");
+        Analog_lineEdit[14].setText("");
+        Analog_lineEdit[15].setText("");
+        Analog_lineEdit[16].setText("");
+        break;
+    }case 14:{
+        int data = Analog_lineEdit[13].text().toInt(NULL,16) + (Analog_lineEdit[14].text().toInt(NULL,16)<<1) +
+                   (Analog_lineEdit[15].text().toInt(NULL,16)<<4) + (Analog_lineEdit[16].text().toInt(NULL,16)<<5);
+        emit writeDevSignal(hardWareAddress, 25 , QString::number(data,16), false);
+        Analog_lineEdit[13].setText("");
+        Analog_lineEdit[14].setText("");
+        Analog_lineEdit[15].setText("");
+        Analog_lineEdit[16].setText("");
+        break;
+    }case 15:{
+        int data = Analog_lineEdit[13].text().toInt(NULL,16) + (Analog_lineEdit[14].text().toInt(NULL,16)<<1) +
+                   (Analog_lineEdit[15].text().toInt(NULL,16)<<4) + (Analog_lineEdit[16].text().toInt(NULL,16)<<5);
+        emit writeDevSignal(hardWareAddress, 25 , QString::number(data,16), false);
+        Analog_lineEdit[13].setText("");
+        Analog_lineEdit[14].setText("");
+        Analog_lineEdit[15].setText("");
+        Analog_lineEdit[16].setText("");
+        break;
+    }case 16:{
+        int data = Analog_lineEdit[13].text().toInt(NULL,16) + (Analog_lineEdit[14].text().toInt(NULL,16)<<1) +
+                   (Analog_lineEdit[15].text().toInt(NULL,16)<<4) + (Analog_lineEdit[16].text().toInt(NULL,16)<<5);
+        emit writeDevSignal(hardWareAddress, 25 , QString::number(data,16), false);
+        Analog_lineEdit[13].setText("");
+        Analog_lineEdit[14].setText("");
+        Analog_lineEdit[15].setText("");
+        Analog_lineEdit[16].setText("");
+        break;
+    }case 17:{
+        int data = Analog_lineEdit[17].text().toInt(NULL,16) + (Analog_lineEdit[18].text().toInt(NULL,16)<<1) +
+                   (Analog_lineEdit[19].text().toInt(NULL,16)<<5) + (Analog_lineEdit[20].text().toInt(NULL,16)<<6);
+        emit writeDevSignal(hardWareAddress, 26 , QString::number(data,16), false);
+        Analog_lineEdit[17].setText("");
+        Analog_lineEdit[18].setText("");
+        Analog_lineEdit[19].setText("");
+        Analog_lineEdit[20].setText("");
+        break;
+    }case 18:{
+        int data = Analog_lineEdit[17].text().toInt(NULL,16) + (Analog_lineEdit[18].text().toInt(NULL,16)<<1) +
+                   (Analog_lineEdit[19].text().toInt(NULL,16)<<5) + (Analog_lineEdit[20].text().toInt(NULL,16)<<6);
+        emit writeDevSignal(hardWareAddress, 26 , QString::number(data,16), false);
+        Analog_lineEdit[17].setText("");
+        Analog_lineEdit[18].setText("");
+        Analog_lineEdit[19].setText("");
+        Analog_lineEdit[20].setText("");
+        break;
+    }case 19:{
+        int data = Analog_lineEdit[17].text().toInt(NULL,16) + (Analog_lineEdit[18].text().toInt(NULL,16)<<1) +
+                   (Analog_lineEdit[19].text().toInt(NULL,16)<<5) + (Analog_lineEdit[20].text().toInt(NULL,16)<<6);
+        emit writeDevSignal(hardWareAddress, 26 , QString::number(data,16), false);
+        Analog_lineEdit[17].setText("");
+        Analog_lineEdit[18].setText("");
+        Analog_lineEdit[19].setText("");
+        Analog_lineEdit[20].setText("");
+        break;
+    }case 20:{
+        int data = Analog_lineEdit[17].text().toInt(NULL,16) + (Analog_lineEdit[18].text().toInt(NULL,16)<<1) +
+                   (Analog_lineEdit[19].text().toInt(NULL,16)<<5) + (Analog_lineEdit[20].text().toInt(NULL,16)<<6);
+        emit writeDevSignal(hardWareAddress, 26 , QString::number(data,16), false);
+        Analog_lineEdit[17].setText("");
+        Analog_lineEdit[18].setText("");
+        Analog_lineEdit[19].setText("");
+        Analog_lineEdit[20].setText("");
+        break;
+    }case 21:{
+        int data = Analog_lineEdit[21].text().toInt(NULL,16) + (Analog_lineEdit[22].text().toInt(NULL,16)<<2) +
+                   (Analog_lineEdit[23].text().toInt(NULL,16)<<4) + (Analog_lineEdit[24].text().toInt(NULL,16)<<5) +
+                   (Analog_lineEdit[25].text().toInt(NULL,16)<<7);
+        emit writeDevSignal(hardWareAddress, 27 , QString::number(data,16), false);
+        Analog_lineEdit[21].setText("");
+        Analog_lineEdit[22].setText("");
+        Analog_lineEdit[23].setText("");
+        Analog_lineEdit[24].setText("");
+        Analog_lineEdit[25].setText("");
+        break;
+    }case 22:{
+        int data = Analog_lineEdit[21].text().toInt(NULL,16) + (Analog_lineEdit[22].text().toInt(NULL,16)<<2) +
+                   (Analog_lineEdit[23].text().toInt(NULL,16)<<4) + (Analog_lineEdit[24].text().toInt(NULL,16)<<5) +
+                   (Analog_lineEdit[25].text().toInt(NULL,16)<<7);
+        emit writeDevSignal(hardWareAddress, 27 , QString::number(data,16), false);
+        Analog_lineEdit[21].setText("");
+        Analog_lineEdit[22].setText("");
+        Analog_lineEdit[23].setText("");
+        Analog_lineEdit[24].setText("");
+        Analog_lineEdit[25].setText("");
+        break;
+    }case 23:{
+        int data = Analog_lineEdit[21].text().toInt(NULL,16) + (Analog_lineEdit[22].text().toInt(NULL,16)<<2) +
+                   (Analog_lineEdit[23].text().toInt(NULL,16)<<4) + (Analog_lineEdit[24].text().toInt(NULL,16)<<5) +
+                   (Analog_lineEdit[25].text().toInt(NULL,16)<<7);
+        emit writeDevSignal(hardWareAddress, 27 , QString::number(data,16), false);
+        Analog_lineEdit[21].setText("");
+        Analog_lineEdit[22].setText("");
+        Analog_lineEdit[23].setText("");
+        Analog_lineEdit[24].setText("");
+        Analog_lineEdit[25].setText("");
+        break;
+    }case 24:{
+        int data = Analog_lineEdit[21].text().toInt(NULL,16) + (Analog_lineEdit[22].text().toInt(NULL,16)<<2) +
+                   (Analog_lineEdit[23].text().toInt(NULL,16)<<4) + (Analog_lineEdit[24].text().toInt(NULL,16)<<5) +
+                   (Analog_lineEdit[25].text().toInt(NULL,16)<<7);
+        emit writeDevSignal(hardWareAddress, 27 , QString::number(data,16), false);
+        Analog_lineEdit[21].setText("");
+        Analog_lineEdit[22].setText("");
+        Analog_lineEdit[23].setText("");
+        Analog_lineEdit[24].setText("");
+        Analog_lineEdit[25].setText("");
+        break;
+    }case 25:{
+        int data = Analog_lineEdit[21].text().toInt(NULL,16) + (Analog_lineEdit[22].text().toInt(NULL,16)<<2) +
+                   (Analog_lineEdit[23].text().toInt(NULL,16)<<4) + (Analog_lineEdit[24].text().toInt(NULL,16)<<5) +
+                   (Analog_lineEdit[25].text().toInt(NULL,16)<<7);
+        emit writeDevSignal(hardWareAddress, 27 , QString::number(data,16), false);
+        Analog_lineEdit[21].setText("");
+        Analog_lineEdit[22].setText("");
+        Analog_lineEdit[23].setText("");
+        Analog_lineEdit[24].setText("");
+        Analog_lineEdit[25].setText("");
+        break;
+    }
+    default:
+        break;
+    }
 }
 
 
@@ -1696,8 +2054,73 @@ void MainWindow::reReadDevSlot(int regesiterAddress,QString str)
         int r_row_end = data & 0x3F;
         Digital_lineEdit[9].setText(QString::number(r_row_end,16).toUpper());
         break;
+    }case 21:{
+        int dl_sel_dly = data & 0x07;
+        Analog_lineEdit[0].setText(QString::number(dl_sel_dly,16).toUpper());
+        int dl_sel_long = (data & 0x08)>>3;
+        Analog_lineEdit[1].setText(QString::number(dl_sel_long,16).toUpper());
+        int dl_en = (data & 0x10)>>4;
+        Analog_lineEdit[2].setText(QString::number(dl_en,16).toUpper());
+        int tdc_syncnt_en_global = (data & 0x20)>>5;
+        Analog_lineEdit[3].setText(QString::number(tdc_syncnt_en_global,16).toUpper());
+        int tdc_ckdrv_en = (data & 0x40)>>6;
+        Analog_lineEdit[4].setText(QString::number(tdc_ckdrv_en,16).toUpper());
+        int sel_cnt_mode = (data & 0x80)>>7;
+        Analog_lineEdit[5].setText(QString::number(sel_cnt_mode,16).toUpper());
+        break;
+    }case 22:{
+        int pll_coarse_cnt_cksel = data & 0x1F;
+        Analog_lineEdit[6].setText(QString::number(pll_coarse_cnt_cksel,16).toUpper());
+        int pll_lpf_rc = (data & 0xC0)>>6;
+        Analog_lineEdit[7].setText(QString::number(pll_lpf_rc,16).toUpper());
+        break;
+    }case 23:{
+        int pll_div_ctrl = data & 0x7F;
+        Analog_lineEdit[8].setText(QString::number(pll_div_ctrl,16).toUpper());
+        break;
+    }case 24:{
+        int enb_pclk = (data & 0x80)>>7;
+        Analog_lineEdit[9].setText(QString::number(enb_pclk,16).toUpper());
+        int r_tdc_start_re = (data & 0x40)>>6;
+        Analog_lineEdit[10].setText(QString::number(r_tdc_start_re,16).toUpper());
+        int mclk_div_rst = (data & 0x20)>>5;
+        Analog_lineEdit[11].setText(QString::number(mclk_div_rst,16).toUpper());
+        int mclk_div_ctrl = data & 0x1F;
+        Analog_lineEdit[12].setText(QString::number(mclk_div_ctrl,16).toUpper());
+        break;
+    }case 25:{
+        int ana_reserve_out_25_1 = data & 0x01;
+        Analog_lineEdit[13].setText(QString::number(ana_reserve_out_25_1,16).toUpper());
+        int ana_reserve_out_25_2 = (data & 0x0E)>>1;
+        Analog_lineEdit[14].setText(QString::number(ana_reserve_out_25_2,16).toUpper());
+        int ana_reserve_out_25_3 = (data & 0x10)>>4;
+        Analog_lineEdit[15].setText(QString::number(ana_reserve_out_25_3,16).toUpper());
+        int ana_reserve_out_25_4 = (data & 0xE0)>>5;
+        Analog_lineEdit[16].setText(QString::number(ana_reserve_out_25_4,16).toUpper());
+        break;
+    }case 26:{
+        int ana_reserve_out_26_1 = data & 0x01;
+        Analog_lineEdit[17].setText(QString::number(ana_reserve_out_26_1,16).toUpper());
+        int ana_reserve_out_26_2 = (data & 0x1E)>>1;
+        Analog_lineEdit[18].setText(QString::number(ana_reserve_out_26_2,16).toUpper());
+        int ana_reserve_out_26_3 = (data & 0x20)>>5;
+        Analog_lineEdit[19].setText(QString::number(ana_reserve_out_26_3,16).toUpper());
+        int ana_reserve_out_26_4 = (data & 0xC0)>>6;
+        Analog_lineEdit[20].setText(QString::number(ana_reserve_out_26_4,16).toUpper());
+        break;
+    }case 27:{
+        int ana_reserve_out_27_1 = data & 0x03;
+        Analog_lineEdit[21].setText(QString::number(ana_reserve_out_27_1,16).toUpper());
+        int ana_reserve_out_27_2 = (data & 0x0C)>>2;
+        Analog_lineEdit[22].setText(QString::number(ana_reserve_out_27_2,16).toUpper());
+        int ana_reserve_out_27_3 = (data & 0x10)>>4;
+        Analog_lineEdit[23].setText(QString::number(ana_reserve_out_27_3,16).toUpper());
+        int ana_reserve_out_27_4 = (data & 0x60)>>5;
+        Analog_lineEdit[24].setText(QString::number(ana_reserve_out_27_4,16).toUpper());
+        int ana_reserve_out_27_5 = (data & 0x80)>>7;
+        Analog_lineEdit[25].setText(QString::number(ana_reserve_out_27_5,16).toUpper());
+        break;
     }
-
 
     }
 
@@ -1754,6 +2177,15 @@ void MainWindow::on_treeWidget_itemExpanded(QTreeWidgetItem *item)
         emit readDevSignal(hardWareAddress,18,false);
         emit readDevSignal(hardWareAddress,19,false);
         emit readDevSignal(hardWareAddress,20,false);
+    }else if("Analog" == item->text(0))
+    {
+        emit readDevSignal(hardWareAddress,21,false);
+        emit readDevSignal(hardWareAddress,22,false);
+        emit readDevSignal(hardWareAddress,23,false);
+        emit readDevSignal(hardWareAddress,24,false);
+        emit readDevSignal(hardWareAddress,25,false);
+        emit readDevSignal(hardWareAddress,26,false);
+        emit readDevSignal(hardWareAddress,27,false);
     }
 
 }
