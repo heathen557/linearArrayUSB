@@ -70,6 +70,7 @@ void MainWindow::initConnect()
 
     //统计信息设置
     connect(ui->action_3,SIGNAL(triggered()),this,SLOT(showStatisticDia_slot()));
+    connect(&statisticsDia_,SIGNAL(alterStatisticFrameNum_signal(int)),dealUsbMsg_obj,SLOT(alterStatisticFrameNum_signal(int)));
 
 
 }

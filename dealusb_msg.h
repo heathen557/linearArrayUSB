@@ -45,6 +45,8 @@ public slots:
 
     void recvMsgSlot(QByteArray array);
 
+    void alterStatisticFrameNum_slot(int num);
+
 
 };
 

@@ -46,6 +46,9 @@ private slots:
 
     void updateSlot();      //刷新均值和方差的槽函数
 
+signals:
+    void alterStatisticFrameNum_signal(int);
+
 private:
     Ui::statisticsDialog *ui;
 };

@@ -23,6 +23,8 @@ statisticsDialog::~statisticsDialog()
 //开始统计的槽函数
 void statisticsDialog::on_start_pushButton_clicked()
 {
+    int frameNumber = ui->frame_lineEdit->text().toInt();
+    emit alterStatisticFrameNum_signal(frameNumber);
     updateTimer.start(1000);   //1 sec刷新一次
 }
 

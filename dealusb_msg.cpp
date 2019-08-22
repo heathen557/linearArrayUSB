@@ -24,7 +24,7 @@ DealUsb_msg::DealUsb_msg(QObject *parent) : QObject(parent)
 
 
      //总共有256个点 ,针对每一个点开启一个独立的容器进行存储相关内容
-     statisticStartFlag = false;    //初始化为不进行信息统计
+     statisticStartFlag = true;    //初始化进行信息统计,后期可尝试改用信号与槽的进制进行传输
      statisticFrameNumber = 10;
      vector<int> singlePoint;
      for(int i=0; i<256; i++)
@@ -126,10 +126,11 @@ void DealUsb_msg::recvMsgSlot(QByteArray array)
             statisticIndex = i + 64*line_number;
 
             //判断每个点已经储存的个数，如果已经超过设定的范围，则进行循环储存；
-            if(statisticFrameNumber == tempStatisticTofPoints[statisticIndex].size())
+            if(statisticFrameNumber >= tempStatisticTofPoints[statisticIndex].size())
             {
-                tempStatisticTofPoints[statisticIndex].erase(tempStatisticTofPoints[statisticIndex].begin(),tempStatisticTofPoints[statisticIndex].begin()+1);
-                tempStatisticPeakPoints[statisticIndex].erase(tempStatisticPeakPoints[statisticIndex].begin(),tempStatisticPeakPoints[statisticIndex].begin()+1);
+                int offset = statisticFrameNumber-tempStatisticTofPoints[statisticIndex].size() + 1;
+                tempStatisticTofPoints[statisticIndex].erase(tempStatisticTofPoints[statisticIndex].begin(),tempStatisticTofPoints[statisticIndex].begin()+offset);
+                tempStatisticPeakPoints[statisticIndex].erase(tempStatisticPeakPoints[statisticIndex].begin(),tempStatisticPeakPoints[statisticIndex].begin()+offset);
             }
 
             //向每个点的容器中添加一个新的点,完成循环存储
@@ -164,4 +165,10 @@ void DealUsb_msg::recvMsgSlot(QByteArray array)
 
     }
     lastLineNum = line_number ;
+}
+
+
+void DealUsb_msg::alterStatisticFrameNum_slot(int num)
+{
+    statisticFrameNumber = num;
 }
