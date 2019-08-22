@@ -29,6 +29,12 @@ public:
 
     float angle;
 
+    bool statisticStartFlag;
+    int statisticIndex;
+    int statisticFrameNumber;
+    vector<vector<int>> tempStatisticTofPoints;   //用于统计 均值和方差的 容器
+    vector<vector<int>> tempStatisticPeakPoints;   //用于统计 均值和方差的 容器
+
 signals:
 
     void statisticsValueSignal(float,float,float,float);

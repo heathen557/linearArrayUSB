@@ -44,7 +44,7 @@
         <widget class="QToolBox" name="toolBox">
          <property name="maximumSize">
           <size>
-           <width>320</width>
+           <width>250</width>
            <height>16777215</height>
           </size>
          </property>
@@ -59,12 +59,12 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>320</width>
+            <width>250</width>
             <height>408</height>
            </rect>
           </property>
           <attribute name="label">
-           <string>                  常用配置</string>
+           <string>            常用配置</string>
           </attribute>
           <layout class="QGridLayout" name="gridLayout_3">
            <item row="0" column="0">
@@ -286,12 +286,12 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>320</width>
+            <width>250</width>
             <height>408</height>
            </rect>
           </property>
           <attribute name="label">
-           <string>               设备寄存器配置</string>
+           <string>         设备寄存器配置</string>
           </attribute>
           <layout class="QGridLayout" name="gridLayout_4">
            <item row="0" column="0">
@@ -448,6 +448,7 @@ border:0px</string>
      <string>设置</string>
     </property>
     <addaction name="action_2"/>
+    <addaction name="action_3"/>
    </widget>
    <widget class="QMenu" name="menu_4">
     <property name="title">
@@ -476,6 +477,11 @@ border:0px</string>
   <action name="action_2">
    <property name="text">
     <string>显示设置</string>
+   </property>
+  </action>
+  <action name="action_3">
+   <property name="text">
+    <string>统计设置</string>
    </property>
   </action>
  </widget>

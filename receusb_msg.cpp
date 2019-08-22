@@ -264,6 +264,9 @@ void ReceUSB_Msg::read_usb()
         {
 
             mArray = QByteArray(MyBuffer,260);
+
+//            qDebug()<<mArray<<endl;
+
             emit recvMsgSignal(mArray);
 //            qDebug()<<mArray<<endl;
         }

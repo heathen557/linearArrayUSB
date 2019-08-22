@@ -31,7 +31,8 @@ SOURCES += main.cpp\
     receusb_msg.cpp \
     savepcdthread.cpp \
     filesave.cpp \
-    showsettingdia.cpp
+    showsettingdia.cpp \
+    statisticsdialog.cpp
 
 HEADERS  += mainwindow.h \
     glwidget.h \
@@ -40,11 +41,13 @@ HEADERS  += mainwindow.h \
     receusb_msg.h \
     savepcdthread.h \
     filesave.h \
-    showsettingdia.h
+    showsettingdia.h \
+    statisticsdialog.h
 
 FORMS    += mainwindow.ui \
     filesave.ui \
-    showsettingdia.ui
+    showsettingdia.ui \
+    statisticsdialog.ui
 
 
 INCLUDEPATH += "D:/programInstall/libsub"

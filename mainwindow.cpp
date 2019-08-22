@@ -68,6 +68,9 @@ void MainWindow::initConnect()
     connect(ui->action_2,SIGNAL(triggered()),this,SLOT(showShowSettingDialog()));
     connect(&showSettingDia_,SIGNAL(showSettingParaSignal(int,int)),this,SLOT(showSettingParaSlot(int,int)));
 
+    //统计信息设置
+    connect(ui->action_3,SIGNAL(triggered()),this,SLOT(showStatisticDia_slot()));
+
 
 }
 
@@ -123,10 +126,10 @@ void MainWindow::initTreeWidget()
 {
     ui->treeWidget->clear();
     ui->treeWidget->setColumnCount(4);
-    ui->treeWidget->setColumnWidth(0,170);
-    ui->treeWidget->setColumnWidth(1,35);
-    ui->treeWidget->setColumnWidth(2,35);
-    ui->treeWidget->setColumnWidth(3,35);
+    ui->treeWidget->setColumnWidth(0,120);
+    ui->treeWidget->setColumnWidth(1,32);
+    ui->treeWidget->setColumnWidth(2,32);
+    ui->treeWidget->setColumnWidth(3,10);
 
     QStringList strList;
     strList.append(QStringLiteral("寄存器名称"));
@@ -871,6 +874,13 @@ void MainWindow::showSettingParaSlot(int FrameNum,int TOFmax)
 
     qDebug()<<"showFrameNum = "<<showFrameNum<<"  showTOFmax ="<<showTOFmax<<endl;
 }
+
+//显示统计信息窗口的槽函数
+void MainWindow::showStatisticDia_slot()
+{
+    statisticsDia_.show();
+}
+
 
 
 /**************************单个寄存器配置相关的槽函数***************************************************/

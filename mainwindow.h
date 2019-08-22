@@ -19,6 +19,7 @@
 #include<showsettingdia.h>
 #include<QSignalMapper>
 #include<QLabel>
+#include<statisticsdialog.h>
 
 
 namespace Ui {
@@ -123,6 +124,8 @@ public:
     fileSave fileSaveDia;
 
     showSettingDia showSettingDia_;
+    statisticsDialog  statisticsDia_;
+
 
     QLabel explainLabel;
 
@@ -207,6 +210,8 @@ private slots:
     void on_treeWidget_itemClicked(QTreeWidgetItem *item, int column);
 
     void on_treeWidget_itemExpanded(QTreeWidgetItem *item);
+
+    void showStatisticDia_slot();
 
 signals:
     void openLinkSignal(int ,int); //打开连接
