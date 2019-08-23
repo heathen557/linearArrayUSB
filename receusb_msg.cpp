@@ -269,6 +269,11 @@ void ReceUSB_Msg::read_usb()
 
             emit recvMsgSignal(mArray);
 //            qDebug()<<mArray<<endl;
+
+
+
+
+
         }
 
     }

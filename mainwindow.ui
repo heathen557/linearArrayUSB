@@ -309,14 +309,14 @@
            <item row="1" column="0">
             <layout class="QHBoxLayout" name="horizontalLayout">
              <item>
-              <widget class="QPushButton" name="pushButton_2">
+              <widget class="QPushButton" name="getALL_pushButton">
                <property name="text">
                 <string>全部读取</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="pushButton_3">
+              <widget class="QPushButton" name="setAll_pushButton">
                <property name="text">
                 <string>全部写入</string>
                </property>

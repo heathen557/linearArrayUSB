@@ -127,7 +127,9 @@ public:
     statisticsDialog  statisticsDia_;
 
 
-    QLabel explainLabel;
+    QLabel explainLabel;  //显示注释
+    int expandItem_index;
+
 
 
 private:
@@ -212,6 +214,10 @@ private slots:
     void on_treeWidget_itemExpanded(QTreeWidgetItem *item);
 
     void showStatisticDia_slot();
+
+    void on_getALL_pushButton_clicked();
+
+    void on_setAll_pushButton_clicked();
 
 signals:
     void openLinkSignal(int ,int); //打开连接

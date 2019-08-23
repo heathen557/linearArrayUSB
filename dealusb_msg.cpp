@@ -44,8 +44,8 @@ void DealUsb_msg::recvMsgSlot(QByteArray array)
     MyBuffer = array.data();
 
     //spadNum ==08  lineNum == 00 01 02 03
-    int spadNum = MyBuffer[0] + (((ushort)MyBuffer[1]) << 8);
-    int line_number = MyBuffer[2] + (((ushort)MyBuffer[3]) << 8);
+    int spadNum = (quint8)(MyBuffer[0]) +  (((quint8)(MyBuffer[1]))<<8);
+    int line_number = (quint8)(MyBuffer[2]) +  (((quint8)(MyBuffer[3]))<<8);
 //    qDebug()<<"here   spadNum = "<<spadNum<<"  line_number = "<<line_number<<endl;
 
     if(spadNum != 8)          //固定值0x08
@@ -100,18 +100,14 @@ void DealUsb_msg::recvMsgSlot(QByteArray array)
             allStatisticPeakPoints = tempStatisticPeakPoints;
             statisticMutex.unlock();
         }
-
-
-
-
     }    //一帧已经接收完毕
 
 
 
     for(int i=0; i<64; i++)                     //260个字节，2个字节spad,2个字节的line,256个字节的数据，一个点由两个字节tof，两个子节点peak构成  一个包有64个点
     {
-        int tof = (ushort)((MyBuffer[4 + i * 4]) + (((ushort)MyBuffer[4 + i * 4 + 1]) << 8));
-        int intensity = (ushort)((MyBuffer[4 + i * 4 + 2]) + (((ushort)MyBuffer[4 + i * 4 + 3]) << 8));
+        int tof = quint8(MyBuffer[4 + i * 4]) + ((quint8(MyBuffer[4 + i * 4 +1]))<<8);
+        int intensity = quint8(MyBuffer[4 + i * 4 + 2]) + ((quint8(MyBuffer[4 + i * 4 + 3 ]))<<8);
 
         //保存文件时，tofPeakToSave_string存储相关的信息
         if(isSaveFlag)     //如果需要保存文件信息
@@ -126,11 +122,11 @@ void DealUsb_msg::recvMsgSlot(QByteArray array)
             statisticIndex = i + 64*line_number;
 
             //判断每个点已经储存的个数，如果已经超过设定的范围，则进行循环储存；
-            if(statisticFrameNumber >= tempStatisticTofPoints[statisticIndex].size())
+            int offset = tempStatisticTofPoints[statisticIndex].size() - statisticFrameNumber;
+            if(offset >= 0)
             {
-                int offset = statisticFrameNumber-tempStatisticTofPoints[statisticIndex].size() + 1;
-                tempStatisticTofPoints[statisticIndex].erase(tempStatisticTofPoints[statisticIndex].begin(),tempStatisticTofPoints[statisticIndex].begin()+offset);
-                tempStatisticPeakPoints[statisticIndex].erase(tempStatisticPeakPoints[statisticIndex].begin(),tempStatisticPeakPoints[statisticIndex].begin()+offset);
+                tempStatisticTofPoints[statisticIndex].erase(tempStatisticTofPoints[statisticIndex].begin(),tempStatisticTofPoints[statisticIndex].begin()+offset+1);
+                tempStatisticPeakPoints[statisticIndex].erase(tempStatisticPeakPoints[statisticIndex].begin(),tempStatisticPeakPoints[statisticIndex].begin()+offset+1);
             }
 
             //向每个点的容器中添加一个新的点,完成循环存储

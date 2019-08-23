@@ -26,6 +26,8 @@ MainWindow::MainWindow(QWidget *parent) :
     showFrameNum = 1;
     showTOFmax = 10;
 
+    expandItem_index = 0;  //初始化为0表示都为展开节点
+
     ui->statusBar->addWidget(&explainLabel);
     ui->statusBar->setStyleSheet(QString("QStatusBar::item{border:0px}"));
 
@@ -70,7 +72,7 @@ void MainWindow::initConnect()
 
     //统计信息设置
     connect(ui->action_3,SIGNAL(triggered()),this,SLOT(showStatisticDia_slot()));
-    connect(&statisticsDia_,SIGNAL(alterStatisticFrameNum_signal(int)),dealUsbMsg_obj,SLOT(alterStatisticFrameNum_signal(int)));
+    connect(&statisticsDia_,SIGNAL(alterStatisticFrameNum_signal(int)),dealUsbMsg_obj,SLOT(alterStatisticFrameNum_slot(int)));
 
 
 }
@@ -1049,7 +1051,6 @@ void MainWindow::TDC_write_slot(int TDC_number)
         TDC_lineEdit[10].setText("");
         TDC_lineEdit[11].setText("");
         TDC_lineEdit[12].setText("");
-        qDebug()<<"ten jinzhi="<<data<<"    16jinzhi="<<QString::number(data,16)<<endl;
         break;
     }
 
@@ -2999,6 +3000,8 @@ void MainWindow::on_treeWidget_itemExpanded(QTreeWidgetItem *item)
 
     if("TDC" == item->text(0))
     {
+        expandItem_index = 1;    //allGet allRead
+
         emit readDevSignal(hardWareAddress,0,false);
         emit readDevSignal(hardWareAddress,1,false);
         emit readDevSignal(hardWareAddress,2,false);
@@ -3007,11 +3010,14 @@ void MainWindow::on_treeWidget_itemExpanded(QTreeWidgetItem *item)
         emit readDevSignal(hardWareAddress,5,false);
     }else if("Integration" == item->text(0))
     {
+        expandItem_index = 2;    //allGet allRead
+
         emit readDevSignal(hardWareAddress,6,false);
         emit readDevSignal(hardWareAddress,7,false);
         emit readDevSignal(hardWareAddress,8,false);
     }else if("MA" == item->text(0))
     {
+        expandItem_index = 3;    //allGet allRead
         emit readDevSignal(hardWareAddress,9,false);
         emit readDevSignal(hardWareAddress,10,false);
         emit readDevSignal(hardWareAddress,11,false);
@@ -3022,12 +3028,16 @@ void MainWindow::on_treeWidget_itemExpanded(QTreeWidgetItem *item)
         emit readDevSignal(hardWareAddress,16,false);
     }else if("Digital" == item->text(0))
     {
+         expandItem_index = 4;    //allGet allRead
+
         emit readDevSignal(hardWareAddress,17,false);
         emit readDevSignal(hardWareAddress,18,false);
         emit readDevSignal(hardWareAddress,19,false);
         emit readDevSignal(hardWareAddress,20,false);
     }else if("Analog" == item->text(0))
     {
+        expandItem_index = 5;    //allGet allRead
+
         emit readDevSignal(hardWareAddress,21,false);
         emit readDevSignal(hardWareAddress,22,false);
         emit readDevSignal(hardWareAddress,23,false);
@@ -3037,6 +3047,8 @@ void MainWindow::on_treeWidget_itemExpanded(QTreeWidgetItem *item)
         emit readDevSignal(hardWareAddress,27,false);
     }else if("Pixel" == item->text(0))
     {
+        expandItem_index = 6;    //allGet allRead
+
         emit readDevSignal(hardWareAddress,28,false);
         emit readDevSignal(hardWareAddress,29,false);
         emit readDevSignal(hardWareAddress,30,false);
@@ -3044,12 +3056,16 @@ void MainWindow::on_treeWidget_itemExpanded(QTreeWidgetItem *item)
         emit readDevSignal(hardWareAddress,32,false);
     }else if("Top" == item->text(0))
     {
+        expandItem_index = 7;    //allGet allRead
+
         emit readDevSignal(hardWareAddress,33,false);
         emit readDevSignal(hardWareAddress,34,false);
         emit readDevSignal(hardWareAddress,35,false);
         emit readDevSignal(hardWareAddress,36,false);
     }else if("Delayline" == item->text(0))
     {
+        expandItem_index = 8;    //allGet allRead
+
         emit readDevSignal(hardWareAddress,37,false);
         emit readDevSignal(hardWareAddress,38,false);
         emit readDevSignal(hardWareAddress,39,false);
@@ -3058,6 +3074,8 @@ void MainWindow::on_treeWidget_itemExpanded(QTreeWidgetItem *item)
         emit readDevSignal(hardWareAddress,42,false);
     }else if("MISC" == item->text(0))
     {
+        expandItem_index = 9;    //allGet allRead
+
         emit readDevSignal(hardWareAddress,43,false);
         emit readDevSignal(hardWareAddress,44,false);
         emit readDevSignal(hardWareAddress,45,false);
@@ -3065,6 +3083,7 @@ void MainWindow::on_treeWidget_itemExpanded(QTreeWidgetItem *item)
         emit readDevSignal(hardWareAddress,47,false);
     }else if("Others" == item->text(0))
     {
+        expandItem_index = 10;    //allGet allRead
         emit readDevSignal(hardWareAddress,48,false);
         emit readDevSignal(hardWareAddress,49,false);
     }
@@ -3477,3 +3496,168 @@ void MainWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
 }
 
 
+//全部读取的槽函数
+void MainWindow::on_getALL_pushButton_clicked()
+{
+    int hardWareAddress = 216;
+
+    qDebug()<<" on_getALL_pushButton_clicked  expandIndex ="<<expandItem_index<<endl;
+
+
+        emit readDevSignal(hardWareAddress,0,false);
+        emit readDevSignal(hardWareAddress,1,false);
+        emit readDevSignal(hardWareAddress,2,false);
+        emit readDevSignal(hardWareAddress,3,false);
+        emit readDevSignal(hardWareAddress,4,false);
+        emit readDevSignal(hardWareAddress,5,false);
+
+        emit readDevSignal(hardWareAddress,6,false);
+        emit readDevSignal(hardWareAddress,7,false);
+        emit readDevSignal(hardWareAddress,8,false);
+
+        emit readDevSignal(hardWareAddress,9,false);
+        emit readDevSignal(hardWareAddress,10,false);
+        emit readDevSignal(hardWareAddress,11,false);
+        emit readDevSignal(hardWareAddress,12,false);
+        emit readDevSignal(hardWareAddress,13,false);
+        emit readDevSignal(hardWareAddress,14,false);
+        emit readDevSignal(hardWareAddress,15,false);
+        emit readDevSignal(hardWareAddress,16,false);
+
+        emit readDevSignal(hardWareAddress,17,false);
+        emit readDevSignal(hardWareAddress,18,false);
+        emit readDevSignal(hardWareAddress,19,false);
+        emit readDevSignal(hardWareAddress,20,false);
+
+        emit readDevSignal(hardWareAddress,21,false);
+        emit readDevSignal(hardWareAddress,22,false);
+        emit readDevSignal(hardWareAddress,23,false);
+        emit readDevSignal(hardWareAddress,24,false);
+        emit readDevSignal(hardWareAddress,25,false);
+        emit readDevSignal(hardWareAddress,26,false);
+        emit readDevSignal(hardWareAddress,27,false);
+
+        emit readDevSignal(hardWareAddress,28,false);
+        emit readDevSignal(hardWareAddress,29,false);
+        emit readDevSignal(hardWareAddress,30,false);
+        emit readDevSignal(hardWareAddress,31,false);
+        emit readDevSignal(hardWareAddress,32,false);
+
+        emit readDevSignal(hardWareAddress,33,false);
+        emit readDevSignal(hardWareAddress,34,false);
+        emit readDevSignal(hardWareAddress,35,false);
+        emit readDevSignal(hardWareAddress,36,false);
+
+        emit readDevSignal(hardWareAddress,37,false);
+        emit readDevSignal(hardWareAddress,38,false);
+        emit readDevSignal(hardWareAddress,39,false);
+        emit readDevSignal(hardWareAddress,40,false);
+        emit readDevSignal(hardWareAddress,41,false);
+        emit readDevSignal(hardWareAddress,42,false);
+
+        emit readDevSignal(hardWareAddress,43,false);
+        emit readDevSignal(hardWareAddress,44,false);
+        emit readDevSignal(hardWareAddress,45,false);
+        emit readDevSignal(hardWareAddress,46,false);
+        emit readDevSignal(hardWareAddress,47,false);
+
+        emit readDevSignal(hardWareAddress,48,false);
+        emit readDevSignal(hardWareAddress,49,false);
+
+}
+
+
+//全部写入的槽函数
+void MainWindow::on_setAll_pushButton_clicked()
+{
+    int i = 0 ;
+
+    qDebug()<<" on_setAll_pushButton_clicked  expandIndex ="<<expandItem_index<<endl;
+
+
+
+
+        TDC_write_slot(0);
+        TDC_write_slot(1);
+        TDC_write_slot(3);
+        TDC_write_slot(4);
+        TDC_write_slot(6);
+        TDC_write_slot(8);
+
+
+
+
+       Integration_write_slot(0);
+       Integration_write_slot(1);
+       Integration_write_slot(3);
+
+
+
+
+        MA_write_slot(0);
+        MA_write_slot(2);
+        MA_write_slot(4);
+        MA_write_slot(6);
+        MA_write_slot(8);
+        MA_write_slot(10);
+        MA_write_slot(12);
+        MA_write_slot(14);
+
+
+
+        Digital_write_slot(0);
+        Digital_write_slot(3);
+        Digital_write_slot(7);
+        Digital_write_slot(9);
+
+
+
+
+        Analog_write_slot(0);
+        Analog_write_slot(6);
+        Analog_write_slot(8);
+        Analog_write_slot(9);
+        Analog_write_slot(13);
+        Analog_write_slot(17);
+        Analog_write_slot(21);
+
+
+
+
+        Pixel_write_slot(0);
+        Pixel_write_slot(2);
+        Pixel_write_slot(7);
+        Pixel_write_slot(9);
+        Pixel_write_slot(11);
+
+
+
+        Top_write_slot(0);
+        Top_write_slot(3);
+        Top_write_slot(6);
+        Top_write_slot(8);
+
+
+
+        Delayline_write_slot(0);
+        Delayline_write_slot(2);
+        Delayline_write_slot(3);
+        Delayline_write_slot(4);
+        Delayline_write_slot(5);
+        Delayline_write_slot(6);
+
+
+
+
+
+        MISC_write_slot(0);
+        MISC_write_slot(4);
+        MISC_write_slot(5);
+        MISC_write_slot(6);
+        MISC_write_slot(7);
+
+
+       Others_write_slot(0);
+       Others_write_slot(5);
+
+}

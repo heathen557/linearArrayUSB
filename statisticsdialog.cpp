@@ -69,14 +69,13 @@ void statisticsDialog::updateSlot()
             tofStd_string.append(QString::number(tofStd)).append("  ");
             peakMean_string.append(QString::number(peakMean)).append("  ");
             peakStd_string.append(QString::number(peakStd)).append("  ");
-
-
         }
 
-
-        ui->tofMean_textEdit->setText(tofMean_string);
-        ui->tofStd_textEdit->setText(tofStd_string);
-        ui->peakMean_textEdit->setText(peakMean_string);
-        ui->peakStd_textEdit->setText(peakStd_string);
     }
+
+    ui->tofMean_textEdit->setText(tofMean_string);
+    ui->tofStd_textEdit->setText(tofStd_string);
+    ui->peakMean_textEdit->setText(peakMean_string);
+    ui->peakStd_textEdit->setText(peakStd_string);
+
 }
