@@ -219,6 +219,8 @@ private slots:
 
     void on_setAll_pushButton_clicked();
 
+    void on_toolBox_currentChanged(int index);
+
 signals:
     void openLinkSignal(int ,int); //打开连接
 

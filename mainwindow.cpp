@@ -3574,90 +3574,80 @@ void MainWindow::on_setAll_pushButton_clicked()
 
     qDebug()<<" on_setAll_pushButton_clicked  expandIndex ="<<expandItem_index<<endl;
 
+    TDC_write_slot(0);
+    TDC_write_slot(1);
+    TDC_write_slot(3);
+    TDC_write_slot(4);
+    TDC_write_slot(6);
+    TDC_write_slot(8);
+
+    Integration_write_slot(0);
+    Integration_write_slot(1);
+    Integration_write_slot(3);
+
+    MA_write_slot(0);
+    MA_write_slot(2);
+    MA_write_slot(4);
+    MA_write_slot(6);
+    MA_write_slot(8);
+    MA_write_slot(10);
+    MA_write_slot(12);
+    MA_write_slot(14);
+
+    Digital_write_slot(0);
+    Digital_write_slot(3);
+    Digital_write_slot(7);
+    Digital_write_slot(9);
+
+    Analog_write_slot(0);
+    Analog_write_slot(6);
+    Analog_write_slot(8);
+    Analog_write_slot(9);
+    Analog_write_slot(13);
+    Analog_write_slot(17);
+    Analog_write_slot(21);
+
+    Pixel_write_slot(0);
+    Pixel_write_slot(2);
+    Pixel_write_slot(7);
+    Pixel_write_slot(9);
+    Pixel_write_slot(11);
+
+    Top_write_slot(0);
+    Top_write_slot(3);
+    Top_write_slot(6);
+    Top_write_slot(8);
+
+    Delayline_write_slot(0);
+    Delayline_write_slot(2);
+    Delayline_write_slot(3);
+    Delayline_write_slot(4);
+    Delayline_write_slot(5);
+    Delayline_write_slot(6);
 
 
+    MISC_write_slot(0);
+    MISC_write_slot(4);
+    MISC_write_slot(5);
+    MISC_write_slot(6);
+    MISC_write_slot(7);
 
-        TDC_write_slot(0);
-        TDC_write_slot(1);
-        TDC_write_slot(3);
-        TDC_write_slot(4);
-        TDC_write_slot(6);
-        TDC_write_slot(8);
+    Others_write_slot(0);
+    Others_write_slot(5);
 
+}
 
+//QToolBox标签变化时 触发的槽函数
+//当index=1时，：1、关闭USB数据接收      2、对所有寄存器进行读取操作
+void MainWindow::on_toolBox_currentChanged(int index)
+{
+    qDebug()<<" index ="<<index<<endl;
+    if(1 == index)
+    {
+        isRecvFlag = false ;             //关闭数据接收连接
 
+        on_getALL_pushButton_clicked(); //读取所有寄存器的操作
+    }
 
-       Integration_write_slot(0);
-       Integration_write_slot(1);
-       Integration_write_slot(3);
-
-
-
-
-        MA_write_slot(0);
-        MA_write_slot(2);
-        MA_write_slot(4);
-        MA_write_slot(6);
-        MA_write_slot(8);
-        MA_write_slot(10);
-        MA_write_slot(12);
-        MA_write_slot(14);
-
-
-
-        Digital_write_slot(0);
-        Digital_write_slot(3);
-        Digital_write_slot(7);
-        Digital_write_slot(9);
-
-
-
-
-        Analog_write_slot(0);
-        Analog_write_slot(6);
-        Analog_write_slot(8);
-        Analog_write_slot(9);
-        Analog_write_slot(13);
-        Analog_write_slot(17);
-        Analog_write_slot(21);
-
-
-
-
-        Pixel_write_slot(0);
-        Pixel_write_slot(2);
-        Pixel_write_slot(7);
-        Pixel_write_slot(9);
-        Pixel_write_slot(11);
-
-
-
-        Top_write_slot(0);
-        Top_write_slot(3);
-        Top_write_slot(6);
-        Top_write_slot(8);
-
-
-
-        Delayline_write_slot(0);
-        Delayline_write_slot(2);
-        Delayline_write_slot(3);
-        Delayline_write_slot(4);
-        Delayline_write_slot(5);
-        Delayline_write_slot(6);
-
-
-
-
-
-        MISC_write_slot(0);
-        MISC_write_slot(4);
-        MISC_write_slot(5);
-        MISC_write_slot(6);
-        MISC_write_slot(7);
-
-
-       Others_write_slot(0);
-       Others_write_slot(5);
 
 }
