@@ -74,6 +74,8 @@ public:
 
     int radiusMeter;               //半径显示多少米
 
+    float maxDistance_;
+
 
 private:
     QBrush background;

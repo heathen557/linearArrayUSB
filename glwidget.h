@@ -5,6 +5,7 @@
 #include<helper.h>
 #include <QPainter>
 #include <QTimer>
+#include<QToolTip>
 #include<QMouseEvent>
 
 class GLWidget : public QOpenGLWidget

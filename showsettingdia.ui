@@ -17,7 +17,7 @@
    <iconset>
     <normaloff>../show2DPointCloudNew_7_30_logThread/icon_1.png</normaloff>../show2DPointCloudNew_7_30_logThread/icon_1.png</iconset>
   </property>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>60</x>
@@ -30,7 +30,7 @@
     <item>
      <widget class="QLabel" name="label">
       <property name="text">
-       <string>   显示帧数：</string>
+       <string>    显示帧数：</string>
       </property>
      </widget>
     </item>
@@ -39,7 +39,7 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>30</x>
@@ -52,7 +52,7 @@
     <item>
      <widget class="QLabel" name="label_2">
       <property name="text">
-       <string>显示最大TOF值(m)：</string>
+       <string>显示最大距离值(m)：</string>
       </property>
      </widget>
     </item>
@@ -61,7 +61,7 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>80</x>

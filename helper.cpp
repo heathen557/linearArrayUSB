@@ -68,7 +68,7 @@ extern int showTOFmax;     //设置显示的最大范围（m）
 
 //#define maxDistance (1000/0.75)
 
-#define maxDistance (showTOFmax*100/0.75)
+#define maxDistance (showTOFmax*100/0.75)    //tof * LSB = 实际距离 ，此处是为了得到最大的TOF值   10m *100 = 1000cm/0.75
 
 //! [0]
 Helper::Helper()
@@ -101,6 +101,7 @@ Helper::Helper()
 //! [1]
 void Helper::paint(QPainter *painter, QPaintEvent *event, int elapsed)
 {
+    maxDistance_ = maxDistance;//此处以供显示坐标时用
 
     painter->setPen(axiPen);
     painter->fillRect(event->rect(), background);
@@ -136,9 +137,9 @@ void Helper::paint(QPainter *painter, QPaintEvent *event, int elapsed)
             int distance = AllPoint_vec[m][n+1];    //tof值为整形,tof的范围为0-10m,传送来的数据为LSB，1LSB=(0.75cm 1.5cm)  故接收到的数据范围：1000/0.75 = 1333.3 ；10000/1.5 = 666.7
 
             /********、此处涉及到一些坐标的变换，tof(0~1333.3),转换比例    *********/
-            //           1333.3                 distance
-            //     ------------------  = -----------------
-            //      width/(2*cos30)           newDistance
+            //           1333.3  (maxTOF)                   distance (inputTOF)
+            //     ------------------------       =  --------------------------
+            //          width/(2*cos30)                   newDistance(axis)
             float newDistance = (Window_wid/(2*cos(30*PI/180.0))) * distance / (maxDistance);
 
 
@@ -147,7 +148,6 @@ void Helper::paint(QPainter *painter, QPaintEvent *event, int elapsed)
             pointf[pointNum].setX(x);
             pointf[pointNum].setY(y);
 //            qDebug()<<"pointNum ="<<pointNum<<",  x="<<x<<",  y="<<y<<endl;
-
 
             pointNum++;
             painter->drawPoints(pointf,pointNum);

@@ -1,5 +1,6 @@
 ﻿
 #include "receusb_msg.h"
+#include<QDataStream>
 
 
 #define MY_CONFIG 1
@@ -265,10 +266,30 @@ void ReceUSB_Msg::read_usb()
 
             mArray = QByteArray(MyBuffer,260);
 
-//            qDebug()<<mArray<<endl;
+//            QDataStream out(&mArray,QIODevice::ReadWrite);
+//            QString strHex;
+//            while (!out.atEnd())
+//            {
+//                qint8 outChar=0;
+//                out>>outChar;
+//                QString str=QString("%1").arg(outChar&0xFF,2,16,QLatin1Char('0'));
+
+//                if (str.length()>1)
+//                {
+//                    strHex+=str+" ";
+//                }
+//                else
+//                {
+//                    strHex+="0"+str+" ";
+//                }
+//            }
+//            strHex = strHex.toUpper();
+
+//            qDebug()<<QStringLiteral("原始数据为：")<<strHex<<endl;
 
             emit recvMsgSignal(mArray);
-//            qDebug()<<mArray<<endl;
+//            break;
+
 
 
 

@@ -3645,8 +3645,18 @@ void MainWindow::on_toolBox_currentChanged(int index)
     if(1 == index)
     {
         isRecvFlag = false ;             //关闭数据接收连接
+        //将按钮改变
+        ui->pushButton_5->setText(QStringLiteral("播放"));
+        if(isLinkSuccess)
+            on_getALL_pushButton_clicked(); //读取所有寄存器的操作
+    }else if(0 == index)
+    {
+        if(isLinkSuccess)
+        {
+            isRecvFlag = true;
+            emit read_usb_signal();
+        }
 
-        on_getALL_pushButton_clicked(); //读取所有寄存器的操作
     }
 
 

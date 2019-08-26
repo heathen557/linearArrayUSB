@@ -48,8 +48,13 @@ void DealUsb_msg::recvMsgSlot(QByteArray array)
     int line_number = (quint8)(MyBuffer[2]) +  (((quint8)(MyBuffer[3]))<<8);
 //    qDebug()<<"here   spadNum = "<<spadNum<<"  line_number = "<<line_number<<endl;
 
-    if(spadNum != 8)          //固定值0x08
+//    if(spadNum != 8)          //固定值0x08
+//        return;
+
+    //如果用面阵数据来进行测试的话 关闭spadNum，打开此行代码
+    if(line_number>3)
         return;
+
 
     if( line_number ==0 && lastLineNum==3)  //此时说明上一帧数据已经接收完毕，把整帧数据付给其他线程，供其显示，数据可以显示了
     {
@@ -108,6 +113,8 @@ void DealUsb_msg::recvMsgSlot(QByteArray array)
     {
         int tof = quint8(MyBuffer[4 + i * 4]) + ((quint8(MyBuffer[4 + i * 4 +1]))<<8);
         int intensity = quint8(MyBuffer[4 + i * 4 + 2]) + ((quint8(MyBuffer[4 + i * 4 + 3 ]))<<8);
+
+//        qDebug()<<"tof = "<<tof<<" intensity ="<<intensity<<endl;
 
         //保存文件时，tofPeakToSave_string存储相关的信息
         if(isSaveFlag)     //如果需要保存文件信息
