@@ -6,7 +6,7 @@
 
 QT       += core gui
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 TARGET = linearArrayUSB
 TEMPLATE = app
@@ -32,7 +32,9 @@ SOURCES += main.cpp\
     savepcdthread.cpp \
     filesave.cpp \
     showsettingdia.cpp \
-    statisticsdialog.cpp
+    statisticsdialog.cpp \
+    qcustomplot.cpp \
+    calmeanstdthread.cpp
 
 HEADERS  += mainwindow.h \
     glwidget.h \
@@ -42,7 +44,9 @@ HEADERS  += mainwindow.h \
     savepcdthread.h \
     filesave.h \
     showsettingdia.h \
-    statisticsdialog.h
+    statisticsdialog.h \
+    qcustomplot.h \
+    calmeanstdthread.h
 
 FORMS    += mainwindow.ui \
     filesave.ui \

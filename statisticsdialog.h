@@ -19,8 +19,6 @@ class statisticsDialog : public QDialog
 public:
     explicit statisticsDialog(QWidget *parent = 0);
     ~statisticsDialog();
-    QTimer updateTimer;
-
     float tofMean;
     float tofAccum;
     float tofStd;
@@ -34,6 +32,8 @@ public:
     vector<vector<int>> useStatisticTofPoints;
     vector<vector<int>> useStatisticPeakPoints;
 
+
+
     QString tofMean_string;
     QString tofStd_string;
 
@@ -44,10 +44,16 @@ public:
 private slots:
     void on_start_pushButton_clicked();
 
-    void updateSlot();      //刷新均值和方差的槽函数
+//    void updateSlot();      //刷新均值和方差的槽函数
+
+    void initCustomPlot();
+
+    void statistic_MeanStdSlot(QStringList,QStringList,QStringList,QStringList);
 
 signals:
     void alterStatisticFrameNum_signal(int);
+
+    void startStop_signal(int);
 
 private:
     Ui::statisticsDialog *ui;

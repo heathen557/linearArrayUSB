@@ -20,6 +20,8 @@
 #include<QSignalMapper>
 #include<QLabel>
 #include<statisticsdialog.h>
+#include<qcustomplot.h>
+#include<calmeanstdthread.h>
 
 
 namespace Ui {
@@ -111,6 +113,9 @@ public:
 
     savePCDThread *savePCD_obj;
     QThread *saveThread;
+
+    calMeanStdThread * calMean_obj;
+    QThread *calMeanThread;
 
 
     QTableWidgetItem tofMinItem_value;

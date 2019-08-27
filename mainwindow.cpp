@@ -73,8 +73,8 @@ void MainWindow::initConnect()
     //统计信息设置
     connect(ui->action_3,SIGNAL(triggered()),this,SLOT(showStatisticDia_slot()));
     connect(&statisticsDia_,SIGNAL(alterStatisticFrameNum_signal(int)),dealUsbMsg_obj,SLOT(alterStatisticFrameNum_slot(int)));
-
-
+    connect(calMean_obj,SIGNAL(statistic_MeanStdSignal(QStringList,QStringList,QStringList,QStringList)),&statisticsDia_,SLOT(statistic_MeanStdSlot(QStringList,QStringList,QStringList,QStringList)));
+    connect(&statisticsDia_,SIGNAL(startStop_signal(int)),calMean_obj,SLOT(startStop_slot(int)));
 }
 
 
@@ -98,6 +98,13 @@ void MainWindow::initThread()
     saveThread = new QThread;
     savePCD_obj->moveToThread(saveThread);
     saveThread->start();
+
+    //开启统计均值、方差的线程
+    calMean_obj = new calMeanStdThread();
+    calMeanThread = new QThread();
+    calMean_obj->moveToThread(calMeanThread);
+    calMeanThread->start();
+
 }
 
 //界面的初始化函数
