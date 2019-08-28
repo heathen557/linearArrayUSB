@@ -43,6 +43,7 @@ public:
     QAction *action;
     QAction *action_2;
     QAction *action_3;
+    QAction *action_4;
     QWidget *centralWidget;
     QGridLayout *gridLayout;
     QFrame *frame;
@@ -99,6 +100,7 @@ public:
     QMenu *menu_2;
     QMenu *menu_3;
     QMenu *menu_4;
+    QMenu *menu_5;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
 
@@ -116,6 +118,8 @@ public:
         action_2->setObjectName(QStringLiteral("action_2"));
         action_3 = new QAction(MainWindow);
         action_3->setObjectName(QStringLiteral("action_3"));
+        action_4 = new QAction(MainWindow);
+        action_4->setObjectName(QStringLiteral("action_4"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         gridLayout = new QGridLayout(centralWidget);
@@ -421,6 +425,8 @@ public:
         menu_3->setObjectName(QStringLiteral("menu_3"));
         menu_4 = new QMenu(menuBar);
         menu_4->setObjectName(QStringLiteral("menu_4"));
+        menu_5 = new QMenu(menuBar);
+        menu_5->setObjectName(QStringLiteral("menu_5"));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -432,10 +438,11 @@ public:
         menuBar->addAction(menu->menuAction());
         menuBar->addAction(menu_2->menuAction());
         menuBar->addAction(menu_3->menuAction());
+        menuBar->addAction(menu_5->menuAction());
         menuBar->addAction(menu_4->menuAction());
         menu->addAction(action);
         menu_3->addAction(action_2);
-        menu_3->addAction(action_3);
+        menu_5->addAction(action_4);
 
         retranslateUi(MainWindow);
 
@@ -451,6 +458,7 @@ public:
         action->setText(QApplication::translate("MainWindow", "\346\226\207\344\273\266\344\277\235\345\255\230", Q_NULLPTR));
         action_2->setText(QApplication::translate("MainWindow", "\346\230\276\347\244\272\350\256\276\347\275\256", Q_NULLPTR));
         action_3->setText(QApplication::translate("MainWindow", "\347\273\237\350\256\241\350\256\276\347\275\256", Q_NULLPTR));
+        action_4->setText(QApplication::translate("MainWindow", "\347\273\237\350\256\241\344\277\241\346\201\257", Q_NULLPTR));
         groupBox_4->setTitle(QApplication::translate("MainWindow", "\350\256\276\345\244\207\350\277\236\346\216\245\357\274\232", Q_NULLPTR));
         label->setText(QApplication::translate("MainWindow", "VID:", Q_NULLPTR));
         VID_lineEdit->setText(QApplication::translate("MainWindow", "8888", Q_NULLPTR));
@@ -485,6 +493,7 @@ public:
         menu_2->setTitle(QApplication::translate("MainWindow", "\347\233\270\346\234\272\345\261\236\346\200\247", Q_NULLPTR));
         menu_3->setTitle(QApplication::translate("MainWindow", "\350\256\276\347\275\256", Q_NULLPTR));
         menu_4->setTitle(QApplication::translate("MainWindow", "\345\270\256\345\212\251", Q_NULLPTR));
+        menu_5->setTitle(QApplication::translate("MainWindow", "\350\260\203\350\257\225", Q_NULLPTR));
     } // retranslateUi
 
 };

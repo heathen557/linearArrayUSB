@@ -71,7 +71,7 @@ void MainWindow::initConnect()
     connect(&showSettingDia_,SIGNAL(showSettingParaSignal(int,int)),this,SLOT(showSettingParaSlot(int,int)));
 
     //统计信息设置
-    connect(ui->action_3,SIGNAL(triggered()),this,SLOT(showStatisticDia_slot()));
+    connect(ui->action_4,SIGNAL(triggered()),this,SLOT(showStatisticDia_slot()));
     connect(&statisticsDia_,SIGNAL(alterStatisticFrameNum_signal(int)),dealUsbMsg_obj,SLOT(alterStatisticFrameNum_slot(int)));
     connect(calMean_obj,SIGNAL(statistic_MeanStdSignal(QStringList,QStringList,QStringList,QStringList)),&statisticsDia_,SLOT(statistic_MeanStdSlot(QStringList,QStringList,QStringList,QStringList)));
     connect(&statisticsDia_,SIGNAL(startStop_signal(int)),calMean_obj,SLOT(startStop_slot(int)));
