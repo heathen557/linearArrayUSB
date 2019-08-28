@@ -26,6 +26,8 @@ DealUsb_msg::DealUsb_msg(QObject *parent) : QObject(parent)
      showAngle = 120;
      showTOFmax = 10;    //10m
 
+     isTOF_flag = true;
+
 
      //总共有256个点 ,针对每一个点开启一个独立的容器进行存储相关内容
      statisticStartFlag = true;    //初始化进行信息统计,后期可尝试改用信号与槽的进制进行传输
@@ -49,6 +51,17 @@ void DealUsb_msg:: showSettingParaSlot(int frameNum, int Angle,int TOFmax)
     showTOFmax = TOFmax;
 
     qDebug()<<" DealUsb_msg showSettingParaSlot has coming= "<<frameNum<<"  "<<Angle<<"  "<<TOFmax<<endl;
+}
+
+void DealUsb_msg::changeTofPeak_slot()
+{
+    if(true == isTOF_flag)
+    {
+        isTOF_flag = false;
+    }else
+    {
+        isTOF_flag = true;
+    }
 }
 
 
@@ -126,8 +139,18 @@ void DealUsb_msg::recvMsgSlot(QByteArray array)
 
     for(int i=0; i<64; i++)                     //260个字节，2个字节spad,2个字节的line,256个字节的数据，一个点由两个字节tof，两个子节点peak构成  一个包有64个点
     {
-        int tof = quint8(MyBuffer[4 + i * 4]) + ((quint8(MyBuffer[4 + i * 4 +1]))<<8);
-        int intensity = quint8(MyBuffer[4 + i * 4 + 2]) + ((quint8(MyBuffer[4 + i * 4 + 3 ]))<<8);
+
+        int tof,intensity;
+        if(isTOF_flag)
+        {
+            tof = quint8(MyBuffer[4 + i * 4]) + ((quint8(MyBuffer[4 + i * 4 +1]))<<8);
+            intensity = quint8(MyBuffer[4 + i * 4 + 2]) + ((quint8(MyBuffer[4 + i * 4 + 3 ]))<<8);
+        }else
+        {
+            intensity = quint8(MyBuffer[4 + i * 4]) + ((quint8(MyBuffer[4 + i * 4 +1]))<<8);
+            tof = quint8(MyBuffer[4 + i * 4 + 2]) + ((quint8(MyBuffer[4 + i * 4 + 3 ]))<<8);
+        }
+
 
 //        qDebug()<<"tof = "<<tof<<" intensity ="<<intensity<<endl;
 
@@ -163,12 +186,12 @@ void DealUsb_msg::recvMsgSlot(QByteArray array)
         if(line_number == 0 || line_number == 1)
         {
             pointIndex = i + 64*line_number;
-            angle = -60 + pointIndex*(60.0/128.0);
+            angle = -showAngle/2.0 + pointIndex*((showAngle/2.0)/128.0);
 
         }else if(line_number == 2 || line_number == 3)
         {
             pointIndex = i + 64*(line_number-2);
-            angle = pointIndex * (60.0/128.0);
+            angle = pointIndex * ((showAngle/2.0)/128.0);
         }
         Rece_points.push_back(angle);
         Rece_points.push_back(tof);

@@ -42,7 +42,9 @@ void GLWidget::mousePressEvent(QMouseEvent *event)
     float distance = sqrtf(pow((origin_x-x),2)+pow(origin_y-y,2));    //计算鼠标点击处的坐标到原点的距离值,这个值没有经过换算
     QString str;
 
-    float maxDistance = origin_x/cos(30*3.1415926/180.0);
+    float lestAngle = 90 - helper.showAngle/2.0;
+
+    float maxDistance = origin_x/cos(lestAngle*3.1415926/180.0);
     qDebug()<<" maxLength = "<<maxDistance<<endl;
 
 
@@ -60,9 +62,9 @@ void GLWidget::mousePressEvent(QMouseEvent *event)
 
     qDebug()<<"  the angle  =  "<<angle<<endl;
 
-    if(angle>=30 || angle<=-30)
+    if(angle>=lestAngle || angle<=-lestAngle)
     {
-        int showTOF = (helper.maxDistance_ * distance * cos(30*3.14159/180.0))/origin_x;
+        int showTOF = (helper.maxDistance_ * distance * cos(lestAngle*3.14159/180.0))/origin_x;
         str.append("x=").append(QString::number(x)).append(",y=").append(QString::number(y)).append(",tof=").append(QString::number(showTOF));
         QToolTip::showText(QCursor::pos(),str);
     }

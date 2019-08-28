@@ -52,6 +52,8 @@ public:
     QToolBox *toolBox;
     QWidget *page;
     QGridLayout *gridLayout_3;
+    QPushButton *pushButton_5;
+    QSpacerItem *verticalSpacer;
     QGroupBox *groupBox_4;
     QGridLayout *gridLayout_8;
     QHBoxLayout *horizontalLayout_2;
@@ -79,8 +81,7 @@ public:
     QVBoxLayout *verticalLayout_2;
     QPushButton *loadSetting_pushButton;
     QPushButton *saveSetting_pushButton;
-    QPushButton *pushButton_5;
-    QSpacerItem *verticalSpacer;
+    QPushButton *changeTofPeak_pushButton;
     QWidget *page_2;
     QGridLayout *gridLayout_4;
     QTreeWidget *treeWidget;
@@ -108,7 +109,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(1385, 738);
+        MainWindow->resize(1385, 744);
         QIcon icon;
         icon.addFile(QStringLiteral("icon_1.png"), QSize(), QIcon::Normal, QIcon::Off);
         MainWindow->setWindowIcon(icon);
@@ -149,11 +150,22 @@ public:
         toolBox->setStyleSheet(QStringLiteral(""));
         page = new QWidget();
         page->setObjectName(QStringLiteral("page"));
-        page->setGeometry(QRect(0, 0, 250, 408));
+        page->setGeometry(QRect(0, 0, 250, 414));
         gridLayout_3 = new QGridLayout(page);
         gridLayout_3->setSpacing(6);
         gridLayout_3->setContentsMargins(11, 11, 11, 11);
         gridLayout_3->setObjectName(QStringLiteral("gridLayout_3"));
+        pushButton_5 = new QPushButton(page);
+        pushButton_5->setObjectName(QStringLiteral("pushButton_5"));
+        pushButton_5->setMaximumSize(QSize(250, 23));
+        pushButton_5->setStyleSheet(QString::fromUtf8("font:10pt \"\351\273\221\344\275\223\";"));
+
+        gridLayout_3->addWidget(pushButton_5, 3, 0, 1, 1);
+
+        verticalSpacer = new QSpacerItem(168, 27, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        gridLayout_3->addItem(verticalSpacer, 5, 0, 1, 1);
+
         groupBox_4 = new QGroupBox(page);
         groupBox_4->setObjectName(QStringLiteral("groupBox_4"));
         groupBox_4->setMaximumSize(QSize(230, 130));
@@ -299,21 +311,15 @@ public:
 
         gridLayout_3->addWidget(groupBox_8, 2, 0, 1, 1);
 
-        pushButton_5 = new QPushButton(page);
-        pushButton_5->setObjectName(QStringLiteral("pushButton_5"));
-        pushButton_5->setMaximumSize(QSize(250, 23));
-        pushButton_5->setStyleSheet(QString::fromUtf8("font:10pt \"\351\273\221\344\275\223\";"));
+        changeTofPeak_pushButton = new QPushButton(page);
+        changeTofPeak_pushButton->setObjectName(QStringLiteral("changeTofPeak_pushButton"));
 
-        gridLayout_3->addWidget(pushButton_5, 3, 0, 1, 1);
-
-        verticalSpacer = new QSpacerItem(168, 27, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-        gridLayout_3->addItem(verticalSpacer, 4, 0, 1, 1);
+        gridLayout_3->addWidget(changeTofPeak_pushButton, 4, 0, 1, 1);
 
         toolBox->addItem(page, QString::fromUtf8("            \345\270\270\347\224\250\351\205\215\347\275\256"));
         page_2 = new QWidget();
         page_2->setObjectName(QStringLiteral("page_2"));
-        page_2->setGeometry(QRect(0, 0, 250, 408));
+        page_2->setGeometry(QRect(0, 0, 250, 414));
         gridLayout_4 = new QGridLayout(page_2);
         gridLayout_4->setSpacing(6);
         gridLayout_4->setContentsMargins(11, 11, 11, 11);
@@ -446,7 +452,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        toolBox->setCurrentIndex(1);
+        toolBox->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -459,6 +465,7 @@ public:
         action_2->setText(QApplication::translate("MainWindow", "\346\230\276\347\244\272\350\256\276\347\275\256", Q_NULLPTR));
         action_3->setText(QApplication::translate("MainWindow", "\347\273\237\350\256\241\350\256\276\347\275\256", Q_NULLPTR));
         action_4->setText(QApplication::translate("MainWindow", "\347\273\237\350\256\241\344\277\241\346\201\257", Q_NULLPTR));
+        pushButton_5->setText(QApplication::translate("MainWindow", "\346\222\255\346\224\276", Q_NULLPTR));
         groupBox_4->setTitle(QApplication::translate("MainWindow", "\350\256\276\345\244\207\350\277\236\346\216\245\357\274\232", Q_NULLPTR));
         label->setText(QApplication::translate("MainWindow", "VID:", Q_NULLPTR));
         VID_lineEdit->setText(QApplication::translate("MainWindow", "8888", Q_NULLPTR));
@@ -474,7 +481,7 @@ public:
         groupBox_8->setTitle(QApplication::translate("MainWindow", "\351\205\215\347\275\256\351\233\206\357\274\232", Q_NULLPTR));
         loadSetting_pushButton->setText(QApplication::translate("MainWindow", "\345\212\240\350\275\275\351\205\215\347\275\256\351\233\206", Q_NULLPTR));
         saveSetting_pushButton->setText(QApplication::translate("MainWindow", "\344\277\235\345\255\230\351\205\215\347\275\256\351\233\206", Q_NULLPTR));
-        pushButton_5->setText(QApplication::translate("MainWindow", "\346\222\255\346\224\276", Q_NULLPTR));
+        changeTofPeak_pushButton->setText(QApplication::translate("MainWindow", "\345\210\207\346\215\242TOF/PEAK", Q_NULLPTR));
         toolBox->setItemText(toolBox->indexOf(page), QApplication::translate("MainWindow", "            \345\270\270\347\224\250\351\205\215\347\275\256", Q_NULLPTR));
         getALL_pushButton->setText(QApplication::translate("MainWindow", "\345\205\250\351\203\250\350\257\273\345\217\226", Q_NULLPTR));
         setAll_pushButton->setText(QApplication::translate("MainWindow", "\345\205\250\351\203\250\345\206\231\345\205\245", Q_NULLPTR));

@@ -76,6 +76,7 @@ Helper::Helper()
 //    gradient.setColorAt(1.0, QColor(0xa6, 0xce, 0x39));
     showFrameNum = 1;
     showTOFmax = 10;   //10M
+    showAngle = 120;
     maxDistance = (showTOFmax*100/0.75) ;
 
 
@@ -113,10 +114,13 @@ void Helper::paint(QPainter *painter, QPaintEvent *event, int elapsed)
     Window_height = event->rect().height();
     Window_wid = event->rect().width();
 
+   float lestAngle = 90 - showAngle/2.0;  //剩余角度
+   float halfAngle = showAngle/2.0;  //剩余角度
+
     //坐标轴画线
     painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
-    painter->drawLine(QPoint(Window_wid/2.0,Window_height),QPoint(Window_wid/2.0-Window_height*tan(60*3.14159/180.0),0));
-    painter->drawLine(QPoint(Window_wid/2.0,Window_height),QPoint(Window_wid/2.0+Window_height*tan(60*3.14159/180.0),0));
+    painter->drawLine(QPoint(Window_wid/2.0,Window_height),QPoint(Window_wid/2.0-Window_height*tan(halfAngle*3.14159/180.0),0));
+    painter->drawLine(QPoint(Window_wid/2.0,Window_height),QPoint(Window_wid/2.0+Window_height*tan(halfAngle*3.14159/180.0),0));
 
 
     painter->save();
@@ -125,6 +129,7 @@ void Helper::paint(QPainter *painter, QPaintEvent *event, int elapsed)
 //    painter->rotate(elapsed * 0.030);
 
     QPointF pointf[10000];
+
 
 
     m_mutex.lock();       //不加锁程序会异常退出；
@@ -143,7 +148,9 @@ void Helper::paint(QPainter *painter, QPaintEvent *event, int elapsed)
             //           1333.3  (maxTOF)                   distance (inputTOF)
             //     ------------------------       =  --------------------------
             //          width/(2*cos30)                   newDistance(axis)
-            float newDistance = (Window_wid/(2*cos(30*PI/180.0))) * distance / (maxDistance);
+
+//            float newDistance = (Window_wid/(2*cos(30*PI/180.0))) * distance / (maxDistance);
+            float newDistance = (Window_wid/(2*cos(lestAngle*PI/180.0))) * distance / (maxDistance);
 
 
             float x  = Window_wid/2.0 + newDistance*sin(ang*PI/180.0);
@@ -163,8 +170,16 @@ void Helper::paint(QPainter *painter, QPaintEvent *event, int elapsed)
 
 
     painter->setPen(textPen);
-    painter->drawText(QRect(5, Window_height-Window_wid/2*tan(30*3.14159/180.0)-15, 30, 20), Qt::AlignCenter, QStringLiteral("-60°"));
-    painter->drawText(QRect(Window_wid-30, Window_height-Window_wid/2*tan(30*3.14159/180.0)-15, 30, 20), Qt::AlignCenter, QStringLiteral("60°"));
+
+
+    QString text1 ="-";
+    text1.append(QString::number(showAngle/2.0)).append(QStringLiteral("°"));
+
+    QString text2 = QString::number(showAngle/2.0);
+    text2.append(QStringLiteral("°"));
+
+    painter->drawText(QRect(5, Window_height-Window_wid/2*tan(lestAngle*3.14159/180.0)-15, 30, 20), Qt::AlignCenter, text1);
+    painter->drawText(QRect(Window_wid-30, Window_height-Window_wid/2*tan(lestAngle*3.14159/180.0)-15, 30, 20), Qt::AlignCenter, text2);
 
 }
 

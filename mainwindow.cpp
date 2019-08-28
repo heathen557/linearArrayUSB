@@ -54,6 +54,7 @@ void MainWindow::initConnect()
 
     //主函数与数据处理线程的 信号与槽的连接
     connect(dealUsbMsg_obj,SIGNAL(statisticsValueSignal(float,float,float,float)),this,SLOT(statisticsValueSlot(float, float, float,float)));
+    connect(this,SIGNAL(changeTofPeak_signal()),dealUsbMsg_obj,SLOT(changeTofPeak_slot()));
 
     //文件保存相关的 信号与槽的连接
     connect(ui->action,SIGNAL(triggered()),this,SLOT(showSaveFileDialog())); //文件保存 窗口打开
@@ -887,7 +888,7 @@ void MainWindow::showSettingParaSlot(int FrameNum,int Angle, int TOFmax)
 
     ui->widget->helper.maxDistance = TOFmax*100/0.75;
 
-    qDebug()<<"showFrameNum = "<<FrameNum<<"  showTOFmax ="<<TOFmax<<endl;
+    qDebug()<<"MainWindow showSettingParaSlot() showFrameNum = "<<FrameNum<<"  showTOFmax ="<<TOFmax<<endl;
 }
 
 //显示统计信息窗口的槽函数
@@ -3672,4 +3673,11 @@ void MainWindow::on_toolBox_currentChanged(int index)
     }
 
 
+}
+
+
+//切换TOF 和PEAK 的槽函数
+void MainWindow::on_changeTofPeak_pushButton_clicked()
+{
+    emit changeTofPeak_signal();
 }

@@ -226,6 +226,8 @@ private slots:
 
     void on_toolBox_currentChanged(int index);
 
+    void on_changeTofPeak_pushButton_clicked();
+
 signals:
     void openLinkSignal(int ,int); //打开连接
 
@@ -244,6 +246,8 @@ signals:
     void saveSettingSignal(QString,int, bool );
 
     void read_usb_signal();     //读取USb信号
+
+    void changeTofPeak_signal();
 
 };
 

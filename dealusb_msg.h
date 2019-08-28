@@ -41,6 +41,8 @@ public:
     int showAngle;
     int showTOFmax;
 
+    bool isTOF_flag;
+
 signals:
 
     void statisticsValueSignal(float,float,float,float);
@@ -54,6 +56,8 @@ public slots:
     void alterStatisticFrameNum_slot(int num);
 
     void showSettingParaSlot(int,int,int);
+
+    void  changeTofPeak_slot();
 
 
 };
