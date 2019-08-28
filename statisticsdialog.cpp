@@ -99,8 +99,6 @@ void statisticsDialog::statistic_MeanStdSlot(QStringList tofMeanStringlist,QStri
     QVector<double> peakMean_y(256);
     QVector<double> peakStd_y(256);
 
-    qDebug()<<"tofMeanStringlist.size() = "<<tofMeanStringlist.size()<<endl;
-
     QString str;
     for(int i=0; i<tofMeanStringlist.size(); i++)
     {
@@ -109,18 +107,19 @@ void statisticsDialog::statistic_MeanStdSlot(QStringList tofMeanStringlist,QStri
         tofStd_y[i] = tofStdStringlist[i].toDouble();
         peakMean_y[i] = peakMeanStringlist[i].toDouble();
         peakStd_y[i] = peakStdStringlist[i].toDouble();
+
     }
 
-    ui->TOFMean_widget->graph(0)->addData(label_x,tofMean_y);
+    ui->TOFMean_widget->graph(0)->setData(label_x,tofMean_y);
     ui->TOFMean_widget->replot();
 
-    ui->TOFSTD_widget->graph(0)->addData(label_x,tofStd_y);
+    ui->TOFSTD_widget->graph(0)->setData(label_x,tofStd_y);
     ui->TOFSTD_widget->replot();
 
-    ui->PEAKMEAN_widget->graph(0)->addData(label_x,peakMean_y);
+    ui->PEAKMEAN_widget->graph(0)->setData(label_x,peakMean_y);
     ui->PEAKMEAN_widget->replot();
 
-    ui->PEAKSTD_widget->graph(0)->addData(label_x,peakStd_y);
+    ui->PEAKSTD_widget->graph(0)->setData(label_x,peakStd_y);
     ui->PEAKSTD_widget->replot();
 
 //    statisticMutex.lock();

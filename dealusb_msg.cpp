@@ -164,7 +164,7 @@ void DealUsb_msg::recvMsgSlot(QByteArray array)
         //开始存储统计信息；
         if(statisticStartFlag == true)
         {
-            statisticIndex = i + 64*line_number;
+            statisticIndex = i + 64*line_number;    // statisticIndex = line_number + 4*i ;
 
             //判断每个点已经储存的个数，如果已经超过设定的范围，则进行循环储存；
             int offset = tempStatisticTofPoints[statisticIndex].size() - statisticFrameNumber;
@@ -193,6 +193,7 @@ void DealUsb_msg::recvMsgSlot(QByteArray array)
             pointIndex = i + 64*(line_number-2);
             angle = pointIndex * ((showAngle/2.0)/128.0);
         }
+
         Rece_points.push_back(angle);
         Rece_points.push_back(tof);
 
