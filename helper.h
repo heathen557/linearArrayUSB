@@ -76,6 +76,11 @@ public:
 
     float maxDistance_;
 
+    int showFrameNum;
+    int showAngle;
+    int showTOFmax;
+    int maxDistance;
+
 
 private:
     QBrush background;

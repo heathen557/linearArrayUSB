@@ -10,8 +10,8 @@ extern bool isSaveFlag;
 extern vector<vector<int>> AllPoint_vec;    //保存要显示的点
 extern QMutex m_mutex;
 
-extern int showFrameNum;   //同时显示多少帧数据
-extern int showTOFmax;     //设置显示的最大范围（m）
+//extern int showFrameNum;   //同时显示多少帧数据
+//extern int showTOFmax;     //设置显示的最大范围（m）
 
 //统计 均值和方差 相关
 extern QMutex statisticMutex;
@@ -21,6 +21,10 @@ extern vector<vector<int>> allStatisticPeakPoints;   //用于统计 均值和方
 DealUsb_msg::DealUsb_msg(QObject *parent) : QObject(parent)
 {
      qDebug()<<"DealUsb_msg thread start!!!!"<<endl;
+
+     showFrameNum = 1;
+     showAngle = 120;
+     showTOFmax = 10;    //10m
 
 
      //总共有256个点 ,针对每一个点开启一个独立的容器进行存储相关内容
@@ -37,6 +41,17 @@ DealUsb_msg::DealUsb_msg(QObject *parent) : QObject(parent)
 
 
 }
+
+void DealUsb_msg:: showSettingParaSlot(int frameNum, int Angle,int TOFmax)
+{
+    showFrameNum = frameNum ;
+    showAngle = Angle;
+    showTOFmax = TOFmax;
+
+    qDebug()<<" DealUsb_msg showSettingParaSlot has coming= "<<frameNum<<"  "<<Angle<<"  "<<TOFmax<<endl;
+}
+
+
 
 void DealUsb_msg::recvMsgSlot(QByteArray array)
 {

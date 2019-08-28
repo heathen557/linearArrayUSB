@@ -171,7 +171,7 @@ private slots:
 
     void showShowSettingDialog();
 
-    void showSettingParaSlot(int FrameNum,int TOFmax);
+    void showSettingParaSlot(int FrameNum, int Angle ,int TOFmax);
 
     /*******************************************/
     void TDC_read_slot(int);

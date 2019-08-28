@@ -20,6 +20,7 @@ showSettingDia::~showSettingDia()
 void showSettingDia::on_ok_pushButton_clicked()
 {
     int frameNum = ui->frameNum_lineEdit->text().toInt();
+    int showAngle = ui->showAngle_lineEdit->text().toInt();
     int maxTof = ui->tofMax_lineEdit->text().toInt();
     if(frameNum<1)
     {
@@ -35,7 +36,7 @@ void showSettingDia::on_ok_pushButton_clicked()
         maxTof = 10;
     }
 
-    emit showSettingParaSignal(frameNum,maxTof);
+    emit showSettingParaSignal(frameNum, showAngle, maxTof);
     this->hide();
 
 }

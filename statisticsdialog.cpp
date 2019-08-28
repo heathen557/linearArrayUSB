@@ -2,10 +2,6 @@
 #include "ui_statisticsdialog.h"
 
 
-//QMutex statisticMutex;
-//vector<vector<int>> allStatisticTofPoints;   //用于统计 均值和方差的 容器  TOF
-//vector<vector<int>> allStatisticPeakPoints;   //用于统计 均值和方差的 容器  TOF
-
 statisticsDialog::statisticsDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::statisticsDialog)

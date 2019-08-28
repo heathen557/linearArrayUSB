@@ -24,7 +24,7 @@ private:
     Ui::showSettingDia *ui;
 
 signals:
-    void showSettingParaSignal(int,int);
+    void showSettingParaSignal(int,int,int);
 };
 
 #endif // SHOWSETTINGDIA_H

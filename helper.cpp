@@ -61,14 +61,12 @@
 QMutex m_mutex;
 vector<vector<int>> AllPoint_vec;
 extern int halfWidth_showWindow;
-
-extern int showFrameNum;   //同时显示多少帧数据
-extern int showTOFmax;     //设置显示的最大范围（m）
 #define PI 3.14159
 
-//#define maxDistance (1000/0.75)
 
-#define maxDistance (showTOFmax*100/0.75)    //tof * LSB = 实际距离 ，此处是为了得到最大的TOF值   10m *100 = 1000cm/0.75
+//extern int showFrameNum;   //同时显示多少帧数据
+//extern int showTOFmax;     //设置显示的最大范围（m）
+//#define maxDistance (showTOFmax*100/0.75)    //tof * LSB = 实际距离 ，此处是为了得到最大的TOF值   10m *100 = 1000cm/0.75
 
 //! [0]
 Helper::Helper()
@@ -76,6 +74,11 @@ Helper::Helper()
 //    QLinearGradient gradient(QPointF(50, -20), QPointF(80, 20));
 //    gradient.setColorAt(0.0, Qt::white);
 //    gradient.setColorAt(1.0, QColor(0xa6, 0xce, 0x39));
+    showFrameNum = 1;
+    showTOFmax = 10;   //10M
+    maxDistance = (showTOFmax*100/0.75) ;
+
+
 
     background = QBrush(QColor(0, 0, 0));
 //    circleBrush = QBrush(gradient);

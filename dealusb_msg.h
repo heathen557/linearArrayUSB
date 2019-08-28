@@ -35,6 +35,12 @@ public:
     vector<vector<int>> tempStatisticTofPoints;   //用于统计 均值和方差的 容器
     vector<vector<int>> tempStatisticPeakPoints;   //用于统计 均值和方差的 容器
 
+
+
+    int showFrameNum;
+    int showAngle;
+    int showTOFmax;
+
 signals:
 
     void statisticsValueSignal(float,float,float,float);
@@ -46,6 +52,8 @@ public slots:
     void recvMsgSlot(QByteArray array);
 
     void alterStatisticFrameNum_slot(int num);
+
+    void showSettingParaSlot(int,int,int);
 
 
 };

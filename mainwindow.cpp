@@ -11,8 +11,7 @@ int saveFileIndex;
 QString saveFilePath;
 bool isSaveFlag;
 
-int showFrameNum;   //同时显示多少帧数据
-int showTOFmax;     //设置显示的最大范围（m）
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -23,8 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     isRecvFlag = false;
     isLinkSuccess = false;
 
-    showFrameNum = 1;
-    showTOFmax = 10;
+
 
     expandItem_index = 0;  //初始化为0表示都为展开节点
 
@@ -68,7 +66,8 @@ void MainWindow::initConnect()
     //显示相关
     connect(&oneSecondTimer,SIGNAL(timeout()),this,SLOT(oneSecondTimer_slot()));  //1sec 刷新显示
     connect(ui->action_2,SIGNAL(triggered()),this,SLOT(showShowSettingDialog()));
-    connect(&showSettingDia_,SIGNAL(showSettingParaSignal(int,int)),this,SLOT(showSettingParaSlot(int,int)));
+    connect(&showSettingDia_,SIGNAL(showSettingParaSignal(int,int,int)),this,SLOT(showSettingParaSlot(int,int,int)));
+    connect(&showSettingDia_,SIGNAL(showSettingParaSignal(int,int,int)),dealUsbMsg_obj,SLOT(showSettingParaSlot(int,int,int)));
 
     //统计信息设置
     connect(ui->action_4,SIGNAL(triggered()),this,SLOT(showStatisticDia_slot()));
@@ -877,12 +876,18 @@ void MainWindow::showShowSettingDialog()
 }
 
 //接收显示设置参数的槽函数
-void MainWindow::showSettingParaSlot(int FrameNum,int TOFmax)
+void MainWindow::showSettingParaSlot(int FrameNum,int Angle, int TOFmax)
 {
-    showFrameNum = FrameNum;
-    showTOFmax = TOFmax;
 
-    qDebug()<<"showFrameNum = "<<showFrameNum<<"  showTOFmax ="<<showTOFmax<<endl;
+    ui->widget->helper.showFrameNum = FrameNum;
+
+    ui->widget->helper.showAngle = Angle;
+
+    ui->widget->helper.showTOFmax = TOFmax;
+
+    ui->widget->helper.maxDistance = TOFmax*100/0.75;
+
+    qDebug()<<"showFrameNum = "<<FrameNum<<"  showTOFmax ="<<TOFmax<<endl;
 }
 
 //显示统计信息窗口的槽函数
