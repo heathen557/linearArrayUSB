@@ -66,6 +66,150 @@ void DealUsb_msg::changeTofPeak_slot()
 
 
 
+//void DealUsb_msg::recvMsgSlot(QByteArray array)
+//{
+//    char *MyBuffer;
+//    MyBuffer = array.data();
+
+//    //spadNum ==08  lineNum == 00 01 02 03
+//    int spadNum = (quint8)(MyBuffer[0]) +  (((quint8)(MyBuffer[1]))<<8);
+//    int line_number = (quint8)(MyBuffer[2]) +  (((quint8)(MyBuffer[3]))<<8);
+////    qDebug()<<"here   spadNum = "<<spadNum<<"  line_number = "<<line_number<<endl;
+
+////    if(spadNum != 8)          //固定值0x08
+////        return;
+
+//    //如果用面阵数据来进行测试的话 关闭spadNum，打开此行代码
+//    if(line_number>3)
+//        return;
+
+
+//    if( line_number ==0 && lastLineNum==3)  //此时说明上一帧数据已经接收完毕，把整帧数据付给其他线程，供其显示，数据可以显示了
+//    {
+
+//        //统计信息相关内容
+//        emit statisticsValueSignal(tofMin,tofMax,peakMin,peakMax);
+//        tofMin = 10000;     //重置变量
+//        tofMax = -10000;
+//        peakMin = 10000;
+//        peakMax = -10000;
+
+//        //如果选中保存，把上一帧的数据发送到数据保存线程中，保存成文本
+//        if(isSaveFlag)
+//        {
+//            emit saveTXTSignal(tofPeakToSave_string);
+//            tofPeakToSave_string.clear();
+//        }
+
+
+
+//        //显示内容相关，将一帧数据传递给全局变量供显示
+//        if(!Rece_points.empty())
+//        {
+////            qDebug()<<"AllPoint_vec already have number,Rece_points ="<<Rece_points.size()<<",   AllPoint_vec.size="<<AllPoint_vec.size()<<endl;
+//            m_mutex.lock();
+//            AllPoint_vec.push_back(Rece_points);
+//            Rece_points.clear();
+
+//            if(AllPoint_vec.size() == showFrameNum+1)  //循环清理第一个元素,因为每次只显示一帧数据，故这里把容器的长度设置为2,这里是用来显示的容器
+//            {
+//                AllPoint_vec.erase(AllPoint_vec.begin(),AllPoint_vec.begin()+1);
+
+//            }
+//            if(AllPoint_vec.size() > showFrameNum+1)
+//            {
+//                AllPoint_vec.clear();
+//            }
+
+//            m_mutex.unlock();
+//        }
+
+
+//        //统计信息相关的 ，将统计信息的容器赋值给全局变量
+//        if(statisticStartFlag)
+//        {
+//            statisticMutex.lock();
+//            allStatisticTofPoints = tempStatisticTofPoints;
+//            allStatisticPeakPoints = tempStatisticPeakPoints;
+//            statisticMutex.unlock();
+//        }
+//    }    //一帧已经接收完毕
+
+
+
+//    for(int i=0; i<64; i++)                     //260个字节，2个字节spad,2个字节的line,256个字节的数据，一个点由两个字节tof，两个子节点peak构成  一个包有64个点
+//    {
+
+//        int tof,intensity;
+//        if(isTOF_flag)
+//        {
+//            tof = quint8(MyBuffer[4 + i * 4]) + ((quint8(MyBuffer[4 + i * 4 +1]))<<8);
+//            intensity = quint8(MyBuffer[4 + i * 4 + 2]) + ((quint8(MyBuffer[4 + i * 4 + 3 ]))<<8);
+//        }else
+//        {
+//            intensity = quint8(MyBuffer[4 + i * 4]) + ((quint8(MyBuffer[4 + i * 4 +1]))<<8);
+//            tof = quint8(MyBuffer[4 + i * 4 + 2]) + ((quint8(MyBuffer[4 + i * 4 + 3 ]))<<8);
+//        }
+
+
+////        qDebug()<<"tof = "<<tof<<" intensity ="<<intensity<<endl;
+
+//        //保存文件时，tofPeakToSave_string存储相关的信息
+//        if(isSaveFlag)     //如果需要保存文件信息
+//        {
+//            tofPeakToSave_string.append(QString::number(tof)).append(",").append(QString::number(intensity)).append("\n");
+//        }
+
+//        /********************************************************************************************************************************/
+//        //开始存储统计信息；
+//        if(statisticStartFlag == true)
+//        {
+//            statisticIndex = i + 64*line_number;    // statisticIndex = line_number + 4*i ;
+
+//            //判断每个点已经储存的个数，如果已经超过设定的范围，则进行循环储存；
+//            int offset = tempStatisticTofPoints[statisticIndex].size() - statisticFrameNumber;
+//            if(offset >= 0)
+//            {
+//                tempStatisticTofPoints[statisticIndex].erase(tempStatisticTofPoints[statisticIndex].begin(),tempStatisticTofPoints[statisticIndex].begin()+offset+1);
+//                tempStatisticPeakPoints[statisticIndex].erase(tempStatisticPeakPoints[statisticIndex].begin(),tempStatisticPeakPoints[statisticIndex].begin()+offset+1);
+//            }
+
+//            //向每个点的容器中添加一个新的点,完成循环存储
+//            tempStatisticTofPoints[statisticIndex].push_back(tof);
+//            tempStatisticPeakPoints[statisticIndex].push_back(intensity);
+//        }
+//        /*******************************************************************************************************************************/
+
+
+//        //第一个存角度，第二个存tof
+//        //解析角度值，并保存在vector容器当中;
+//        if(line_number == 0 || line_number == 1)
+//        {
+//            pointIndex = i + 64*line_number;
+//            angle = -showAngle/2.0 + pointIndex*((showAngle/2.0)/128.0);
+
+//        }else if(line_number == 2 || line_number == 3)
+//        {
+//            pointIndex = i + 64*(line_number-2);
+//            angle = pointIndex * ((showAngle/2.0)/128.0);
+//        }
+
+//        Rece_points.push_back(angle);
+//        Rece_points.push_back(tof);
+
+////        qDebug()<<"angle = "<<angle<<"   tof="<<tof<<endl;
+
+//        //统计tof 以及peak信息
+//        tofMax = (tof>tofMax) ? tof : tofMax;
+//        tofMin = (tof<tofMin) ? tof : tofMin;
+//        peakMax = (intensity>peakMax) ? intensity : peakMax;
+//        peakMin = (intensity<peakMin) ? intensity : peakMin;
+
+//    }
+//    lastLineNum = line_number ;
+//}
+
+
 void DealUsb_msg::recvMsgSlot(QByteArray array)
 {
     char *MyBuffer;
@@ -97,6 +241,11 @@ void DealUsb_msg::recvMsgSlot(QByteArray array)
         //如果选中保存，把上一帧的数据发送到数据保存线程中，保存成文本
         if(isSaveFlag)
         {
+            for(int i=0; i<256; i++)
+            {
+                tofPeakToSave_string.append(tmpTofPeak_string[i]);
+            }
+
             emit saveTXTSignal(tofPeakToSave_string);
             tofPeakToSave_string.clear();
         }
@@ -141,7 +290,7 @@ void DealUsb_msg::recvMsgSlot(QByteArray array)
     {
 
         int tof,intensity;
-        if(isTOF_flag)
+        if(isTOF_flag)                          //TOF和PEAk 存在前后不确定的问题，故设定标识位进行选择
         {
             tof = quint8(MyBuffer[4 + i * 4]) + ((quint8(MyBuffer[4 + i * 4 +1]))<<8);
             intensity = quint8(MyBuffer[4 + i * 4 + 2]) + ((quint8(MyBuffer[4 + i * 4 + 3 ]))<<8);
@@ -154,17 +303,25 @@ void DealUsb_msg::recvMsgSlot(QByteArray array)
 
 //        qDebug()<<"tof = "<<tof<<" intensity ="<<intensity<<endl;
 
+        pointIndex = line_number + 4 * i;        //pointIndex 为256个点的序号
+                                                 //为最新的协议lineNum=0: 0 4 8 12...
+                                                 //          lineNum=1: 1 5 9 13...
+                                                 //          lineNum=2: 2 6 10 14...
+                                                 //          lineNum=3: 3 7 11 15 ...
+
         //保存文件时，tofPeakToSave_string存储相关的信息
         if(isSaveFlag)     //如果需要保存文件信息
         {
-            tofPeakToSave_string.append(QString::number(tof)).append(",").append(QString::number(intensity)).append("\n");
+//            tofPeakToSave_string.append(QString::number(tof)).append(",").append(QString::number(intensity)).append("\n");
+
+            tmpTofPeak_string[pointIndex] = QString::number(tof).append(",").append(QString::number(intensity)).append("\n");
         }
 
         /********************************************************************************************************************************/
         //开始存储统计信息；
         if(statisticStartFlag == true)
         {
-            statisticIndex = i + 64*line_number;    // statisticIndex = line_number + 4*i ;
+            statisticIndex = pointIndex;    // statisticIndex = line_number + 4*i ;
 
             //判断每个点已经储存的个数，如果已经超过设定的范围，则进行循环储存；
             int offset = tempStatisticTofPoints[statisticIndex].size() - statisticFrameNumber;
@@ -181,18 +338,29 @@ void DealUsb_msg::recvMsgSlot(QByteArray array)
         /*******************************************************************************************************************************/
 
 
-        //第一个存角度，第二个存tof
-        //解析角度值，并保存在vector容器当中;
-        if(line_number == 0 || line_number == 1)
-        {
-            pointIndex = i + 64*line_number;
-            angle = -showAngle/2.0 + pointIndex*((showAngle/2.0)/128.0);
+//        //第一个存角度，第二个存tof
+//        //解析角度值，并保存在vector容器当中;
+//        if(line_number == 0 || line_number == 1)
+//        {
+//            pointIndex = i + 64*line_number;
+//            angle = -showAngle/2.0 + pointIndex*((showAngle/2.0)/128.0);
 
-        }else if(line_number == 2 || line_number == 3)
+//        }else if(line_number == 2 || line_number == 3)
+//        {
+//            pointIndex = i + 64*(line_number-2);
+//            angle = pointIndex * ((showAngle/2.0)/128.0);
+//        }
+
+        //256个点 分为左右两个
+        if( pointIndex < 128)
         {
-            pointIndex = i + 64*(line_number-2);
-            angle = pointIndex * ((showAngle/2.0)/128.0);
+            angle = -showAngle/2.0 + pointIndex*((showAngle/2.0)/128.0);
+        }else
+        {
+            int rightIndex = pointIndex -128;
+            angle = rightIndex * ((showAngle/2.0)/128.0);
         }
+
 
         Rece_points.push_back(angle);
         Rece_points.push_back(tof);
@@ -208,6 +376,7 @@ void DealUsb_msg::recvMsgSlot(QByteArray array)
     }
     lastLineNum = line_number ;
 }
+
 
 
 void DealUsb_msg::alterStatisticFrameNum_slot(int num)

@@ -7,7 +7,24 @@
 #include<Windows.h>
 #include"lusb0_usb.h"
 #include<QFile>
+#include<QtSerialPort/QSerialPort>
+#include<QMessageBox>
 
+
+struct Settings {
+    QString name;
+    qint32 baudRate;
+    QString stringBaudRate;
+    QSerialPort::DataBits dataBits;
+    QString stringDataBits;
+    QSerialPort::Parity parity;
+    QString stringParity;
+    QSerialPort::StopBits stopBits;
+    QString stringStopBits;
+    QSerialPort::FlowControl flowControl;
+    QString stringFlowControl;
+    bool localEchoEnabled;
+};
 
 class ReceUSB_Msg : public QObject
 {
@@ -44,6 +61,10 @@ public:
     int idVendor_,idProduct_;
 
 
+    /*********串口相关******************/
+    QSerialPort *serial;
+
+    QString m_buffer;   //接收数据的缓存区
 
 
 
@@ -57,6 +78,7 @@ signals:
                                     // 10：保存配置信息成功； 11：保存配置信息失败
                                     // 12：写入系统成功      13：写入系统失败
                                     // 14：写入设备成功      15：写入设备失败
+                                    // 16:串口打开成功       17：串口打开失败
     void staticValueSignal(float,float,float,float,float,float,float,float,float,float);
 
     void recvMsgSignal(QByteArray); //发送给处理线程的信号
@@ -80,6 +102,14 @@ public slots:
     void writeDevSlot(int slavId,int addr,QString data,bool recvFlag);
     void loadSettingSlot(QString filePath,bool recvFlag);
     void saveSettingSlot(QString filePath,int deviceId,bool  recvFlag);
+
+
+    //串口相关
+    void openSerial_slot(Settings);
+    void recvSerial_slot();
+    void singleDataDeal(QString singleData);
+    QByteArray stringToByte(QString str);
+
 };
 
 #endif // RECEUSB_MSG_H

@@ -21,7 +21,10 @@ public:
 
     float tofMin,tofMax,peakMin,peakMax;
 
-    QString tofPeakToSave_string;   //存储文件所需的tof和peak;
+    QString tofPeakToSave_string;   //存储文件所需的tof和peak;  储存排序以后的数据，
+    QString tmpTofPeak_string[256];
+
+
 
     vector<int> Rece_points;        //保存一帧的点，先角度 后TOF
 

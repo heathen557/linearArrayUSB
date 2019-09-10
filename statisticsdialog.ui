@@ -71,7 +71,7 @@
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
-       <string>TOF均值和方差</string>
+       <string>TOF均值和标准差</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_5">
        <item row="0" column="0">
@@ -97,7 +97,7 @@
      </widget>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
-       <string>PEAK均值和方差</string>
+       <string>PEAK均值和标准差</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_4">
        <item row="0" column="0">

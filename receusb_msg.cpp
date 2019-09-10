@@ -23,6 +23,8 @@ ReceUSB_Msg::ReceUSB_Msg(QObject *parent) : QObject(parent)
     isFirstLink = true;
     isRecvFlag = false;
 
+    serial = NULL;
+
 }
 
 //查找是不是存在想要链接的USB设备
@@ -596,6 +598,180 @@ void ReceUSB_Msg::saveSettingSlot(QString filePath,int deviceId,bool recvFlag)
 
 
 
+/**************************串口相关***************************************/
+void ReceUSB_Msg::openSerial_slot(Settings serialSetting)
+{
+    if(NULL == serial)
+    {
+        serial = new QSerialPort();
+        connect(serial,SIGNAL(readyRead()),this,SLOT(recvSerial_slot()));
+    }
+
+    serial->setPortName(serialSetting.name);
+    serial->setBaudRate(serialSetting.baudRate);
+    serial->setDataBits(serialSetting.dataBits);
+    serial->setParity(serialSetting.parity);
+    serial->setStopBits(serialSetting.stopBits);
+    serial->setFlowControl(serialSetting.flowControl);
+    if(serial->open(QIODevice::ReadWrite))
+    {
+//       QMessageBox::information(NULL,QStringLiteral("提示"),QStringLiteral("串口打开成功！"));
+       emit linkInfoSignal(16);
+    }else
+    {
+        emit linkInfoSignal(17);
+//        QMessageBox::information(NULL,QStringLiteral("提示"),QStringLiteral("串口打开失败！"));
+    }
+    qDebug()<<"recvData = "<<serialSetting.name<<" -- "<<serialSetting.baudRate<<endl;
+}
+
+void ReceUSB_Msg::recvSerial_slot()
+{
+    QByteArray temp = serial->readAll();
+    QString strHex;//16进制数据
+
+    if (!temp.isEmpty())
+    {
+        QDataStream out(&temp,QIODevice::ReadWrite);
+        while (!out.atEnd())
+        {
+            qint8 outChar=0;
+            out>>outChar;
+            QString str=QString("%1").arg(outChar&0xFF,2,16,QLatin1Char('0'));
+
+            if (str.length()>1)
+            {
+                strHex+=str+" ";
+            }
+            else
+            {
+                strHex+="0"+str+" ";
+            }
+        }
+        strHex = strHex.toUpper();
+        m_buffer.append(strHex);
+
+//        qDebug()<<"m_buffer = "<<m_buffer<<endl;
+
+        int totallen = m_buffer.size();
+        while(totallen)
+        {
+            if(totallen <(1029*3))    //一个报文至少要有1029个字节,加上空格 1029*3
+                return;
+
+           int indexOf5A = m_buffer.indexOf("5A 83",0);
+           if(indexOf5A < 0)  //没有找到5A 83
+           {
+               qDebug()<<QString::fromUtf8("msg maybe error,can't find 5A")<<"index ="<<indexOf5A<<"buffer"<<m_buffer<<endl;
+               return;
+           }else if(indexOf5A>0)  //第一次的时候前面会有冗余数据，删掉
+           {
+               m_buffer = m_buffer.right(totallen-indexOf5A);
+               totallen = m_buffer.size();
+               qDebug()<<"the first msg ,has some Redundant data,  indexOf5A="<<indexOf5A<<"  the left msg = "<<m_buffer<<endl;
+               if(totallen <(1029*3))
+                   return;
+           }
 
 
+           /*********************************/
+           int length = (m_buffer.mid(9,2).toInt(NULL,16)*256 + m_buffer.mid(6,2).toInt(NULL,16) +5)*3;    //数据长度1024 + 命令字节数5
+           if(m_buffer.size()<length)    //不够一个命令的长度 返回
+               return;
+           QString single_Data = m_buffer.left(length);       //接收到的一整个数据包，交给函数处理
+           qDebug()<<"rece data = "<<single_Data<<endl;
+
+           //数据校验
+
+
+           //数据处理
+           singleDataDeal(single_Data);
+
+           m_buffer = m_buffer.right(totallen - length);
+           totallen = m_buffer.size();
+
+        } //while
+
+   }
+}
+
+//把单包数据解析成4个指令，以信号的形式发送给数据处理线程，这么做是为了使接口统一
+void ReceUSB_Msg::singleDataDeal(QString singleData)
+{
+    QByteArray sendArray;
+
+    int len = singleData.length();
+    QString dataStr = singleData.right( len - 4*3 );
+
+    QString data1 = "08 00 " + dataStr.mid(0, 64*4*3);
+    data1 = data1.replace(" ","");
+    sendArray = stringToByte(data1);
+    emit recvMsgSignal(sendArray);
+
+
+    QString data2 = "08 01 " + dataStr.mid(64*4*3,64*4*3);
+    data2 = data2.replace(" ","");
+    sendArray = stringToByte(data2);
+    emit recvMsgSignal(sendArray);
+
+
+
+    QString data3 = "08 02 " + dataStr.mid(64*4*3*2,64*4*3);
+    data3 = data3.replace(" ","");
+    sendArray = stringToByte(data3);
+    emit recvMsgSignal(sendArray);
+
+
+
+    QString data4 = "08 03 " + dataStr.mid(64*4*3*3,64*4*3);
+    data4 = data4.replace(" ","");
+    sendArray = stringToByte(data4);
+    emit recvMsgSignal(sendArray);
+
+    //把QString类型 转换为QByteArray
+
+}
+
+
+//QString to byte
+QByteArray ReceUSB_Msg::stringToByte(QString str)
+{
+    QByteArray byte_arr;
+    bool ok;
+    //如果str的长度 不是2的倍数  那么直接返回空
+    if(str.size()%2!=0){
+        return QByteArray::fromHex("字符串不符合标准");
+    }
+    int len=str.size();
+    for(int i=0;i<len;i+=2){
+         byte_arr.append(char(str.mid(i,2).toUShort(&ok,16)));
+    }
+
+
+    /*****************验证数据的对错**********************************/
+//    QDataStream out(&byte_arr,QIODevice::ReadWrite);
+//    QString strHex;
+//    while (!out.atEnd())
+//    {
+//        qint8 outChar=0;
+//        out>>outChar;
+//        QString str=QString("%1").arg(outChar&0xFF,2,16,QLatin1Char('0'));
+
+//        if (str.length()>1)
+//        {
+//            strHex+=str+" ";
+//        }
+//        else
+//        {
+//            strHex+="0"+str+" ";
+//        }
+//    }
+//    strHex = strHex.toUpper();
+
+//    qDebug()<<QStringLiteral("发送的原始数据为：")<<strHex<<endl;
+    /*********************************************************************/
+
+
+    return byte_arr;
+}
 

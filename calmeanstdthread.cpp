@@ -44,11 +44,11 @@ void calMeanStdThread::updateSlot()      //刷新均值和方差的槽函数
     peakMean_stringlist.clear();
     peakStd_stringlist.clear();
 
+
+    qDebug()<<QStringLiteral("显示时，查询到的每个点对应的个数为： ")<< useStatisticTofPoints[0].size()<<endl;
     for(int i =0; i<256; i++)
     {
         frameSize = useStatisticTofPoints[i].size();
-//        qDebug()<<QStringLiteral("显示时，查询到的每个点对应的个数为： ")<< frameSize<<endl;
-
 
         if(frameSize>0)                              //理论上应该与设置的帧数相等，此处是为了防止除数为零时引起程序异常；
         {

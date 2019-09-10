@@ -24,6 +24,7 @@
 #include<calmeanstdthread.h>
 
 
+
 namespace Ui {
 class MainWindow;
 }
@@ -39,7 +40,8 @@ public:
     void initGUI();                 //界面的初始化函数
     void initTreeWidget();          //设备寄存器读写的界面的初始化函数
     void initThread();              //要开启的线程的初始化函数
-    void initConnect();             //家里信号与槽连接的初始化函数
+    void initConnect();             //信号与槽连接的初始化函数
+    void initSerial();              //初始化串口的函数
 
     QLineEdit TDC_lineEdit[13];
     QPushButton TDC_read_pushButton[13];
@@ -136,7 +138,6 @@ public:
     int expandItem_index;
 
 
-
 private:
     Ui::MainWindow *ui;
 
@@ -228,6 +229,8 @@ private slots:
 
     void on_changeTofPeak_pushButton_clicked();
 
+    void on_openSerial_pushButton_clicked();
+
 signals:
     void openLinkSignal(int ,int); //打开连接
 
@@ -248,6 +251,8 @@ signals:
     void read_usb_signal();     //读取USb信号
 
     void changeTofPeak_signal();
+
+    void openSerial_signal(Settings);
 
 };
 

@@ -3,6 +3,7 @@
 #include<QStandardItem>
 #include<QStandardItemModel>
 #include<QCheckBox>
+#include<QMetaType>
 
 
 bool isWriteSuccess;   //配置集是否配置成功标识
@@ -32,8 +33,8 @@ MainWindow::MainWindow(QWidget *parent) :
     initTreeWidget();
     initGUI();
     initThread();
+    initSerial();
     initConnect();
-
 }
 
 void MainWindow::initConnect()
@@ -51,6 +52,10 @@ void MainWindow::initConnect()
     connect(this,SIGNAL(saveSettingSignal(QString,int,bool)),recvUsbMsg_obj,SLOT(saveSettingSlot(QString,int,bool)));
     connect(recvUsbMsg_obj,SIGNAL(reReadSysSignal(QString)),this,SLOT(reReadSysSlot(QString)));
     connect(recvUsbMsg_obj,SIGNAL(reReadDevSignal(int,QString)),this,SLOT(reReadDevSlot(int,QString)));
+   //主线程与串口数据接收线程 信号与槽的连接
+    qRegisterMetaType<Settings>("Settings");
+    connect(this,SIGNAL(openSerial_signal(Settings)),recvUsbMsg_obj,SLOT(openSerial_slot(Settings)));
+
 
     //主函数与数据处理线程的 信号与槽的连接
     connect(dealUsbMsg_obj,SIGNAL(statisticsValueSignal(float,float,float,float)),this,SLOT(statisticsValueSlot(float, float, float,float)));
@@ -75,6 +80,7 @@ void MainWindow::initConnect()
     connect(&statisticsDia_,SIGNAL(alterStatisticFrameNum_signal(int)),dealUsbMsg_obj,SLOT(alterStatisticFrameNum_slot(int)));
     connect(calMean_obj,SIGNAL(statistic_MeanStdSignal(QStringList,QStringList,QStringList,QStringList)),&statisticsDia_,SLOT(statistic_MeanStdSlot(QStringList,QStringList,QStringList,QStringList)));
     connect(&statisticsDia_,SIGNAL(startStop_signal(int)),calMean_obj,SLOT(startStop_slot(int)));
+
 }
 
 
@@ -129,6 +135,65 @@ void MainWindow::initGUI()
     ui->tableWidget_2->setItem(1,1,&peakMaxItem_value);
 
 
+}
+
+//串口相关的初始化函数
+void MainWindow::initSerial()
+{
+    QFile file("setting.ini");
+    QByteArray temp("\r\n");
+    QString line[20];
+
+    if (file.open(QIODevice::ReadOnly))
+    {
+        QTextStream in(&file);
+        int i = 0;
+        while (!in.atEnd())
+        {
+            line[i] = in.readLine();
+            i++;
+        }
+        file.close();
+    }
+    int numSeri_ = line[0].toInt();
+    int baudRateBox_ = line[1].toInt();
+
+    QStringList comList;//串口号
+    comList.clear();
+    comList<<"COM1"<<"COM2"<<"COM3"<<"COM4"<<"COM5"<<"COM6"
+            <<"COM7"<<"COM8"<<"COM9"<<"COM10"<<"COM11"<<"COM12"
+            <<"COM13"<<"COM14"<<"COM15"<<"COM16"<<"COM17"<<"COM18"
+            <<"COM19"<<"COM20"<<"COM21"<<"COM22"<<"COM23"<<"COM24"
+            <<"COM25"<<"COM26"<<"COM27"<<"COM28"<<"COM28"<<"COM29"<<"COM30";
+    ui->serialPortInfoListBox->clear();
+    ui->serialPortInfoListBox->addItems(comList);
+    ui->serialPortInfoListBox->setCurrentIndex(numSeri_);
+
+    ui->baudRateBox->addItem(QStringLiteral("9600"), QSerialPort::Baud9600);
+    ui->baudRateBox->addItem(QStringLiteral("19200"), QSerialPort::Baud19200);
+    ui->baudRateBox->addItem(QStringLiteral("38400"), QSerialPort::Baud38400);
+    ui->baudRateBox->addItem(QStringLiteral("115200"), QSerialPort::Baud115200);
+    ui->baudRateBox->addItem(QStringLiteral("256000"), QSerialPort::Baud256000);
+    ui->baudRateBox->addItem(tr("Custom"));
+    ui->baudRateBox->setCurrentIndex(baudRateBox_);
+
+    ui->dataBitsBox->addItem(QStringLiteral("5"), QSerialPort::Data5);
+    ui->dataBitsBox->addItem(QStringLiteral("6"), QSerialPort::Data6);
+    ui->dataBitsBox->addItem(QStringLiteral("7"), QSerialPort::Data7);
+    ui->dataBitsBox->addItem(QStringLiteral("8"), QSerialPort::Data8);
+    ui->dataBitsBox->setCurrentIndex(3);
+
+    ui->parityBox->addItem(tr("None"), QSerialPort::NoParity);
+    ui->parityBox->addItem(tr("Even"), QSerialPort::EvenParity);
+    ui->parityBox->addItem(tr("Odd"), QSerialPort::OddParity);
+    ui->parityBox->addItem(tr("Mark"), QSerialPort::MarkParity);
+    ui->parityBox->addItem(tr("Space"), QSerialPort::SpaceParity);
+
+    ui->stopBitsBox->addItem(QStringLiteral("1"), QSerialPort::OneStop);
+#ifdef Q_OS_WIN
+    ui->stopBitsBox->addItem(tr("1.5"), QSerialPort::OneAndHalfStop);
+#endif
+    ui->stopBitsBox->addItem(QStringLiteral("2"), QSerialPort::TwoStop);
 }
 
 //设备寄存器读写的界面的初始化函数
@@ -822,6 +887,14 @@ void MainWindow::linkInfoSlot(int flagNum)
         break;
     case 15:
         tempStr = QStringLiteral("写入设备寄存器失败！");
+        tempStr.append("                   ");
+        break;
+    case 16:
+        tempStr = QStringLiteral("打开串口成功！");
+        tempStr.append("                   ");
+        break;
+    case 17:
+        tempStr = QStringLiteral("打开串口失败！");
         tempStr.append("                   ");
         break;
 
@@ -3680,4 +3753,85 @@ void MainWindow::on_toolBox_currentChanged(int index)
 void MainWindow::on_changeTofPeak_pushButton_clicked()
 {
     emit changeTofPeak_signal();
+}
+
+
+
+//打开串口的槽函数
+void MainWindow::on_openSerial_pushButton_clicked()
+{
+    if(ui->openSerial_pushButton->text() == QStringLiteral("打开串口"))
+    {
+        Settings currentSettings;
+        currentSettings.name = ui->serialPortInfoListBox->currentText();
+
+        if (ui->baudRateBox->currentIndex() == 4) {
+            currentSettings.baudRate = ui->baudRateBox->currentText().toInt();
+        } else {
+            currentSettings.baudRate = static_cast<QSerialPort::BaudRate>(
+                        ui->baudRateBox->itemData(ui->baudRateBox->currentIndex()).toInt());
+        }
+        currentSettings.stringBaudRate = QString::number(currentSettings.baudRate);
+
+        currentSettings.dataBits = static_cast<QSerialPort::DataBits>(
+                    ui->dataBitsBox->itemData(ui->dataBitsBox->currentIndex()).toInt());
+        currentSettings.stringDataBits = ui->dataBitsBox->currentText();
+
+        currentSettings.parity = static_cast<QSerialPort::Parity>(
+                    ui->parityBox->itemData(ui->parityBox->currentIndex()).toInt());
+        currentSettings.stringParity = ui->parityBox->currentText();
+
+        currentSettings.stopBits = static_cast<QSerialPort::StopBits>(
+                    ui->stopBitsBox->itemData(ui->stopBitsBox->currentIndex()).toInt());
+        currentSettings.stringStopBits = ui->stopBitsBox->currentText();
+
+
+        //将配置保存到本地文件
+        QFile file("setting.ini");
+        QByteArray temp("\r\n");
+        QString line[20];
+
+        if (file.open(QIODevice::ReadOnly))
+        {
+            QTextStream in(&file);
+            int i = 0;
+            while (!in.atEnd())
+            {
+                line[i] = in.readLine();
+                i++;
+            }
+            file.close();
+        }
+
+        int seriNum = ui->serialPortInfoListBox->currentIndex();
+        int baudBox = ui->baudRateBox->currentIndex();
+
+
+        if(file.open(QIODevice::WriteOnly))
+        {
+            QByteArray writeData;
+            writeData = QString::number(seriNum).toLatin1()+ temp + QString::number(baudBox).toLatin1()+temp+\
+                    line[2].toLatin1()+ temp +line[3].toLatin1()+ temp+ line[4].toLatin1()+ temp +line[5].toLatin1();
+            if (-1 == file.write(writeData))
+            {
+                qDebug()<<"ERROR";
+            }
+            file.close();
+        }
+
+
+        //向数据接收进程发送信号，打开串口
+        emit openSerial_signal(currentSettings);
+
+
+
+
+
+
+        ui->openSerial_pushButton->setText(QStringLiteral("关闭串口"));
+    }else
+    {
+        ui->openSerial_pushButton->setText(QStringLiteral("打开串口"));
+    }
+
 }

@@ -13,6 +13,7 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QComboBox>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
@@ -88,6 +89,27 @@ public:
     QHBoxLayout *horizontalLayout;
     QPushButton *getALL_pushButton;
     QPushButton *setAll_pushButton;
+    QWidget *page_3;
+    QGridLayout *gridLayout_7;
+    QGroupBox *gbox1;
+    QGridLayout *gridLayout_6;
+    QHBoxLayout *horizontalLayout_8;
+    QLabel *label_5;
+    QComboBox *serialPortInfoListBox;
+    QHBoxLayout *horizontalLayout_9;
+    QLabel *label_6;
+    QComboBox *baudRateBox;
+    QHBoxLayout *horizontalLayout_10;
+    QLabel *label_7;
+    QComboBox *dataBitsBox;
+    QHBoxLayout *horizontalLayout_11;
+    QLabel *label_8;
+    QComboBox *parityBox;
+    QHBoxLayout *horizontalLayout_12;
+    QLabel *label_9;
+    QComboBox *stopBitsBox;
+    QPushButton *openSerial_pushButton;
+    QSpacerItem *verticalSpacer_2;
     QGroupBox *groupBox_2;
     QGridLayout *gridLayout_5;
     QFrame *frame_6;
@@ -109,7 +131,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(1385, 744);
+        MainWindow->resize(1385, 767);
         QIcon icon;
         icon.addFile(QStringLiteral("icon_1.png"), QSize(), QIcon::Normal, QIcon::Off);
         MainWindow->setWindowIcon(icon);
@@ -150,7 +172,7 @@ public:
         toolBox->setStyleSheet(QStringLiteral(""));
         page = new QWidget();
         page->setObjectName(QStringLiteral("page"));
-        page->setGeometry(QRect(0, 0, 250, 414));
+        page->setGeometry(QRect(0, 0, 250, 410));
         gridLayout_3 = new QGridLayout(page);
         gridLayout_3->setSpacing(6);
         gridLayout_3->setContentsMargins(11, 11, 11, 11);
@@ -319,7 +341,7 @@ public:
         toolBox->addItem(page, QString::fromUtf8("            \345\270\270\347\224\250\351\205\215\347\275\256"));
         page_2 = new QWidget();
         page_2->setObjectName(QStringLiteral("page_2"));
-        page_2->setGeometry(QRect(0, 0, 250, 414));
+        page_2->setGeometry(QRect(0, 0, 250, 410));
         gridLayout_4 = new QGridLayout(page_2);
         gridLayout_4->setSpacing(6);
         gridLayout_4->setContentsMargins(11, 11, 11, 11);
@@ -350,6 +372,113 @@ public:
         gridLayout_4->addLayout(horizontalLayout, 1, 0, 1, 1);
 
         toolBox->addItem(page_2, QString::fromUtf8("         \350\256\276\345\244\207\345\257\204\345\255\230\345\231\250\351\205\215\347\275\256"));
+        page_3 = new QWidget();
+        page_3->setObjectName(QStringLiteral("page_3"));
+        page_3->setGeometry(QRect(0, 0, 250, 410));
+        gridLayout_7 = new QGridLayout(page_3);
+        gridLayout_7->setSpacing(6);
+        gridLayout_7->setContentsMargins(11, 11, 11, 11);
+        gridLayout_7->setObjectName(QStringLiteral("gridLayout_7"));
+        gbox1 = new QGroupBox(page_3);
+        gbox1->setObjectName(QStringLiteral("gbox1"));
+        gridLayout_6 = new QGridLayout(gbox1);
+        gridLayout_6->setSpacing(6);
+        gridLayout_6->setContentsMargins(11, 11, 11, 11);
+        gridLayout_6->setObjectName(QStringLiteral("gridLayout_6"));
+        horizontalLayout_8 = new QHBoxLayout();
+        horizontalLayout_8->setSpacing(6);
+        horizontalLayout_8->setObjectName(QStringLiteral("horizontalLayout_8"));
+        label_5 = new QLabel(gbox1);
+        label_5->setObjectName(QStringLiteral("label_5"));
+
+        horizontalLayout_8->addWidget(label_5);
+
+        serialPortInfoListBox = new QComboBox(gbox1);
+        serialPortInfoListBox->setObjectName(QStringLiteral("serialPortInfoListBox"));
+
+        horizontalLayout_8->addWidget(serialPortInfoListBox);
+
+
+        gridLayout_6->addLayout(horizontalLayout_8, 0, 0, 1, 1);
+
+        horizontalLayout_9 = new QHBoxLayout();
+        horizontalLayout_9->setSpacing(6);
+        horizontalLayout_9->setObjectName(QStringLiteral("horizontalLayout_9"));
+        label_6 = new QLabel(gbox1);
+        label_6->setObjectName(QStringLiteral("label_6"));
+
+        horizontalLayout_9->addWidget(label_6);
+
+        baudRateBox = new QComboBox(gbox1);
+        baudRateBox->setObjectName(QStringLiteral("baudRateBox"));
+
+        horizontalLayout_9->addWidget(baudRateBox);
+
+
+        gridLayout_6->addLayout(horizontalLayout_9, 1, 0, 1, 1);
+
+        horizontalLayout_10 = new QHBoxLayout();
+        horizontalLayout_10->setSpacing(6);
+        horizontalLayout_10->setObjectName(QStringLiteral("horizontalLayout_10"));
+        label_7 = new QLabel(gbox1);
+        label_7->setObjectName(QStringLiteral("label_7"));
+
+        horizontalLayout_10->addWidget(label_7);
+
+        dataBitsBox = new QComboBox(gbox1);
+        dataBitsBox->setObjectName(QStringLiteral("dataBitsBox"));
+
+        horizontalLayout_10->addWidget(dataBitsBox);
+
+
+        gridLayout_6->addLayout(horizontalLayout_10, 2, 0, 1, 1);
+
+        horizontalLayout_11 = new QHBoxLayout();
+        horizontalLayout_11->setSpacing(6);
+        horizontalLayout_11->setObjectName(QStringLiteral("horizontalLayout_11"));
+        label_8 = new QLabel(gbox1);
+        label_8->setObjectName(QStringLiteral("label_8"));
+
+        horizontalLayout_11->addWidget(label_8);
+
+        parityBox = new QComboBox(gbox1);
+        parityBox->setObjectName(QStringLiteral("parityBox"));
+
+        horizontalLayout_11->addWidget(parityBox);
+
+
+        gridLayout_6->addLayout(horizontalLayout_11, 3, 0, 1, 1);
+
+        horizontalLayout_12 = new QHBoxLayout();
+        horizontalLayout_12->setSpacing(6);
+        horizontalLayout_12->setObjectName(QStringLiteral("horizontalLayout_12"));
+        label_9 = new QLabel(gbox1);
+        label_9->setObjectName(QStringLiteral("label_9"));
+
+        horizontalLayout_12->addWidget(label_9);
+
+        stopBitsBox = new QComboBox(gbox1);
+        stopBitsBox->setObjectName(QStringLiteral("stopBitsBox"));
+
+        horizontalLayout_12->addWidget(stopBitsBox);
+
+
+        gridLayout_6->addLayout(horizontalLayout_12, 4, 0, 1, 1);
+
+        openSerial_pushButton = new QPushButton(gbox1);
+        openSerial_pushButton->setObjectName(QStringLiteral("openSerial_pushButton"));
+        openSerial_pushButton->setCursor(QCursor(Qt::PointingHandCursor));
+
+        gridLayout_6->addWidget(openSerial_pushButton, 5, 0, 1, 1);
+
+
+        gridLayout_7->addWidget(gbox1, 0, 0, 1, 1);
+
+        verticalSpacer_2 = new QSpacerItem(20, 187, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        gridLayout_7->addItem(verticalSpacer_2, 1, 0, 1, 1);
+
+        toolBox->addItem(page_3, QString::fromUtf8("            \344\270\262\345\217\243\350\277\236\346\216\245"));
 
         gridLayout_2->addWidget(toolBox, 0, 0, 1, 1);
 
@@ -452,7 +581,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        toolBox->setCurrentIndex(0);
+        toolBox->setCurrentIndex(2);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -486,6 +615,14 @@ public:
         getALL_pushButton->setText(QApplication::translate("MainWindow", "\345\205\250\351\203\250\350\257\273\345\217\226", Q_NULLPTR));
         setAll_pushButton->setText(QApplication::translate("MainWindow", "\345\205\250\351\203\250\345\206\231\345\205\245", Q_NULLPTR));
         toolBox->setItemText(toolBox->indexOf(page_2), QApplication::translate("MainWindow", "         \350\256\276\345\244\207\345\257\204\345\255\230\345\231\250\351\205\215\347\275\256", Q_NULLPTR));
+        gbox1->setTitle(QApplication::translate("MainWindow", "\344\270\262\345\217\243\345\217\202\346\225\260\350\256\276\347\275\256", Q_NULLPTR));
+        label_5->setText(QApplication::translate("MainWindow", "\344\270\262\345\217\243\345\217\267\357\274\232", Q_NULLPTR));
+        label_6->setText(QApplication::translate("MainWindow", "\346\263\242\347\211\271\347\216\207\357\274\232", Q_NULLPTR));
+        label_7->setText(QApplication::translate("MainWindow", "\346\225\260\346\215\256\344\275\215\357\274\232", Q_NULLPTR));
+        label_8->setText(QApplication::translate("MainWindow", "\346\240\241\351\252\214\344\275\215\357\274\232", Q_NULLPTR));
+        label_9->setText(QApplication::translate("MainWindow", "\345\201\234\346\255\242\344\275\215\357\274\232", Q_NULLPTR));
+        openSerial_pushButton->setText(QApplication::translate("MainWindow", "\346\211\223\345\274\200\344\270\262\345\217\243", Q_NULLPTR));
+        toolBox->setItemText(toolBox->indexOf(page_3), QApplication::translate("MainWindow", "            \344\270\262\345\217\243\350\277\236\346\216\245", Q_NULLPTR));
         groupBox_2->setTitle(QApplication::translate("MainWindow", "\347\273\237\350\256\241\344\277\241\346\201\257\344\270\216\346\227\245\345\277\227", Q_NULLPTR));
         label_11->setText(QApplication::translate("MainWindow", "        TOF/PEAK\344\277\241\346\201\257\347\273\237\350\256\241", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem = tableWidget_2->horizontalHeaderItem(0);
