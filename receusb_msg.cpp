@@ -13,6 +13,8 @@
 extern bool isRecvFlag;
 //extern int framePerSecond;
 
+extern int ProtocolFlag;  //0: 1*256;  1:2*256    2:4*256
+
 
 
 
@@ -265,8 +267,14 @@ void ReceUSB_Msg::read_usb()
 
         if(260 == ret)
         {
-
             mArray = QByteArray(MyBuffer,260);
+
+            if(0 == ProtocolFlag )
+                emit recvMsgSignal(mArray);
+            if(1 == ProtocolFlag)
+                emit recvMsgSignal_2_256(mArray);
+            if(2 == ProtocolFlag)
+                emit recvMsgSignal_4_256(mArray);
 
 //            QDataStream out(&mArray,QIODevice::ReadWrite);
 //            QString strHex;
@@ -288,15 +296,52 @@ void ReceUSB_Msg::read_usb()
 //            strHex = strHex.toUpper();
 
 //            qDebug()<<QStringLiteral("原始数据为：")<<strHex<<endl;
+        }else if(ret<260)
+        {
+            mArray = QByteArray(MyBuffer,ret);
 
-            emit recvMsgSignal(mArray);
-//            break;
+            if(4 == ret && 0 == tmpArray.size())
+            {
+                tmpArray.append(mArray);
+            }
+            if(256 == ret && 4 == tmpArray.size())
+            {
+                tmpArray.append(mArray);
+//                qDebug()<<"tmpArray's size = "<<tmpArray.size()<<" ProtocolFlag="<<ProtocolFlag<<endl;
+
+                if(0 == ProtocolFlag )
+                    emit recvMsgSignal(tmpArray);
+                if(1 == ProtocolFlag )
+                    emit recvMsgSignal_2_256(tmpArray);
+                if(2 == ProtocolFlag )
+                    emit recvMsgSignal_4_256(tmpArray);
+
+//                QDataStream out(&tmpArray,QIODevice::ReadWrite);
+//                QString strHex;
+//                while (!out.atEnd())
+//                {
+//                    qint8 outChar=0;
+//                    out>>outChar;
+//                    QString str=QString("%1").arg(outChar&0xFF,2,16,QLatin1Char('0'));
+
+//                    if (str.length()>1)
+//                    {
+//                        strHex+=str+" ";
+//                    }
+//                    else
+//                    {
+//                        strHex+="0"+str+" ";
+//                    }
+//                }
+//                strHex = strHex.toUpper();
+
+//                qDebug()<<QStringLiteral("原始数据为：")<<strHex<<endl;
 
 
 
 
-
-
+                tmpArray.clear();
+            }
         }
 
     }
@@ -461,20 +506,29 @@ void ReceUSB_Msg::loadSettingSlot(QString filePath,bool recvFlag)
     // 1、 0x11= 17  0x41=65    （17-22）（0x11 0x16）
     //    QString str2 = "41 01 00";
     QString str2 = line[1];
-    res = System_Register_Write(17,str2.mid(0,2));
-    qDebug()<<"[w]sys write str2="<<str2.mid(0,2)<<"   res="<<res<<endl;
+//    res = System_Register_Write(17,str2.mid(0,2));
+//    qDebug()<<"[w]sys write str2="<<str2.mid(0,2)<<"   res="<<res<<endl;
 
-    // 0x12 = 18
-    res = System_Register_Write(18,str2.mid(3,2));
-    qDebug()<<"[w]sys write str2="<<str2.mid(3,2)<<"   res="<<res<<endl;
+//    // 0x12 = 18
+//    res = System_Register_Write(18,str2.mid(3,2));
+//    qDebug()<<"[w]sys write str2="<<str2.mid(3,2)<<"   res="<<res<<endl;
 
-    //0xe2 = 226
-    res = System_Register_Write(226,str2.mid(6,2));
-    qDebug()<<"[w]sys write str2="<<str2.mid(6,2)<<"   res="<<res<<endl;
+//    //0xe2 = 226
+//    res = System_Register_Write(226,str2.mid(6,2));
+//    qDebug()<<"[w]sys write str2="<<str2.mid(6,2)<<"   res="<<res<<endl;
 
-    //0x13 = 19
-    res = System_Register_Read(19,array);
-    qDebug()<<"[R]sys Read array="<<array<<"   res="<<res<<endl;
+//    //0x13 = 19
+//    res = System_Register_Read(19,array);
+//    qDebug()<<"[R]sys Read array="<<array<<"   res="<<res<<endl;
+
+    for(int n=0; n<6; n++)
+    {
+        res = System_Register_Write(17+n,str2.mid(n*3,2));
+        qDebug()<<"[R]sys Read array="<<array<<"   res="<<res<<endl;
+    }
+
+
+
 
 
     /************************测试STR3********************************************/
@@ -493,6 +547,16 @@ void ReceUSB_Msg::loadSettingSlot(QString filePath,bool recvFlag)
     //    QString str1 = "00 44 1F 44 45 44 EE 02 64 11 22 44 88 88 44 22 11 03 40 00 1F E0 81 4A 84 08 00 00 CC 01 00 00 00 00 00 00 00 0A 06 06 06 06 06 34 FF FF FF FF 04 1E";
     QString str1 = line[0];
 
+    QString str = "34";               //0x2b = 43                        //2019-8-15
+    res = Device_Register_Write(216,43,str);
+    qDebug()<<"[w]Device write str1="<<"00"<<"   res="<<res<<endl;
+
+    str = "4A";              //0x17 =23                         //2019-8-15
+    res = Device_Register_Write(216,23,str);
+    qDebug()<<"[w]Device write str1="<<"00"<<"   res="<<res<<endl;
+
+
+
 
     //0xd8 = 216,
     for(int k=0; k<50; k++)
@@ -500,6 +564,13 @@ void ReceUSB_Msg::loadSettingSlot(QString filePath,bool recvFlag)
         res = Device_Register_Write(216,k,str1.mid(3*k,2));
         qDebug()<<"[w]Device write str1="<<str1.mid(3*k,2)<<"   res="<<res<<str1.mid(3*k,2).toInt(NULL,16) <<endl;
     }
+
+
+    //0x15 = 21
+    str = "01";
+    res = System_Register_Write(21, str);
+    qDebug()<<"[w]sys write str="<<"01"<<"   res="<<res<<endl;
+
 
     if(res)
     {
@@ -511,8 +582,8 @@ void ReceUSB_Msg::loadSettingSlot(QString filePath,bool recvFlag)
 
     /************************开始接受数据****************************************************/
     //    readTimer->start(1);
-    isRecvFlag =true;
-    read_usb();
+//    isRecvFlag =true;
+//    read_usb();
 }
 
 //保存配置集槽函数
@@ -527,7 +598,7 @@ void ReceUSB_Msg::saveSettingSlot(QString filePath,int deviceId,bool recvFlag)
     QString textString;
 
     QByteArray ba;
-    const char *c_str;
+//    const char *c_str;
     int m;
     /***************文本中写入str1******************************************/
     for(; i<50 ; i++)

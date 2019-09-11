@@ -61,9 +61,9 @@ public:
     int idVendor_,idProduct_;
 
 
+     QByteArray tmpArray;    //用于协议2的缓存 缓存到260个字节时发送给数据处理线程
     /*********串口相关******************/
     QSerialPort *serial;
-
     QString m_buffer;   //接收数据的缓存区
 
 
@@ -82,6 +82,10 @@ signals:
     void staticValueSignal(float,float,float,float,float,float,float,float,float,float);
 
     void recvMsgSignal(QByteArray); //发送给处理线程的信号
+
+    void recvMsgSignal_2_256(QByteArray); //发送给处理线程的信号 2*256的协议
+
+    void recvMsgSignal_4_256(QByteArray); //发送给处理线程的信号
 
     void reReadSysSignal(QString);  //读取系统指令 返回信号
 

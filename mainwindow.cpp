@@ -68,6 +68,8 @@ void MainWindow::initConnect()
 
     //数据接收与数据处理线程 信号与槽的连接
     connect(recvUsbMsg_obj,SIGNAL(recvMsgSignal(QByteArray)),dealUsbMsg_obj,SLOT(recvMsgSlot(QByteArray)));
+    connect(recvUsbMsg_obj,SIGNAL(recvMsgSignal_2_256(QByteArray)),dealUsbMsg_obj,SLOT(recvMsgSlot_2_256(QByteArray)));
+    connect(recvUsbMsg_obj,SIGNAL(recvMsgSignal_4_256(QByteArray)),dealUsbMsg_obj,SLOT(recvMsgSlot_4_256(QByteArray)));
 
     //显示相关
     connect(&oneSecondTimer,SIGNAL(timeout()),this,SLOT(oneSecondTimer_slot()));  //1sec 刷新显示
@@ -603,11 +605,11 @@ void MainWindow::on_linkUSB_pushButton_clicked()
         int pId = ui->PID_lineEdit->text().toInt(NULL,16);
         emit openLinkSignal(vId,pId);
 
-        if(isWriteSuccess)      //关闭连接以后，重新连接后需直接接收数据
-        {
-            isRecvFlag = true;
-            emit read_usb_signal();
-        }
+//        if(isWriteSuccess)      //关闭连接以后，重新连接后需直接接收数据
+//        {
+//            isRecvFlag = true;
+//            emit read_usb_signal();
+//        }
     }else if(ui->linkUSB_pushButton->text() == QStringLiteral("关闭连接"))
     {
         isRecvFlag = false;
@@ -784,11 +786,20 @@ void MainWindow::on_saveSetting_pushButton_clicked()
 //播放的槽函数
 void MainWindow::on_pushButton_5_clicked()
 {
+    if(!isLinkSuccess)
+    {
+        QMessageBox::information(NULL,QStringLiteral("告警"),QStringLiteral("设备未连接"));
+        return;
+    }
+
     if(ui->pushButton_5->text() == QStringLiteral("播放"))
     {
         ui->widget->timer.start(10);
         ui->pushButton_5->setText(QStringLiteral("暂停"));
         oneSecondTimer.start(1000);
+
+        isRecvFlag = true;
+        emit read_usb_signal();
 
     }else if(ui->pushButton_5->text() == QStringLiteral("暂停"))
     {
@@ -920,7 +931,7 @@ void MainWindow::isSaveFlagSlot(bool saveFlag, QString filePath,int formatSelect
 
     saveFilePath = filePath;
     isSaveFlag = saveFlag;
-    qDebug()<<"saveFlag ="<<saveFlag<<"  filePath="<<filePath<<endl;
+    qDebug()<<"saveFlag ="<<saveFlag<<"  filePath="<<filePath<<" formatSelect="<<formatSelect<<endl;
 
 }
 
@@ -3180,7 +3191,7 @@ void MainWindow::on_treeWidget_itemExpanded(QTreeWidgetItem *item)
 //点击某一个item时，触发的槽函数，方便后期做注释
 void MainWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
 {
-    qDebug()<<"item on_treeWidget_itemClicked "<<item->text(0);
+    qDebug()<<"item on_treeWidget_itemClicked "<<item->text(0)<<" column="<<column;
 
     QString itemName = item->text(0);
     if("sfw_rst(0)[0]" == itemName)
@@ -3656,7 +3667,7 @@ void MainWindow::on_getALL_pushButton_clicked()
 //全部写入的槽函数
 void MainWindow::on_setAll_pushButton_clicked()
 {
-    int i = 0 ;
+//    int i = 0 ;
 
     qDebug()<<" on_setAll_pushButton_clicked  expandIndex ="<<expandItem_index<<endl;
 

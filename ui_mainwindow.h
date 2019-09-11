@@ -132,7 +132,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(1385, 767);
+        MainWindow->resize(1385, 770);
         QIcon icon;
         icon.addFile(QStringLiteral("icon_1.png"), QSize(), QIcon::Normal, QIcon::Off);
         MainWindow->setWindowIcon(icon);
@@ -173,7 +173,7 @@ public:
         toolBox->setStyleSheet(QStringLiteral(""));
         page = new QWidget();
         page->setObjectName(QStringLiteral("page"));
-        page->setGeometry(QRect(0, 0, 250, 410));
+        page->setGeometry(QRect(0, 0, 250, 413));
         gridLayout_3 = new QGridLayout(page);
         gridLayout_3->setSpacing(6);
         gridLayout_3->setContentsMargins(11, 11, 11, 11);
@@ -342,7 +342,7 @@ public:
         toolBox->addItem(page, QString::fromUtf8("            \345\270\270\347\224\250\351\205\215\347\275\256"));
         page_2 = new QWidget();
         page_2->setObjectName(QStringLiteral("page_2"));
-        page_2->setGeometry(QRect(0, 0, 250, 410));
+        page_2->setGeometry(QRect(0, 0, 250, 413));
         gridLayout_4 = new QGridLayout(page_2);
         gridLayout_4->setSpacing(6);
         gridLayout_4->setContentsMargins(11, 11, 11, 11);
@@ -375,7 +375,7 @@ public:
         toolBox->addItem(page_2, QString::fromUtf8("         \350\256\276\345\244\207\345\257\204\345\255\230\345\231\250\351\205\215\347\275\256"));
         page_3 = new QWidget();
         page_3->setObjectName(QStringLiteral("page_3"));
-        page_3->setGeometry(QRect(0, 0, 250, 410));
+        page_3->setGeometry(QRect(0, 0, 250, 413));
         gridLayout_7 = new QGridLayout(page_3);
         gridLayout_7->setSpacing(6);
         gridLayout_7->setContentsMargins(11, 11, 11, 11);

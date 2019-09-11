@@ -22,7 +22,7 @@ public:
     float tofMin,tofMax,peakMin,peakMax;
 
     QString tofPeakToSave_string;   //存储文件所需的tof和peak;  储存排序以后的数据，
-    QString tmpTofPeak_string[256];
+    QString tmpTofPeak_string[256*4];
 
 
 
@@ -46,6 +46,13 @@ public:
 
     bool isTOF_flag;
 
+
+
+    /************ 2 * 256 / 4*256 相关*******************/
+    int imageArray[4][256];
+    int lastSpadNum;
+
+
 signals:
 
     void statisticsValueSignal(float,float,float,float);
@@ -55,6 +62,10 @@ signals:
 public slots:
 
     void recvMsgSlot(QByteArray array);
+
+    void recvMsgSlot_2_256(QByteArray array);
+
+    void recvMsgSlot_4_256(QByteArray array);
 
     void alterStatisticFrameNum_slot(int num);
 
