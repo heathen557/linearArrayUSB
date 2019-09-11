@@ -231,6 +231,8 @@ private slots:
 
     void on_openSerial_pushButton_clicked();
 
+    void on_serialPlay_pushButton_clicked();
+
 signals:
     void openLinkSignal(int ,int); //打开连接
 
@@ -252,7 +254,7 @@ signals:
 
     void changeTofPeak_signal();
 
-    void openSerial_signal(Settings);
+    void openSerial_signal(Settings,bool);
 
 };
 

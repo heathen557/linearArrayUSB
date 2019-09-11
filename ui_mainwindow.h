@@ -91,6 +91,7 @@ public:
     QPushButton *setAll_pushButton;
     QWidget *page_3;
     QGridLayout *gridLayout_7;
+    QSpacerItem *verticalSpacer_2;
     QGroupBox *gbox1;
     QGridLayout *gridLayout_6;
     QHBoxLayout *horizontalLayout_8;
@@ -109,7 +110,7 @@ public:
     QLabel *label_9;
     QComboBox *stopBitsBox;
     QPushButton *openSerial_pushButton;
-    QSpacerItem *verticalSpacer_2;
+    QPushButton *serialPlay_pushButton;
     QGroupBox *groupBox_2;
     QGridLayout *gridLayout_5;
     QFrame *frame_6;
@@ -379,6 +380,10 @@ public:
         gridLayout_7->setSpacing(6);
         gridLayout_7->setContentsMargins(11, 11, 11, 11);
         gridLayout_7->setObjectName(QStringLiteral("gridLayout_7"));
+        verticalSpacer_2 = new QSpacerItem(20, 158, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        gridLayout_7->addItem(verticalSpacer_2, 2, 0, 1, 1);
+
         gbox1 = new QGroupBox(page_3);
         gbox1->setObjectName(QStringLiteral("gbox1"));
         gridLayout_6 = new QGridLayout(gbox1);
@@ -474,9 +479,10 @@ public:
 
         gridLayout_7->addWidget(gbox1, 0, 0, 1, 1);
 
-        verticalSpacer_2 = new QSpacerItem(20, 187, QSizePolicy::Minimum, QSizePolicy::Expanding);
+        serialPlay_pushButton = new QPushButton(page_3);
+        serialPlay_pushButton->setObjectName(QStringLiteral("serialPlay_pushButton"));
 
-        gridLayout_7->addItem(verticalSpacer_2, 1, 0, 1, 1);
+        gridLayout_7->addWidget(serialPlay_pushButton, 1, 0, 1, 1);
 
         toolBox->addItem(page_3, QString::fromUtf8("            \344\270\262\345\217\243\350\277\236\346\216\245"));
 
@@ -581,7 +587,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        toolBox->setCurrentIndex(2);
+        toolBox->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -622,6 +628,7 @@ public:
         label_8->setText(QApplication::translate("MainWindow", "\346\240\241\351\252\214\344\275\215\357\274\232", Q_NULLPTR));
         label_9->setText(QApplication::translate("MainWindow", "\345\201\234\346\255\242\344\275\215\357\274\232", Q_NULLPTR));
         openSerial_pushButton->setText(QApplication::translate("MainWindow", "\346\211\223\345\274\200\344\270\262\345\217\243", Q_NULLPTR));
+        serialPlay_pushButton->setText(QApplication::translate("MainWindow", "\346\222\255\346\224\276", Q_NULLPTR));
         toolBox->setItemText(toolBox->indexOf(page_3), QApplication::translate("MainWindow", "            \344\270\262\345\217\243\350\277\236\346\216\245", Q_NULLPTR));
         groupBox_2->setTitle(QApplication::translate("MainWindow", "\347\273\237\350\256\241\344\277\241\346\201\257\344\270\216\346\227\245\345\277\227", Q_NULLPTR));
         label_11->setText(QApplication::translate("MainWindow", "        TOF/PEAK\344\277\241\346\201\257\347\273\237\350\256\241", Q_NULLPTR));

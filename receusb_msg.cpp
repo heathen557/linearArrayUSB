@@ -458,7 +458,7 @@ void ReceUSB_Msg::loadSettingSlot(QString filePath,bool recvFlag)
     bool res = true;
     QString array;
     /**********************测试STR2******************************************/
-    // 1、 0x11= 17  0x41=65
+    // 1、 0x11= 17  0x41=65    （17-22）（0x11 0x16）
     //    QString str2 = "41 01 00";
     QString str2 = line[1];
     res = System_Register_Write(17,str2.mid(0,2));
@@ -478,7 +478,7 @@ void ReceUSB_Msg::loadSettingSlot(QString filePath,bool recvFlag)
 
 
     /************************测试STR3********************************************/
-    //    QString str3 = "00 00 26 0A 00 64 00 14 00 01 00 00";   //len = 12
+    //    QString str3 = "00 00 26 0A 00 64 00 14 00 01 00 00";   //len = 12    (0x20-0x2c)
     QString str3 = line[2];
 
     //起始位置从32 开始
@@ -599,7 +599,7 @@ void ReceUSB_Msg::saveSettingSlot(QString filePath,int deviceId,bool recvFlag)
 
 
 /**************************串口相关***************************************/
-void ReceUSB_Msg::openSerial_slot(Settings serialSetting)
+void ReceUSB_Msg::openSerial_slot(Settings serialSetting, bool openFlag)
 {
     if(NULL == serial)
     {
@@ -607,24 +607,35 @@ void ReceUSB_Msg::openSerial_slot(Settings serialSetting)
         connect(serial,SIGNAL(readyRead()),this,SLOT(recvSerial_slot()));
     }
 
-    serial->setPortName(serialSetting.name);
-    serial->setBaudRate(serialSetting.baudRate);
-    serial->setDataBits(serialSetting.dataBits);
-    serial->setParity(serialSetting.parity);
-    serial->setStopBits(serialSetting.stopBits);
-    serial->setFlowControl(serialSetting.flowControl);
-    if(serial->open(QIODevice::ReadWrite))
+    if(openFlag)   //打开串口
     {
-//       QMessageBox::information(NULL,QStringLiteral("提示"),QStringLiteral("串口打开成功！"));
-       emit linkInfoSignal(16);
-    }else
+        serial->setPortName(serialSetting.name);
+        serial->setBaudRate(serialSetting.baudRate);
+        serial->setDataBits(serialSetting.dataBits);
+        serial->setParity(serialSetting.parity);
+        serial->setStopBits(serialSetting.stopBits);
+        serial->setFlowControl(serialSetting.flowControl);
+        if(serial->open(QIODevice::ReadWrite))
+        {
+           emit linkInfoSignal(16);
+        }else
+        {
+           emit linkInfoSignal(17);
+        }
+        qDebug()<<"recvData = "<<serialSetting.name<<" -- "<<serialSetting.baudRate<<endl;
+
+    }else       //关闭串口
     {
-        emit linkInfoSignal(17);
-//        QMessageBox::information(NULL,QStringLiteral("提示"),QStringLiteral("串口打开失败！"));
+        qDebug()<<QStringLiteral("接收到关闭串口的信号")<<endl;
+        serial->close();
     }
-    qDebug()<<"recvData = "<<serialSetting.name<<" -- "<<serialSetting.baudRate<<endl;
+
+
 }
 
+
+
+//接收串口发送过来的数据
 void ReceUSB_Msg::recvSerial_slot()
 {
     QByteArray temp = serial->readAll();
@@ -662,7 +673,7 @@ void ReceUSB_Msg::recvSerial_slot()
            int indexOf5A = m_buffer.indexOf("5A 83",0);
            if(indexOf5A < 0)  //没有找到5A 83
            {
-               qDebug()<<QString::fromUtf8("msg maybe error,can't find 5A")<<"index ="<<indexOf5A<<"buffer"<<m_buffer<<endl;
+               qDebug()<<"msg maybe error,can't find 5A     "<<"index ="<<indexOf5A<<"buffer"<<m_buffer<<endl;
                return;
            }else if(indexOf5A>0)  //第一次的时候前面会有冗余数据，删掉
            {
@@ -679,9 +690,16 @@ void ReceUSB_Msg::recvSerial_slot()
            if(m_buffer.size()<length)    //不够一个命令的长度 返回
                return;
            QString single_Data = m_buffer.left(length);       //接收到的一整个数据包，交给函数处理
-           qDebug()<<"rece data = "<<single_Data<<endl;
+//           qDebug()<<"rece data = "<<single_Data<<endl;
 
            //数据校验
+           if(!msgCheck(single_Data))
+           {
+               qDebug()<<QStringLiteral("数据校验失败,singleData = ")<<single_Data<<endl;
+               m_buffer = m_buffer.right(totallen-2);
+               totallen = m_buffer.length();
+               return;
+           }
 
 
            //数据处理
@@ -703,6 +721,7 @@ void ReceUSB_Msg::singleDataDeal(QString singleData)
     int len = singleData.length();
     QString dataStr = singleData.right( len - 4*3 );
 
+    //把QString类型 转换为QByteArray,并向数据处理线程发送信号
     QString data1 = "08 00 " + dataStr.mid(0, 64*4*3);
     data1 = data1.replace(" ","");
     sendArray = stringToByte(data1);
@@ -728,7 +747,7 @@ void ReceUSB_Msg::singleDataDeal(QString singleData)
     sendArray = stringToByte(data4);
     emit recvMsgSignal(sendArray);
 
-    //把QString类型 转换为QByteArray
+
 
 }
 
@@ -770,8 +789,21 @@ QByteArray ReceUSB_Msg::stringToByte(QString str)
 
 //    qDebug()<<QStringLiteral("发送的原始数据为：")<<strHex<<endl;
     /*********************************************************************/
-
-
     return byte_arr;
+}
+
+bool ReceUSB_Msg::msgCheck(QString strMsg)
+{
+    strMsg = strMsg.replace(" ","");
+
+    int len = strMsg.length();
+    int num = 0;
+    for(int i=2; i<len-2; i+=2)  //命令区到数据区求和
+        num += strMsg.mid(i,2).toInt(NULL,16);
+
+    if(quint8(~num) == strMsg.right(2).toInt(NULL,16))
+        return true;
+    else
+        return false;
 }
 

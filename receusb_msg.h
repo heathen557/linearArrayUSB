@@ -105,10 +105,11 @@ public slots:
 
 
     //串口相关
-    void openSerial_slot(Settings);
+    void openSerial_slot(Settings serialSetting, bool openFlag);
     void recvSerial_slot();
     void singleDataDeal(QString singleData);
     QByteArray stringToByte(QString str);
+    bool msgCheck(QString strMsg);
 
 };
 

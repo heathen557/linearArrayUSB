@@ -54,7 +54,7 @@ void MainWindow::initConnect()
     connect(recvUsbMsg_obj,SIGNAL(reReadDevSignal(int,QString)),this,SLOT(reReadDevSlot(int,QString)));
    //主线程与串口数据接收线程 信号与槽的连接
     qRegisterMetaType<Settings>("Settings");
-    connect(this,SIGNAL(openSerial_signal(Settings)),recvUsbMsg_obj,SLOT(openSerial_slot(Settings)));
+    connect(this,SIGNAL(openSerial_signal(Settings,bool)),recvUsbMsg_obj,SLOT(openSerial_slot(Settings,bool)));
 
 
     //主函数与数据处理线程的 信号与槽的连接
@@ -3760,9 +3760,10 @@ void MainWindow::on_changeTofPeak_pushButton_clicked()
 //打开串口的槽函数
 void MainWindow::on_openSerial_pushButton_clicked()
 {
+    Settings currentSettings;
     if(ui->openSerial_pushButton->text() == QStringLiteral("打开串口"))
     {
-        Settings currentSettings;
+
         currentSettings.name = ui->serialPortInfoListBox->currentText();
 
         if (ui->baudRateBox->currentIndex() == 4) {
@@ -3819,19 +3820,31 @@ void MainWindow::on_openSerial_pushButton_clicked()
             file.close();
         }
 
-
         //向数据接收进程发送信号，打开串口
-        emit openSerial_signal(currentSettings);
-
-
-
-
-
-
+        emit openSerial_signal(currentSettings,true);
         ui->openSerial_pushButton->setText(QStringLiteral("关闭串口"));
     }else
     {
+        emit openSerial_signal(currentSettings,false);
         ui->openSerial_pushButton->setText(QStringLiteral("打开串口"));
     }
 
+}
+
+
+//播放串口接收数据的槽函数
+void MainWindow::on_serialPlay_pushButton_clicked()
+{
+    if(ui->serialPlay_pushButton->text() == QStringLiteral("播放"))
+    {
+        ui->widget->timer.start(10);
+        ui->serialPlay_pushButton->setText(QStringLiteral("暂停"));
+        oneSecondTimer.start(1000);
+
+    }else if(ui->serialPlay_pushButton->text() == QStringLiteral("暂停"))
+    {
+        ui->widget->timer.stop();
+        ui->serialPlay_pushButton->setText(QStringLiteral("播放"));
+        oneSecondTimer.stop();
+    }
 }
