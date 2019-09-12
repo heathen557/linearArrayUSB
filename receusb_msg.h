@@ -91,6 +91,8 @@ signals:
 
     void reReadDevSignal(int,QString); //读取设备指令 返回信号
 
+    void recvSerialSignal_4_256(QByteArray);    //发送给处理线程的信号 串口的 4*256
+
 
 
 
@@ -112,8 +114,12 @@ public slots:
     void openSerial_slot(Settings serialSetting, bool openFlag);
     void recvSerial_slot();
     void singleDataDeal(QString singleData);
+    void dataDeal_2_256(QString Data);   //2x256协议的解析
+    void dataDeal_4_256(QString Data);   //4x256协议的解析
     QByteArray stringToByte(QString str);
     bool msgCheck(QString strMsg);
+
+
 
 };
 

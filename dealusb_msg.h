@@ -71,7 +71,12 @@ public slots:
 
     void showSettingParaSlot(int,int,int);
 
-    void  changeTofPeak_slot();
+    void changeTofPeak_slot();
+
+
+
+    /************串口相关的槽函数************/
+    void recvSerialSlot_4_256(QByteArray MyBuffer);
 
 
 };

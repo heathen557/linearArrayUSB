@@ -27,6 +27,7 @@ void savePCDThread::saveTXTSlot(QString msgStr)
 // numOfFile：第几个文件
 void savePCDThread::writeTXT(QString text, int index)
 {
+    index;
     QString sFilePath = saveFilePath + QString::number(saveFileIndex)+".txt";
     QFile file(sFilePath);
     file.open(QIODevice::WriteOnly|QIODevice::Text|QIODevice::Append);

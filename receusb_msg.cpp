@@ -755,7 +755,6 @@ void ReceUSB_Msg::recvSerial_slot()
                    return;
            }
 
-
            /*********************************/
            int length = (m_buffer.mid(9,2).toInt(NULL,16)*256 + m_buffer.mid(6,2).toInt(NULL,16) +5)*3;    //数据长度1024 + 命令字节数5
            if(m_buffer.size()<length)    //不够一个命令的长度 返回
@@ -772,9 +771,13 @@ void ReceUSB_Msg::recvSerial_slot()
                return;
            }
 
-
            //数据处理
-           singleDataDeal(single_Data);
+           if(0 == ProtocolFlag )
+               singleDataDeal(single_Data);
+           if(1 == ProtocolFlag )
+               dataDeal_2_256(single_Data);
+           if(2 == ProtocolFlag)
+               dataDeal_4_256(single_Data);
 
            m_buffer = m_buffer.right(totallen - length);
            totallen = m_buffer.size();
@@ -817,12 +820,29 @@ void ReceUSB_Msg::singleDataDeal(QString singleData)
     data4 = data4.replace(" ","");
     sendArray = stringToByte(data4);
     emit recvMsgSignal(sendArray);
+}
 
-
-
+//2*256的解析,直接把数据转换成字节类型，以信号的形式发送给数据处理线程 完毕
+void ReceUSB_Msg::dataDeal_2_256(QString Data)   //2x256协议的解析
+{
+    qDebug()<<"dataDeal_2_256 Data'size = "<<Data.size();
 }
 
 
+
+//4x256的解析
+void ReceUSB_Msg::dataDeal_4_256(QString Data)   //4x256协议的解析
+{
+    QByteArray array = stringToByte(Data);       //转换成字节数据，发送给数据处理线程
+    emit recvSerialSignal_4_256(array);
+}
+
+
+
+
+
+
+//工具函数
 //QString to byte
 QByteArray ReceUSB_Msg::stringToByte(QString str)
 {

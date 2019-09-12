@@ -70,6 +70,8 @@ void MainWindow::initConnect()
     connect(recvUsbMsg_obj,SIGNAL(recvMsgSignal(QByteArray)),dealUsbMsg_obj,SLOT(recvMsgSlot(QByteArray)));
     connect(recvUsbMsg_obj,SIGNAL(recvMsgSignal_2_256(QByteArray)),dealUsbMsg_obj,SLOT(recvMsgSlot_2_256(QByteArray)));
     connect(recvUsbMsg_obj,SIGNAL(recvMsgSignal_4_256(QByteArray)),dealUsbMsg_obj,SLOT(recvMsgSlot_4_256(QByteArray)));
+    connect(recvUsbMsg_obj,SIGNAL(recvSerialSignal_4_256(QByteArray)),dealUsbMsg_obj,SLOT(recvSerialSlot_4_256(QByteArray)));
+
 
     //显示相关
     connect(&oneSecondTimer,SIGNAL(timeout()),this,SLOT(oneSecondTimer_slot()));  //1sec 刷新显示
