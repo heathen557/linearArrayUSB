@@ -159,6 +159,23 @@ void MainWindow::initSerial()
     }
     int numSeri_ = line[0].toInt();
     int baudRateBox_ = line[1].toInt();
+    int showFrameNum = line[2].toInt();
+    int showAngle = line[3].toInt();
+    int maxDistance = line[4].toInt();
+//    int porocIndex = line[5].toInt();
+
+
+
+    ui->widget->helper.showFrameNum = showFrameNum;
+
+    ui->widget->helper.showAngle = showAngle;
+
+    ui->widget->helper.showTOFmax = maxDistance;
+
+    ui->widget->helper.maxDistance = maxDistance*100/0.75;
+
+
+
 
     QStringList comList;//串口号
     comList.clear();

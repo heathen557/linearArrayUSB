@@ -59,7 +59,7 @@
 #include<math.h>
 
 QMutex m_mutex;
-vector<vector<int>> AllPoint_vec;
+vector<vector<float>> AllPoint_vec;
 extern int halfWidth_showWindow;
 #define PI 3.14159
 
@@ -74,10 +74,12 @@ Helper::Helper()
 //    QLinearGradient gradient(QPointF(50, -20), QPointF(80, 20));
 //    gradient.setColorAt(0.0, Qt::white);
 //    gradient.setColorAt(1.0, QColor(0xa6, 0xce, 0x39));
-    showFrameNum = 1;
-    showTOFmax = 10;   //10M
-    showAngle = 120;
-    maxDistance = (showTOFmax*100/0.75) ;
+
+
+//    showFrameNum = 1;
+//    showTOFmax = 10;   //10M
+//    showAngle = 120;
+//    maxDistance = (showTOFmax*100/0.75) ;
 
 
 
@@ -142,7 +144,7 @@ void Helper::paint(QPainter *painter, QPaintEvent *event, int elapsed)
         for(int n=0; n<len-1; n+=2)
         {
             float ang = AllPoint_vec[m][n];         //角度为float形式
-            int distance = AllPoint_vec[m][n+1];    //tof值为整形,tof的范围为0-10m,传送来的数据为LSB，1LSB=(0.75cm 1.5cm)  故接收到的数据范围：1000/0.75 = 1333.3 ；10000/1.5 = 666.7
+            int distance = AllPoint_vec[m][n+1] -20;    //tof值为整形,tof的范围为0-10m,传送来的数据为LSB，1LSB=(0.75cm 1.5cm)  故接收到的数据范围：1000/0.75 = 1333.3 ；10000/1.5 = 666.7
 
             /********、此处涉及到一些坐标的变换，tof(0~1333.3),转换比例    *********/
             //           1333.3  (maxTOF)                   distance (inputTOF)
@@ -152,9 +154,16 @@ void Helper::paint(QPainter *painter, QPaintEvent *event, int elapsed)
 //            float newDistance = (Window_wid/(2*cos(30*PI/180.0))) * distance / (maxDistance);
             float newDistance = (Window_wid/(2*cos(lestAngle*PI/180.0))) * distance / (maxDistance);
 
+            float angle = ang*PI/180.0 ;
+
+//            float x  = Window_wid/2.0 + Dr_calculate(newDistance,3.4,angle)*sin(angle);
+//            float y  = Window_height -  Dr_calculate(newDistance,3.4,angle)*cos(angle);
+
+//            qDebug()<<"n="<<n/2<<" ang = "<<ang<<endl;
 
             float x  = Window_wid/2.0 + newDistance*sin(ang*PI/180.0);
             float y  = Window_height -  newDistance*cos(ang*PI/180.0);
+
             pointf[pointNum].setX(x);
             pointf[pointNum].setY(y);
 //            qDebug()<<"pointNum ="<<pointNum<<",  x="<<x<<",  y="<<y<<endl;
@@ -183,3 +192,9 @@ void Helper::paint(QPainter *painter, QPaintEvent *event, int elapsed)
 
 }
 
+
+double Helper::Dr_calculate(float disTance,float lValue,float theta)
+{
+    double dr = ((disTance*disTance)-(lValue*lValue))/(2*(disTance+lValue*cos(theta)));
+    return dr;
+}

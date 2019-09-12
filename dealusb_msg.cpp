@@ -2,12 +2,13 @@
 #include<qdebug.h>
 #include<vector>
 #include<QMutex>
+#include<QFile>
 
 /*保存用到的标识*/
 extern QString saveFilePath;   //保存的路径  E:/..../.../的形式
 extern int saveFileIndex;      //文件标号；1作为开始
 extern bool isSaveFlag;
-extern vector<vector<int>> AllPoint_vec;    //保存要显示的点
+extern vector<vector<float>> AllPoint_vec;    //保存要显示的点
 extern QMutex m_mutex;
 
 //extern int showFrameNum;   //同时显示多少帧数据
@@ -22,11 +23,37 @@ DealUsb_msg::DealUsb_msg(QObject *parent) : QObject(parent)
 {
      qDebug()<<"DealUsb_msg thread start!!!!"<<endl;
 
-     showFrameNum = 1;
-     showAngle = 120;
-     showTOFmax = 10;    //10m
+//     showFrameNum = 1;
+//     showAngle = 120;
+//     showTOFmax = 10;    //10m
+     QFile file("setting.ini");
+     QByteArray temp("\r\n");
+     QString line[20];
 
-     isTOF_flag = true;
+     if (file.open(QIODevice::ReadOnly))
+     {
+         QTextStream in(&file);
+         int i = 0;
+         while (!in.atEnd())
+         {
+             line[i] = in.readLine();
+             i++;
+         }
+         file.close();
+     }
+     int numSeri_ = line[0].toInt();
+     int baudRateBox_ = line[1].toInt();
+     showFrameNum = line[2].toInt();
+     showAngle = line[3].toInt();
+     showTOFmax = line[4].toInt();
+
+
+
+
+
+
+
+     isTOF_flag = false;
 
 
      //总共有256个点 ,针对每一个点开启一个独立的容器进行存储相关内容
@@ -210,6 +237,9 @@ void DealUsb_msg::changeTofPeak_slot()
 //}
 
 
+
+
+
 //协议版本为spad==08 ；
 void DealUsb_msg::recvMsgSlot(QByteArray array)
 {
@@ -251,6 +281,29 @@ void DealUsb_msg::recvMsgSlot(QByteArray array)
             tofPeakToSave_string.clear();
         }
 
+
+
+        //显示数据发送给接收容器
+        //256个点 分为左右两个
+        int i = 0;
+        int tmpTof;
+        for(i=0; i<128; i++)   //存储前128个点
+        {
+            int leftIndex = i;
+            angle = -showAngle/2.0 + leftIndex*((showAngle/2.0)/128.0);
+            tmpTof = imageArray[0][i];
+            Rece_points.push_back(angle);
+            Rece_points.push_back(tmpTof);
+        }
+
+        for(i=128; i<256; i++)
+        {
+            int rightIndex = i-128;
+            angle = rightIndex * ((showAngle/2.0)/128.0);
+            tmpTof = imageArray[0][i];
+            Rece_points.push_back(angle);
+            Rece_points.push_back(tmpTof);
+        }
 
 
         //显示内容相关，将一帧数据传递给全局变量供显示
@@ -353,18 +406,27 @@ void DealUsb_msg::recvMsgSlot(QByteArray array)
 //        }
 
         //256个点 分为左右两个
-        if( pointIndex < 128)
+//        if( pointIndex < 128)
+//        {
+//            angle = -showAngle/2.0 + pointIndex*((showAngle/2.0)/128.0);
+//        }else
+//        {
+//            int rightIndex = pointIndex -128;
+//            angle = rightIndex * ((showAngle/2.0)/128.0);
+//        }
+//        Rece_points.push_back(angle);
+//        Rece_points.push_back(tof);
+
+
+        if( pointIndex<256 )
         {
-            angle = -showAngle/2.0 + pointIndex*((showAngle/2.0)/128.0);
+            imageArray[0][pointIndex] = tof;
         }else
         {
-            int rightIndex = pointIndex -128;
-            angle = rightIndex * ((showAngle/2.0)/128.0);
+            qDebug()<<QStringLiteral("给像素赋值时出现异常 pointIndex=")<<pointIndex<<endl;
         }
 
 
-        Rece_points.push_back(angle);
-        Rece_points.push_back(tof);
 
 //        qDebug()<<"angle = "<<angle<<"   tof="<<tof<<endl;
 
@@ -390,7 +452,7 @@ void DealUsb_msg::recvMsgSlot_2_256(QByteArray array)
     //spadNum ==00 -- 07   lineNum == 00
     int spadNum = (quint8)(MyBuffer[0]) +  (((quint8)(MyBuffer[1]))<<8);
     int line_number = (quint8)(MyBuffer[2]) +  (((quint8)(MyBuffer[3]))<<8);
-    qDebug()<<"recvMsgSlot_2_256   spadNum = "<<spadNum<<"  line_number = "<<line_number<<endl;
+//    qDebug()<<"recvMsgSlot_2_256   spadNum = "<<spadNum<<"  line_number = "<<line_number<<endl;
 
 //    if(spadNum != 8)          //固定值0x08
 //        return;
@@ -422,7 +484,9 @@ void DealUsb_msg::recvMsgSlot_2_256(QByteArray array)
         {
             int leftIndex = i;
             angle = -showAngle/2.0 + leftIndex*((showAngle/2.0)/128.0);
-            tmpTof = imageArray[0][i];
+//            tmpTof = imageArray[0][i];
+            tmpTof = (imageArray[0][i] + imageArray[1][i])/2.0;
+
             Rece_points.push_back(angle);
             Rece_points.push_back(tmpTof);
         }
@@ -431,7 +495,8 @@ void DealUsb_msg::recvMsgSlot_2_256(QByteArray array)
         {
             int rightIndex = i-128;
             angle = rightIndex * ((showAngle/2.0)/128.0);
-            tmpTof = imageArray[0][i];
+//            tmpTof = imageArray[0][i];
+            tmpTof = (imageArray[0][i] + imageArray[1][i])/2.0;
             Rece_points.push_back(angle);
             Rece_points.push_back(tmpTof);
         }
@@ -499,7 +564,7 @@ void DealUsb_msg::recvMsgSlot_2_256(QByteArray array)
     for(int i=0; i<64; i++)
     {
         int tof,intensity;
-        if(isTOF_flag == 8)  //基本上都是反的 所以直接设置为不可能的值
+        if(isTOF_flag )  //基本上都是反的 所以直接设置为不可能的值
         {
             tof = quint8(MyBuffer[4 + i * 4]) + ((quint8(MyBuffer[4 + i * 4 +1]))<<8);
             intensity = quint8(MyBuffer[4 + i * 4 + 2]) + ((quint8(MyBuffer[4 + i * 4 + 3 ]))<<8);
@@ -620,7 +685,8 @@ void DealUsb_msg::recvMsgSlot_4_256(QByteArray array)
         {
             int leftIndex = i;
             angle = -showAngle/2.0 + leftIndex*((showAngle/2.0)/128.0);
-            tmpTof = imageArray[2][i];
+//            tmpTof = imageArray[2][i];
+            tmpTof = (imageArray[2][i] + imageArray[3][i] )/2.0;
             Rece_points.push_back(angle);
             Rece_points.push_back(tmpTof);
         }
@@ -629,7 +695,8 @@ void DealUsb_msg::recvMsgSlot_4_256(QByteArray array)
         {
             int rightIndex = i-128;
             angle = rightIndex * ((showAngle/2.0)/128.0);
-            tmpTof = imageArray[2][i];
+//            tmpTof = imageArray[2][i];
+            tmpTof = (imageArray[2][i] + imageArray[3][i])/2.0;
             Rece_points.push_back(angle);
             Rece_points.push_back(tmpTof);
         }
@@ -692,12 +759,12 @@ void DealUsb_msg::recvMsgSlot_4_256(QByteArray array)
 
     //********************开始对单包数据进行解析*****************
 
-    int line_offset = spadNum/2;
-    int row_offset = (spadNum + 1)%2;
+    int line_offset = spadNum/2;         // 0 1 2 3
+    int row_offset = (spadNum + 1)%2;    //0 1
     for(int i=0; i<64; i++)
     {
         int tof,intensity;
-        if(isTOF_flag == 8)    //基本上都是反的 所以直接设置为不可能的值
+        if(isTOF_flag )    //基本上都是反的 所以直接设置为不可能的值
         {
             tof = quint8(MyBuffer[4 + i * 4]) + ((quint8(MyBuffer[4 + i * 4 +1]))<<8);
             intensity = quint8(MyBuffer[4 + i * 4 + 2]) + ((quint8(MyBuffer[4 + i * 4 + 3 ]))<<8);
@@ -712,6 +779,7 @@ void DealUsb_msg::recvMsgSlot_4_256(QByteArray array)
         int imgRow = i * 4 + line_offset;
         int imgCol = line_number * 2 + row_offset;
         int cloudIndex = imgCol*256+imgRow;      //在点云数据中的标号
+//        qDebug()<<"imgRow = "<<imgRow<<" imgCol ="<<imgCol<<endl;
 
         if(imgRow>=0 && imgRow<256 && imgCol>=0 && imgCol<4)
         {

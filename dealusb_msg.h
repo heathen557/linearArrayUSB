@@ -26,7 +26,7 @@ public:
 
 
 
-    vector<int> Rece_points;        //保存一帧的点，先角度 后TOF
+    vector<float> Rece_points;        //保存一帧的点，先角度 后TOF
 
     int pointIndex;
 

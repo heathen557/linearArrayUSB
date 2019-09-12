@@ -66,6 +66,9 @@ class Helper
 public:
     Helper();
 
+    double Dr_calculate(float tof,float lValue,float theta);
+
+
 public:
     void paint(QPainter *painter, QPaintEvent *event, int elapsed);
 
