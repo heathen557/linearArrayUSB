@@ -757,10 +757,11 @@ void ReceUSB_Msg::recvSerial_slot()
 
            /*********************************/
            int length = (m_buffer.mid(9,2).toInt(NULL,16)*256 + m_buffer.mid(6,2).toInt(NULL,16) +5)*3;    //数据长度1024 + 命令字节数5
+//           qDebug()<<"the  single Data  = "<<length<<endl;
            if(m_buffer.size()<length)    //不够一个命令的长度 返回
                return;
            QString single_Data = m_buffer.left(length);       //接收到的一整个数据包，交给函数处理
-//           qDebug()<<"rece data = "<<single_Data<<endl;
+//           qDebug()<<"single_Data = "<<single_Data<<endl;
 
            //数据校验
            if(!msgCheck(single_Data))
@@ -833,7 +834,12 @@ void ReceUSB_Msg::dataDeal_2_256(QString Data)   //2x256协议的解析
 //4x256的解析
 void ReceUSB_Msg::dataDeal_4_256(QString Data)   //4x256协议的解析
 {
+    Data.replace(" ","");                        //转换之前把空格去掉
+//    qDebug()<<"before Data = "<<Data<<endl;
+    Data = Data.mid(8,4096*2);
+//    qDebug()<<"after Data = "<<Data<<endl;      //把包头和包尾的部分去掉
     QByteArray array = stringToByte(Data);       //转换成字节数据，发送给数据处理线程
+    qDebug()<<"dataDeal_4_256 Data'size = "<<array.size();
     emit recvSerialSignal_4_256(array);
 }
 

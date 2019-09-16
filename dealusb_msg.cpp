@@ -844,6 +844,9 @@ void DealUsb_msg::recvSerialSlot_4_256(QByteArray MyBuffer)
 {
     int cloudIndex ;      //在点云数据中的标号
 
+//    qDebug()<<" myBuffer'size = "<<MyBuffer.size()<<endl;
+
+
     for (int spad_no = 0; spad_no < 8; spad_no++)
     {
         int spad_no_heng = spad_no / 2;                     //0 1 2 3
@@ -857,7 +860,7 @@ void DealUsb_msg::recvSerialSlot_4_256(QByteArray MyBuffer)
                 int row_backup = row * 4 + spad_no_heng;  // 0 ----- 255
 
                 int tof,intensity;
-                if(isTOF_flag )    //基本上都是反的 所以直接设置为不可能的值
+                if(!isTOF_flag )    //基本上都是反的 所以直接设置为不可能的值
                 {
                     tof = quint8(MyBuffer[spad_no * 64 * 2 * 4 + line * 256 + row * 4 + 0]) + ((quint8(MyBuffer[spad_no * 64 * 2 * 4 + line * 256 + row * 4 + 1]))<<8);
                     intensity = quint8(MyBuffer[spad_no * 64 * 2 * 4 + line * 256 + row * 4 + 2]) + ((quint8(MyBuffer[spad_no * 64 * 2 * 4 + line * 256 + row * 4 + 3]))<<8);
