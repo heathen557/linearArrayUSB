@@ -16,8 +16,15 @@ savePCDThread::savePCDThread(QObject *parent) : QObject(parent)
 
 void savePCDThread::saveTXTSlot(QString msgStr)
 {
+    if(1 == saveFileIndex)
+    {
+        saveFileIndex++;
+        return;
+    }
+
+
     writeTXT(msgStr,saveFileIndex);
-    saveFileIndex++;
+
 }
 
 
@@ -28,7 +35,8 @@ void savePCDThread::saveTXTSlot(QString msgStr)
 void savePCDThread::writeTXT(QString text, int index)
 {
     index;
-    QString sFilePath = saveFilePath + QString::number(saveFileIndex)+".txt";
+    QString sFilePath = saveFilePath + QString::number(saveFileIndex-1)+".txt";
+    saveFileIndex++;
     QFile file(sFilePath);
     file.open(QIODevice::WriteOnly|QIODevice::Text|QIODevice::Append);
 

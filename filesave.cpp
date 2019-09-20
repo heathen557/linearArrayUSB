@@ -7,7 +7,8 @@ fileSave::fileSave(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->radioButton->setChecked(true);    //默认设置为不保存
-    ui->lineEdit->setEnabled(false);
+//    ui->lineEdit->setEnabled(false);
+    ui->lineEdit->setReadOnly(true);
     ui->SelFilePath_pushButton->setEnabled(false);
 }
 
@@ -38,6 +39,7 @@ void fileSave::on_SelFilePath_pushButton_clicked()
 //确定槽函数
 void fileSave::on_pushButton_clicked()
 {
+
     //如果选中且路径不能空，则发送保存信号
     if(ui->radioButton_2->isChecked() && (!file_path.isEmpty()))
     {
@@ -64,7 +66,7 @@ void fileSave::on_radioButton_clicked()
     if(ui->radioButton->isChecked())
     {
         ui->SelFilePath_pushButton->setEnabled(false);
-        ui->lineEdit->setEnabled(false);
+//        ui->lineEdit->setEnabled(false);
 
     }
 
@@ -75,7 +77,7 @@ void fileSave::on_radioButton_2_clicked()
 {
     if(ui->radioButton_2->isChecked())
     {
-        ui->lineEdit->setEnabled(true);
+//        ui->lineEdit->setEnabled(true);
         ui->SelFilePath_pushButton->setEnabled(true);
     }
 }

@@ -27,6 +27,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     expandItem_index = 0;  //初始化为0表示都为展开节点
 
+    framePerSecond = 0; //统计帧率
+
     ui->statusBar->addWidget(&explainLabel);
     ui->statusBar->setStyleSheet(QString("QStatusBar::item{border:0px}"));
 
@@ -957,6 +959,7 @@ void MainWindow::isSaveFlagSlot(bool saveFlag, QString filePath,int formatSelect
 //接收线程发送来的统计信息的槽函数
 void MainWindow::statisticsValueSlot(float tofMin,float tofMax,float peakMin,float peakMax)
 {
+    framePerSecond++;   //帧率统计
     tofMin_ = tofMin;
     tofMax_ = tofMax;
     peakMin_ = peakMin;
@@ -967,6 +970,12 @@ void MainWindow::statisticsValueSlot(float tofMin,float tofMax,float peakMin,flo
 //显示统计信息槽函数
 void MainWindow::oneSecondTimer_slot()
 {
+    QString textStr;
+    textStr = QString::number(framePerSecond) + "fps";
+    explainLabel.setText(textStr);
+
+    framePerSecond = 0;
+
     tofMinItem_value.setText(QString::number(tofMin_));
     tofMaxItem_value.setText(QString::number(tofMax_));
     peakMinItem_value.setText(QString::number(peakMin_));

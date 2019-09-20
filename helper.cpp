@@ -137,6 +137,8 @@ void Helper::paint(QPainter *painter, QPaintEvent *event, int elapsed)
     m_mutex.lock();       //不加锁程序会异常退出；
     int allLen = AllPoint_vec.size();
 
+
+//    qDebug()<<"显示的帧数为："<<allLen<<endl;
     for(int m=0; m<allLen; m++)
     {
         int len =AllPoint_vec[m].size();

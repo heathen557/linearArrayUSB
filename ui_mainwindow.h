@@ -132,7 +132,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(1385, 770);
+        MainWindow->resize(1385, 715);
         QIcon icon;
         icon.addFile(QStringLiteral("icon_1.png"), QSize(), QIcon::Normal, QIcon::Off);
         MainWindow->setWindowIcon(icon);
@@ -173,11 +173,12 @@ public:
         toolBox->setStyleSheet(QStringLiteral(""));
         page = new QWidget();
         page->setObjectName(QStringLiteral("page"));
-        page->setGeometry(QRect(0, 0, 250, 413));
+        page->setGeometry(QRect(0, 0, 250, 358));
         gridLayout_3 = new QGridLayout(page);
         gridLayout_3->setSpacing(6);
         gridLayout_3->setContentsMargins(11, 11, 11, 11);
         gridLayout_3->setObjectName(QStringLiteral("gridLayout_3"));
+        gridLayout_3->setContentsMargins(-1, 2, -1, 0);
         pushButton_5 = new QPushButton(page);
         pushButton_5->setObjectName(QStringLiteral("pushButton_5"));
         pushButton_5->setMaximumSize(QSize(250, 23));
@@ -191,12 +192,13 @@ public:
 
         groupBox_4 = new QGroupBox(page);
         groupBox_4->setObjectName(QStringLiteral("groupBox_4"));
-        groupBox_4->setMaximumSize(QSize(230, 130));
+        groupBox_4->setMaximumSize(QSize(230, 108));
         groupBox_4->setStyleSheet(QString::fromUtf8("font:10pt \"\351\273\221\344\275\223\";"));
         gridLayout_8 = new QGridLayout(groupBox_4);
         gridLayout_8->setSpacing(6);
         gridLayout_8->setContentsMargins(11, 11, 11, 11);
         gridLayout_8->setObjectName(QStringLiteral("gridLayout_8"));
+        gridLayout_8->setContentsMargins(-1, 2, -1, 2);
         horizontalLayout_2 = new QHBoxLayout();
         horizontalLayout_2->setSpacing(6);
         horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
@@ -250,13 +252,14 @@ public:
 
         groupBox_6 = new QGroupBox(page);
         groupBox_6->setObjectName(QStringLiteral("groupBox_6"));
-        groupBox_6->setMaximumSize(QSize(230, 115));
+        groupBox_6->setMaximumSize(QSize(230, 108));
         groupBox_6->setStyleSheet(QString::fromUtf8("font:10pt \"\351\273\221\344\275\223\";\n"
 ""));
         gridLayout_9 = new QGridLayout(groupBox_6);
         gridLayout_9->setSpacing(6);
         gridLayout_9->setContentsMargins(11, 11, 11, 11);
         gridLayout_9->setObjectName(QStringLiteral("gridLayout_9"));
+        gridLayout_9->setContentsMargins(-1, 2, -1, 4);
         horizontalLayout_4 = new QHBoxLayout();
         horizontalLayout_4->setSpacing(6);
         horizontalLayout_4->setObjectName(QStringLiteral("horizontalLayout_4"));
@@ -310,11 +313,12 @@ public:
 
         groupBox_8 = new QGroupBox(page);
         groupBox_8->setObjectName(QStringLiteral("groupBox_8"));
-        groupBox_8->setMaximumSize(QSize(16777215, 85));
+        groupBox_8->setMaximumSize(QSize(16777215, 80));
         gridLayout_11 = new QGridLayout(groupBox_8);
         gridLayout_11->setSpacing(6);
         gridLayout_11->setContentsMargins(11, 11, 11, 11);
         gridLayout_11->setObjectName(QStringLiteral("gridLayout_11"));
+        gridLayout_11->setContentsMargins(-1, 2, -1, 4);
         verticalLayout_2 = new QVBoxLayout();
         verticalLayout_2->setSpacing(6);
         verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
@@ -342,7 +346,7 @@ public:
         toolBox->addItem(page, QString::fromUtf8("            \345\270\270\347\224\250\351\205\215\347\275\256"));
         page_2 = new QWidget();
         page_2->setObjectName(QStringLiteral("page_2"));
-        page_2->setGeometry(QRect(0, 0, 250, 413));
+        page_2->setGeometry(QRect(0, 0, 250, 358));
         gridLayout_4 = new QGridLayout(page_2);
         gridLayout_4->setSpacing(6);
         gridLayout_4->setContentsMargins(11, 11, 11, 11);
@@ -375,7 +379,7 @@ public:
         toolBox->addItem(page_2, QString::fromUtf8("         \350\256\276\345\244\207\345\257\204\345\255\230\345\231\250\351\205\215\347\275\256"));
         page_3 = new QWidget();
         page_3->setObjectName(QStringLiteral("page_3"));
-        page_3->setGeometry(QRect(0, 0, 250, 413));
+        page_3->setGeometry(QRect(0, 0, 250, 358));
         gridLayout_7 = new QGridLayout(page_3);
         gridLayout_7->setSpacing(6);
         gridLayout_7->setContentsMargins(11, 11, 11, 11);

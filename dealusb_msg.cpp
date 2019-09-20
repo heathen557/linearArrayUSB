@@ -41,8 +41,8 @@ DealUsb_msg::DealUsb_msg(QObject *parent) : QObject(parent)
          }
          file.close();
      }
-     int numSeri_ = line[0].toInt();
-     int baudRateBox_ = line[1].toInt();
+//     int numSeri_ = line[0].toInt();
+//     int baudRateBox_ = line[1].toInt();
      showFrameNum = line[2].toInt();
      showAngle = line[3].toInt();
      showTOFmax = line[4].toInt();
@@ -251,8 +251,8 @@ void DealUsb_msg::recvMsgSlot(QByteArray array)
     int line_number = (quint8)(MyBuffer[2]) +  (((quint8)(MyBuffer[3]))<<8);
 //    qDebug()<<"here   spadNum = "<<spadNum<<"  line_number = "<<line_number<<endl;
 
-//    if(spadNum != 8)          //固定值0x08
-//        return;
+    if(spadNum != 9)          //固定值0x08
+        return;
 
     //如果用面阵数据来进行测试的话 关闭spadNum，打开此行代码
     if(line_number>3)
@@ -276,7 +276,6 @@ void DealUsb_msg::recvMsgSlot(QByteArray array)
             {
                 tofPeakToSave_string.append(tmpTofPeak_string[i]);
             }
-
             emit saveTXTSignal(tofPeakToSave_string);
             tofPeakToSave_string.clear();
         }
@@ -519,6 +518,8 @@ void DealUsb_msg::recvMsgSlot_2_256(QByteArray array)
                 AllPoint_vec.clear();
             }
 
+//            qDebug()<<" allPoint_vec.size() = "<<AllPoint_vec.size()<<endl;
+
             m_mutex.unlock();
         }
 
@@ -620,8 +621,6 @@ void DealUsb_msg::recvMsgSlot_2_256(QByteArray array)
 
         }
         /*******************************************************************************************************************************/
-
-
 
 
 

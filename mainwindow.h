@@ -137,6 +137,8 @@ public:
     QLabel explainLabel;  //显示注释
     int expandItem_index;
 
+    int framePerSecond;    //显示帧率
+
 
 private:
     Ui::MainWindow *ui;
