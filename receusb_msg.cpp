@@ -590,6 +590,81 @@ void ReceUSB_Msg::loadSettingSlot(QString filePath,bool recvFlag)
 // deviceId转换过来的是十进制数  D8->216
 void ReceUSB_Msg::saveSettingSlot(QString filePath,int deviceId,bool recvFlag)
 {
+//    qDebug()<<" setting fileNamePath = "<< filePath<<"  deviceId ="<<deviceId<<endl;
+
+//    int i=0;
+//    bool res;
+//    QString dataStr;
+//    QString textString;
+
+//    QByteArray ba;
+////    const char *c_str;
+//    int m;
+//    /***************文本中写入str1******************************************/
+//    for(; i<50 ; i++)
+//    {
+//        res = Device_Register_Read(deviceId, i, dataStr);
+//        m = dataStr.toInt();
+//        QString tmpData = QString("%1 ").arg(m,2,16,QLatin1Char('0')).toUpper();
+//        textString.append(tmpData);
+//        qDebug()<<" the data =  "<<m<<"    sixteen's num ="<< tmpData<<endl;
+
+//    }
+//    QFile file(filePath);
+//    file.open(QIODevice::WriteOnly|QIODevice::Text|QIODevice::Append);
+//    QTextStream out(&file);
+//    out<<textString.toLocal8Bit()<<endl;
+
+
+//    /***************文本中写入str2*****************************************************/
+//    res = System_Register_Read(17, dataStr);
+//    m = dataStr.toInt();
+//    QString tmpData = QString("%1 ").arg(m,2,16,QLatin1Char('0')).toUpper();
+//    textString = tmpData;
+
+//    res = System_Register_Read(18, dataStr);
+//    m = dataStr.toInt();
+//    tmpData = QString("%1 ").arg(m,2,16,QLatin1Char('0')).toUpper();
+//    textString.append(tmpData);
+
+
+//    res = System_Register_Read(226, dataStr);
+//    m = dataStr.toInt();
+//    tmpData = QString("%1 ").arg(m,2,16,QLatin1Char('0')).toUpper();
+//    textString.append(tmpData);
+
+//    out<<textString.toLocal8Bit()<<endl;
+
+
+//    /***************文本中写入str3*****************************************************/
+//    textString.clear();
+//    for (i = 0; i < 12; i++)
+//    {
+//        res = System_Register_Read((32+i), dataStr);
+//        m = dataStr.toInt();
+//        tmpData = QString("%1 ").arg(m,2,16,QLatin1Char('0')).toUpper();
+//        textString.append(tmpData);
+//    }
+//    out<<textString.toLocal8Bit()<<endl;
+
+
+
+//    file.close();
+//    if(recvFlag)
+//    {
+//        isRecvFlag = true;
+//        qDebug()<<"saveSettingSlot has set the recvFlag =  true"<<endl;
+//        read_usb();
+//    }
+
+//    if(res)
+//    {
+//        linkInfoSignal(10);
+//    }else
+//    {
+//        linkInfoSignal(11);
+//    }
+
     qDebug()<<" setting fileNamePath = "<< filePath<<"  deviceId ="<<deviceId<<endl;
 
     int i=0;
@@ -598,7 +673,7 @@ void ReceUSB_Msg::saveSettingSlot(QString filePath,int deviceId,bool recvFlag)
     QString textString;
 
     QByteArray ba;
-//    const char *c_str;
+    const char *c_str;
     int m;
     /***************文本中写入str1******************************************/
     for(; i<50 ; i++)
@@ -617,30 +692,55 @@ void ReceUSB_Msg::saveSettingSlot(QString filePath,int deviceId,bool recvFlag)
 
 
     /***************文本中写入str2*****************************************************/
-    res = System_Register_Read(17, dataStr);
-    m = dataStr.toInt();
-    QString tmpData = QString("%1 ").arg(m,2,16,QLatin1Char('0')).toUpper();
-    textString = tmpData;
+//    res = System_Register_Read(17, dataStr);
+////    ba = dataStr.toLatin1();
+////    c_str = ba.data();
+////    m = uint8_t(c_str[0]);
+//    m = dataStr.toInt();
+//    QString tmpData = QString("%1 ").arg(m,2,16,QLatin1Char('0')).toUpper();
+//    textString = tmpData;
 
-    res = System_Register_Read(18, dataStr);
-    m = dataStr.toInt();
-    tmpData = QString("%1 ").arg(m,2,16,QLatin1Char('0')).toUpper();
-    textString.append(tmpData);
+//    res = System_Register_Read(18, dataStr);
+////    ba = dataStr.toLatin1();
+////    c_str = ba.data();
+////    m = uint8_t(c_str[0]);
+//    m = dataStr.toInt();
+//    tmpData = QString("%1 ").arg(m,2,16,QLatin1Char('0')).toUpper();
+//    textString.append(tmpData);
 
 
-    res = System_Register_Read(226, dataStr);
-    m = dataStr.toInt();
-    tmpData = QString("%1 ").arg(m,2,16,QLatin1Char('0')).toUpper();
-    textString.append(tmpData);
+//    res = System_Register_Read(226, dataStr);
+////    ba = dataStr.toLatin1();
+////    c_str = ba.data();
+////    m = uint8_t(c_str[0]);
+//    m = dataStr.toInt();
+//    tmpData = QString("%1 ").arg(m,2,16,QLatin1Char('0')).toUpper();
+//    textString.append(tmpData);
 
+
+
+
+    QString tmpData ;
+    textString.clear();
+    for(int n=0; n<6; n++)
+    {
+        res = System_Register_Read(17+n,dataStr);
+        m = dataStr.toInt();
+        tmpData = QString("%1 ").arg(m,2,16,QLatin1Char('0')).toUpper();
+        textString.append(tmpData);
+
+    }
     out<<textString.toLocal8Bit()<<endl;
 
 
     /***************文本中写入str3*****************************************************/
     textString.clear();
-    for (i = 0; i < 12; i++)
+    for (i = 0; i < 13; i++)
     {
         res = System_Register_Read((32+i), dataStr);
+//        ba = dataStr.toLatin1();
+//        c_str = ba.data();
+//        m = uint8_t(c_str[0]);
         m = dataStr.toInt();
         tmpData = QString("%1 ").arg(m,2,16,QLatin1Char('0')).toUpper();
         textString.append(tmpData);
@@ -655,6 +755,8 @@ void ReceUSB_Msg::saveSettingSlot(QString filePath,int deviceId,bool recvFlag)
         isRecvFlag = true;
         qDebug()<<"saveSettingSlot has set the recvFlag =  true"<<endl;
         read_usb();
+
+
     }
 
     if(res)
@@ -664,6 +766,9 @@ void ReceUSB_Msg::saveSettingSlot(QString filePath,int deviceId,bool recvFlag)
     {
         linkInfoSignal(11);
     }
+
+
+
 
 }
 

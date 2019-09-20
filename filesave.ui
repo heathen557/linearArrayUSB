@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>../testOpenGL3D_PCL_0802/icon_1.png</normaloff>../testOpenGL3D_PCL_0802/icon_1.png</iconset>
+    <normaloff>icon_1.png</normaloff>icon_1.png</iconset>
   </property>
   <widget class="QGroupBox" name="groupBox">
    <property name="geometry">
