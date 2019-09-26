@@ -3,10 +3,10 @@
 
 
 statisticsDialog::statisticsDialog(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::statisticsDialog)
+    ui(new Ui::statisticsDialog),QDialog(parent),tofImage(256,32, QImage::Format_RGB32),peakImage(256,32, QImage::Format_RGB32)
 {
     ui->setupUi(this);
+    gainImage = 1;
 
     initCustomPlot();
 }
@@ -75,17 +75,61 @@ void statisticsDialog::on_start_pushButton_clicked()
         qDebug()<<"this is begin to start "<<endl;
         ui->start_pushButton->setText(QStringLiteral("结束统计"));
         int frameNumber = ui->frame_lineEdit->text().toInt();
-        emit alterStatisticFrameNum_signal(frameNumber);
+        emit alterStatisticFrameNum_signal(frameNumber,true);
         emit startStop_signal(1);
     }else
     {
+        int frameNumber = ui->frame_lineEdit->text().toInt();
+        emit alterStatisticFrameNum_signal(frameNumber,false);
         emit startStop_signal(0);
         ui->start_pushButton->setText(QStringLiteral("开始统计"));
     }
 
 
-//    int frameNumber = ui->frame_lineEdit->text().toInt();
-//    emit alterStatisticFrameNum_signal(frameNumber);
+
+
+    float width_scale = ui->tofImage_label->width()/double(tofImage.width());
+    float height_scale = ui->tofImage_label->height()/double(tofImage.height());
+    tofImage.fill(0);
+    peakImage.fill(0);
+
+    for(int i=0;i<256;i++)
+    {
+        //设置TOF图像、强度图像的颜色
+        tof = 50;
+        intensity = 1000;
+        gainIndex_tof = tof*gainImage;
+        gainIndex_intensity =intensity * gainImage;
+
+        if(gainIndex_tof<1024 && gainIndex_tof>=0)
+            tofColor = qRgb(colormap[gainIndex_tof * 3], colormap[gainIndex_tof * 3 + 1], colormap[gainIndex_tof * 3 + 2]);
+        else
+            tofColor = qRgb(colormap[1023 * 3], colormap[1023 * 3 + 1], colormap[1023 * 3 + 2]);
+
+        if(gainIndex_intensity<1024 && gainIndex_intensity>=0)
+            intenColor = qRgb(colormap[gainIndex_intensity * 3], colormap[gainIndex_intensity * 3 + 1], colormap[gainIndex_intensity * 3 + 2]);
+        else
+            intenColor = qRgb(colormap[1023 * 3], colormap[1023 * 3 + 1], colormap[1023 * 3 + 2]);
+
+        int rowNum = tofImage.height()/2;
+        tofImage.setPixel(i,rowNum-2,tofColor);
+        tofImage.setPixel(i,rowNum-1,intenColor);
+        tofImage.setPixel(i,rowNum,tofColor);
+        tofImage.setPixel(i,rowNum+1,intenColor);
+
+
+        peakImage.setPixel(i,rowNum,intenColor);
+    }
+
+    resTofImage = tofImage.scaled(tofImage.width()*width_scale, tofImage.height()*height_scale, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    resPeakImage = peakImage.scaled(peakImage.width()*width_scale, peakImage.height()*height_scale, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    QPixmap pixmap(QPixmap::fromImage (resTofImage));
+    ui->tofImage_label->setPixmap(pixmap);
+    QPixmap pixmap2(QPixmap::fromImage (resPeakImage));
+    ui->peakImage_label->setPixmap(pixmap2);
+
+
+
 
 }
 
@@ -122,71 +166,142 @@ void statisticsDialog::statistic_MeanStdSlot(QStringList tofMeanStringlist,QStri
     ui->PEAKSTD_widget->graph(0)->setData(label_x,peakStd_y);
     ui->PEAKSTD_widget->replot();
 
-//    statisticMutex.lock();
-//    useStatisticTofPoints = allStatisticTofPoints;
-//    useStatisticPeakPoints = allStatisticPeakPoints;
-//    statisticMutex.unlock();
 
-//    tofMean_string.clear();
-//    tofStd_string.clear();
-//    peakMean_string.clear();
-//    peakStd_string.clear();
+    showImage();
+}
 
-//    for(int i =0; i<256; i++)
-//    {
-//        frameSize = useStatisticTofPoints[i].size();
-//        if(frameSize>0)                              //理论上应该与设置的帧数相等，此处是为了防止除数为零时引起程序异常；
-//        {
-//            //tof的均值 标准差的统计
-//            tofMean = std::accumulate(std::begin(useStatisticTofPoints[i]),std::end(useStatisticTofPoints[i]),0.0)/frameSize;
-//            tofAccum = 0.0;
-//            std::for_each (std::begin(useStatisticTofPoints[i]), std::end(useStatisticTofPoints[i]), [&](const double d) {
-//                    tofAccum  += (d-tofMean)*(d-tofMean);
-//                });
-//            tofStd = sqrt(tofAccum/(frameSize-1));
+//接收tof和peak的槽函数
+void statisticsDialog::tofPeakImageSlot(QStringList tof_list,QStringList peak_list,int rowNum)
+{
+    qDebug()<<"tofList's len = "<<tof_list.length()<<"    rowNum = "<<rowNum<<endl;
+    tofStringList = tof_list;
+    peakStringList = peak_list;
+    allRowNum = rowNum;
 
 
-//            //peak的均值 标准差的统计
-//            peakMean = std::accumulate(std::begin(useStatisticPeakPoints[i]),std::end(useStatisticPeakPoints[i]),0.0)/frameSize;
-//            peakAccum = 0.0;
-//            std::for_each (std::begin(useStatisticPeakPoints[i]), std::end(useStatisticPeakPoints[i]), [&](const double d) {
-//                    peakAccum  += (d-peakMean)*(d-peakMean);
-//                });
-//            peakStd = sqrt(peakAccum/(frameSize-1));
+}
 
-//            if( 0 == (i%10))
-//            {
-//                tofMean_string.append("\n");
-//                tofStd_string.append("\n");
-//                peakMean_string.append("\n");
-//                peakStd_string.append("\n");
-//            }
+//显示TOF/PEAK图像的函数
+void statisticsDialog::showImage()
+{
+    float width_scale = ui->tofImage_label->width()/double(tofImage.width());
+    float height_scale = ui->tofImage_label->height()/double(tofImage.height());
+    tofImage.fill(0);
+
+    if(1 == allRowNum)
+    {
+        for(int i=0;i<tofStringList.length();i++)      //256
+        {
+            //设置TOF图像、强度图像的颜色
+            tof = tofStringList[i].toInt();
+            intensity = peakStringList[i].toInt();
+            gainIndex_tof = tof*gainImage;
+            gainIndex_intensity =intensity * gainImage;
+
+            if(gainIndex_tof<1024 && gainIndex_tof>=0)
+                tofColor = qRgb(colormap[gainIndex_tof * 3], colormap[gainIndex_tof * 3 + 1], colormap[gainIndex_tof * 3 + 2]);
+            else
+                tofColor = qRgb(colormap[1023 * 3], colormap[1023 * 3 + 1], colormap[1023 * 3 + 2]);
+
+            if(gainIndex_intensity<1024 && gainIndex_intensity>=0)
+                intenColor = qRgb(colormap[gainIndex_intensity * 3], colormap[gainIndex_intensity * 3 + 1], colormap[gainIndex_intensity * 3 + 2]);
+            else
+                intenColor = qRgb(colormap[1023 * 3], colormap[1023 * 3 + 1], colormap[1023 * 3 + 2]);
+
+            int allRowNum = tofImage.height()/2;
+            tofImage.setPixel(i,allRowNum,tofColor);
+            peakImage.setPixel(i,allRowNum,intenColor);
+        }
+
+    }else if(2 == allRowNum)
+    {
+        for(int i=0;i<tofStringList.length();i++)      //512
+        {
+            //设置TOF图像、强度图像的颜色
+            tof = tofStringList[i].toInt();
+            intensity = peakStringList[i].toInt();
+            gainIndex_tof = tof*gainImage;
+            gainIndex_intensity =intensity * gainImage;
+
+            if(gainIndex_tof<1024 && gainIndex_tof>=0)
+                tofColor = qRgb(colormap[gainIndex_tof * 3], colormap[gainIndex_tof * 3 + 1], colormap[gainIndex_tof * 3 + 2]);
+            else
+                tofColor = qRgb(colormap[1023 * 3], colormap[1023 * 3 + 1], colormap[1023 * 3 + 2]);
+
+            if(gainIndex_intensity<1024 && gainIndex_intensity>=0)
+                intenColor = qRgb(colormap[gainIndex_intensity * 3], colormap[gainIndex_intensity * 3 + 1], colormap[gainIndex_intensity * 3 + 2]);
+            else
+                intenColor = qRgb(colormap[1023 * 3], colormap[1023 * 3 + 1], colormap[1023 * 3 + 2]);
+
+            int allRowNum = tofImage.height()/2;
+            int x_pix = (i<256) ? i:(i-256);
+            int y_pix = (i<256) ? allRowNum:(allRowNum+1);
+            tofImage.setPixel(x_pix,y_pix,tofColor);
+            peakImage.setPixel(x_pix,y_pix,intenColor);
+
+        }
+    }else if(4 == allRowNum)
+    {
+        for(int i=0; i<tofStringList.length(); i++)
+        {
+            //设置TOF图像、强度图像的颜色
+            tof = tofStringList[i].toInt();
+            intensity = peakStringList[i].toInt();
+            gainIndex_tof = tof*gainImage;
+            gainIndex_intensity =intensity * gainImage;
+
+            if(gainIndex_tof<1024 && gainIndex_tof>=0)
+                tofColor = qRgb(colormap[gainIndex_tof * 3], colormap[gainIndex_tof * 3 + 1], colormap[gainIndex_tof * 3 + 2]);
+            else
+                tofColor = qRgb(colormap[1023 * 3], colormap[1023 * 3 + 1], colormap[1023 * 3 + 2]);
+
+            if(gainIndex_intensity<1024 && gainIndex_intensity>=0)
+                intenColor = qRgb(colormap[gainIndex_intensity * 3], colormap[gainIndex_intensity * 3 + 1], colormap[gainIndex_intensity * 3 + 2]);
+            else
+                intenColor = qRgb(colormap[1023 * 3], colormap[1023 * 3 + 1], colormap[1023 * 3 + 2]);
+
+            int allRowNum = tofImage.height()/2;
+            int x_pix,y_pix;
+            if(i<256)
+            {
+                x_pix = i;
+                y_pix = allRowNum - 2;
+            }else if(i<512)
+            {
+                x_pix = i - 256;
+                y_pix = allRowNum - 1;
+            }else if(i<768)
+            {
+                x_pix = i - 512;
+                y_pix = allRowNum;
+            }else if(i<1024)
+            {
+                x_pix = i - 768;
+                y_pix = allRowNum + 1;
+            }
+
+            tofImage.setPixel(x_pix,y_pix,tofColor);
+            peakImage.setPixel(x_pix,y_pix,intenColor);
+        }
+    }
+
+    resTofImage = tofImage.scaled(tofImage.width()*width_scale, tofImage.height()*height_scale, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    resPeakImage = peakImage.scaled(peakImage.width()*width_scale, peakImage.height()*height_scale, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    QPixmap pixmap(QPixmap::fromImage (resTofImage));
+    ui->tofImage_label->setPixmap(pixmap);
+    QPixmap pixmap2(QPixmap::fromImage (resPeakImage));
+    ui->peakImage_label->setPixmap(pixmap2);
+}
 
 
-////            tofMean_string.append(QString::number(tofMean)).append("  ");
-////            tofStd_string.append(QString::number(tofStd)).append("  ");
-
-////            peakMean_string.append(QString::number(peakMean)).append("  ");
-////            peakStd_string.append(QString::number(peakStd)).append("  ");
-
-//            tofMean_x[i] = i;
-//            tofMean_y[i] = tofMean;
-
-//            tofStd_x[i] = i;
-//            tofStd_y[i] = peakStd;
 
 
-//        }
-
-//    }
-
-//    ui->TOF_widget->graph(0)->addData(tofMean_x,tofMean_y);
-//    ui->TOF_widget->graph(1)->addData(tofStd_x,tofStd_y);
-
-//    ui->TOF_widget->replot();
-//    ui->tofMean_textEdit->setText(tofMean_string);
-//    ui->tofStd_textEdit->setText(tofStd_string);
-//    ui->peakMean_textEdit->setText(peakMean_string);
-//    ui->peakStd_textEdit->setText(peakStd_string);
+//关闭窗口时发送的信号
+void statisticsDialog::closeEvent(QCloseEvent *event)
+{
+    int frameNumber = ui->frame_lineEdit->text().toInt();
+    emit alterStatisticFrameNum_signal(frameNumber,false);
+    emit startStop_signal(0);
+    ui->start_pushButton->setText(QStringLiteral("开始统计"));
 
 }

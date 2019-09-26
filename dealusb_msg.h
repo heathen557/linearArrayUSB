@@ -49,8 +49,14 @@ public:
 
 
     /************ 2 * 256 / 4*256 相关*******************/
-    int imageArray[4][256];
+    int imageArray[4][256];         //存储的是Tof的值
+    int imageArray_peak[4][256];    //存储的是PEAK的值
     int lastSpadNum;
+
+    /**********显示实时TOF和PEAK图示相关****************/
+    bool isShowImageFlag;
+    QStringList tofList;
+    QStringList peakList;
 
 
 signals:
@@ -58,6 +64,8 @@ signals:
     void statisticsValueSignal(float,float,float,float);
 
     void saveTXTSignal(QString );
+
+    void tofPeakImageSignal(QStringList,QStringList,int);    //tof peak num:1、2、4
 
 public slots:
 
@@ -67,7 +75,7 @@ public slots:
 
     void recvMsgSlot_4_256(QByteArray array);
 
-    void alterStatisticFrameNum_slot(int num);
+    void alterStatisticFrameNum_slot(int num,bool isStartFlag);
 
     void showSettingParaSlot(int,int,int);
 
@@ -80,5 +88,9 @@ public slots:
 
 
 };
+
+
+
+
 
 #endif // DEALUSB_MSG_H

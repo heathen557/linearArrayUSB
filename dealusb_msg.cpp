@@ -54,6 +54,7 @@ DealUsb_msg::DealUsb_msg(QObject *parent) : QObject(parent)
 
 
      isTOF_flag = false;
+     isShowImageFlag = false; //初始化不发送显示图像的数据
 
 
      //总共有256个点 ,针对每一个点开启一个独立的容器进行存储相关内容
@@ -240,7 +241,7 @@ void DealUsb_msg::changeTofPeak_slot()
 
 
 
-//协议版本为spad==08 ；
+//协议版本为spad==09 ，  1*256协议 ；
 void DealUsb_msg::recvMsgSlot(QByteArray array)
 {
     char *MyBuffer;
@@ -284,8 +285,9 @@ void DealUsb_msg::recvMsgSlot(QByteArray array)
 
         //显示数据发送给接收容器
         //256个点 分为左右两个
+        //   另将256个tof以及PEAK存储在QStringList当中，以信号的形式发送给统计界面以供显示
         int i = 0;
-        int tmpTof;
+        int tmpTof,tmpPeak;
         for(i=0; i<128; i++)   //存储前128个点
         {
             int leftIndex = i;
@@ -293,6 +295,11 @@ void DealUsb_msg::recvMsgSlot(QByteArray array)
             tmpTof = imageArray[0][i];
             Rece_points.push_back(angle);
             Rece_points.push_back(tmpTof);
+
+            /**tof 、peak图像存储数据**/
+            tmpPeak = imageArray_peak[0][i];
+            tofList.append(QString::number(tmpTof));
+            peakList.append(QString::number(tmpPeak));
         }
 
         for(i=128; i<256; i++)
@@ -302,8 +309,20 @@ void DealUsb_msg::recvMsgSlot(QByteArray array)
             tmpTof = imageArray[0][i];
             Rece_points.push_back(angle);
             Rece_points.push_back(tmpTof);
+
+            /**tof 、peak图像存储数据**/
+            tmpPeak = imageArray_peak[0][i];
+            tofList.append(QString::number(tmpTof));
+            peakList.append(QString::number(tmpPeak));
         }
 
+        //将tof和peak的统计值发送给统计界面以供来显示,并清空字符串连
+        if(true == isShowImageFlag)
+        {
+            emit tofPeakImageSignal(tofList,peakList,1);
+        }
+        tofList.clear();
+        peakList.clear();
 
         //显示内容相关，将一帧数据传递给全局变量供显示
         if(!Rece_points.empty())
@@ -390,36 +409,10 @@ void DealUsb_msg::recvMsgSlot(QByteArray array)
         }
         /*******************************************************************************************************************************/
 
-
-//        //第一个存角度，第二个存tof
-//        //解析角度值，并保存在vector容器当中;
-//        if(line_number == 0 || line_number == 1)
-//        {
-//            pointIndex = i + 64*line_number;
-//            angle = -showAngle/2.0 + pointIndex*((showAngle/2.0)/128.0);
-
-//        }else if(line_number == 2 || line_number == 3)
-//        {
-//            pointIndex = i + 64*(line_number-2);
-//            angle = pointIndex * ((showAngle/2.0)/128.0);
-//        }
-
-        //256个点 分为左右两个
-//        if( pointIndex < 128)
-//        {
-//            angle = -showAngle/2.0 + pointIndex*((showAngle/2.0)/128.0);
-//        }else
-//        {
-//            int rightIndex = pointIndex -128;
-//            angle = rightIndex * ((showAngle/2.0)/128.0);
-//        }
-//        Rece_points.push_back(angle);
-//        Rece_points.push_back(tof);
-
-
         if( pointIndex<256 )
         {
             imageArray[0][pointIndex] = tof;
+            imageArray_peak[0][pointIndex] = intensity;
         }else
         {
             qDebug()<<QStringLiteral("给像素赋值时出现异常 pointIndex=")<<pointIndex<<endl;
@@ -478,7 +471,7 @@ void DealUsb_msg::recvMsgSlot_2_256(QByteArray array)
         //显示数据发送给接收容器
         //256个点 分为左右两个
         int i = 0;
-        int tmpTof;
+        int tmpTof, tmpPeak;
         for(i=0; i<128; i++)   //存储前128个点
         {
             int leftIndex = i;
@@ -499,6 +492,33 @@ void DealUsb_msg::recvMsgSlot_2_256(QByteArray array)
             Rece_points.push_back(angle);
             Rece_points.push_back(tmpTof);
         }
+
+
+        //将tof和peak的统计值发送给统计界面以供来显示,并清空字符串连
+        if(true == isShowImageFlag)
+        {
+            int rowNum=0,colNum;
+            for(i=0;i<512;i++)
+            {
+                colNum = i;
+                if(i>255)
+                {
+                    rowNum = 1;
+                    colNum = i-256;
+                }
+                tmpTof = imageArray[rowNum][colNum];
+                tmpPeak = imageArray_peak[rowNum][colNum];
+                tofList.append(QString::number(tmpTof));
+                peakList.append(QString::number(tmpPeak));
+            }
+
+            emit tofPeakImageSignal(tofList,peakList,2);    //两行
+        }
+        tofList.clear();
+        peakList.clear();
+
+
+
 
         //显示内容相关，将一帧数据传递给全局变量供显示
         if(!Rece_points.empty())
@@ -679,7 +699,7 @@ void DealUsb_msg::recvMsgSlot_4_256(QByteArray array)
         //显示数据发送给接收容器
         //256个点 分为左右两个
         int i = 0;
-        int tmpTof;
+        int tmpTof,tmpPeak;
         for(i=0; i<128; i++)   //存储前128个点
         {
             int leftIndex = i;
@@ -699,6 +719,43 @@ void DealUsb_msg::recvMsgSlot_4_256(QByteArray array)
             Rece_points.push_back(angle);
             Rece_points.push_back(tmpTof);
         }
+
+
+        //将tof和peak的统计值发送给统计界面以供来显示,并清空字符串连
+        if(true == isShowImageFlag)
+        {
+            int rowNum=0,colNum;
+            for(i=0;i<1024;i++)
+            {
+                if(i<256)
+                {
+                    rowNum = 0;
+                    colNum = i;
+                }else if(i<512)
+                {
+                    rowNum = 1;
+                    colNum = i - 256;
+                }else if(i<768)
+                {
+                    rowNum = 2;
+                    colNum = i - 512;
+                }else if(i<1024)
+                {
+                    rowNum = 3;
+                    colNum = i - 768;
+                }
+                tmpTof = imageArray[rowNum][colNum];
+                tmpPeak = imageArray_peak[rowNum][colNum];
+                tofList.append(QString::number(tmpTof));
+                peakList.append(QString::number(tmpPeak));
+            }
+
+            emit tofPeakImageSignal(tofList,peakList,4);    //四行
+        }
+        tofList.clear();
+        peakList.clear();
+
+
 
         //显示内容相关，将一帧数据传递给全局变量供显示
         if(!Rece_points.empty())
@@ -1004,7 +1061,14 @@ void DealUsb_msg::recvSerialSlot_4_256(QByteArray MyBuffer)
 
 
 
-void DealUsb_msg::alterStatisticFrameNum_slot(int num)
+void DealUsb_msg::alterStatisticFrameNum_slot(int num,bool isStartFlag)
 {
     statisticFrameNumber = num;
+    if(true == isStartFlag)
+    {
+        isShowImageFlag = true;
+    }else{
+        isShowImageFlag = false;
+    }
+
 }
