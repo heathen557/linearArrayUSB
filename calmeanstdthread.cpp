@@ -25,7 +25,7 @@ void calMeanStdThread::startStop_slot(int flag)
 
     if(1 == flag)
     {
-        updateTimer->start(1000);
+        updateTimer->start(5);
     }else {
         updateTimer->stop();
     }

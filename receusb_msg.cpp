@@ -263,6 +263,7 @@ void ReceUSB_Msg::read_usb()
         if (ret < 0) {
             qDebug("**************************************************error reading:%s", usb_strerror());
             emit linkInfoSignal(2);  //  2:没有接收到数据
+            break;
         }
 
         if(260 == ret)
