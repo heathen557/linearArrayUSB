@@ -552,6 +552,7 @@ public:
 
         textEdit = new QTextEdit(groupBox_2);
         textEdit->setObjectName(QStringLiteral("textEdit"));
+        textEdit->setStyleSheet(QStringLiteral("font: 9pt \"Times New Roman\";"));
 
         gridLayout_5->addWidget(textEdit, 0, 1, 1, 1);
 

@@ -990,7 +990,7 @@ void DealUsb_msg::recvSerialSlot_4_256(QByteArray MyBuffer)
     //显示数据发送给接收容器
     //256个点 分为左右两个
     int i = 0;
-    int tmpTof;
+    int tmpTof,tmpPeak;
     for(i=0; i<128; i++)   //存储前128个点
     {
         int leftIndex = i;
@@ -1010,6 +1010,46 @@ void DealUsb_msg::recvSerialSlot_4_256(QByteArray MyBuffer)
         Rece_points.push_back(angle);
         Rece_points.push_back(tmpTof);
     }
+
+
+
+
+    //将tof和peak的统计值发送给统计界面以供来显示,并清空字符串连
+    if(true == isShowImageFlag)
+    {
+        int rowNum=0,colNum;
+        for(i=0;i<1024;i++)
+        {
+            if(i<256)
+            {
+                rowNum = 0;
+                colNum = i;
+            }else if(i<512)
+            {
+                rowNum = 1;
+                colNum = i - 256;
+            }else if(i<768)
+            {
+                rowNum = 2;
+                colNum = i - 512;
+            }else if(i<1024)
+            {
+                rowNum = 3;
+                colNum = i - 768;
+            }
+            tmpTof = imageArray[rowNum][colNum];
+            tmpPeak = imageArray_peak[rowNum][colNum];
+            tofList.append(QString::number(tmpTof));
+            peakList.append(QString::number(tmpPeak));
+        }
+
+        emit tofPeakImageSignal(tofList,peakList,4);    //四行
+    }
+    tofList.clear();
+    peakList.clear();
+
+
+
 
     //显示内容相关，将一帧数据传递给全局变量供显示
     if(!Rece_points.empty())

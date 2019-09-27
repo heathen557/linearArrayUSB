@@ -93,6 +93,11 @@ signals:
 
     void recvSerialSignal_4_256(QByteArray);    //发送给处理线程的信号 串口的 4*256
 
+    void showRunInfoSignal(QString msgStr);     //显示运行日志的槽函数
+
+//    void showWarnInfoSignal(QString warnStr);  //显示告警信息日志的槽函数
+
+
 
 
 

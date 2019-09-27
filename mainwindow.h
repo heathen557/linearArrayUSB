@@ -176,6 +176,10 @@ private slots:
 
     void showSettingParaSlot(int FrameNum, int Angle ,int TOFmax);
 
+    void showRunInfoSlot(QString msgStr);     //显示运行日志的槽函数
+
+
+
     /*******************************************/
     void TDC_read_slot(int);
 

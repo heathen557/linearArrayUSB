@@ -85,50 +85,45 @@ void statisticsDialog::on_start_pushButton_clicked()
         ui->start_pushButton->setText(QStringLiteral("开始统计"));
     }
 
+//    qDebug()<<"begin stats"<<endl;
+//    float width_scale = ui->tofImage_label->width()/double(tofImage.width());
+//    float height_scale = ui->tofImage_label->height()/double(tofImage.height());
+//    tofImage.fill(0);
+//    peakImage.fill(0);
 
+//    for(int i=0;i<256;i++)
+//    {
+//        //设置TOF图像、强度图像的颜色
+//        tof = 50;
+//        intensity = 1000;
+//        gainIndex_tof = tof*gainImage;
+//        gainIndex_intensity =intensity * gainImage;
 
+//        if(gainIndex_tof<1024 && gainIndex_tof>=0)
+//            tofColor = qRgb(colormap[gainIndex_tof * 3], colormap[gainIndex_tof * 3 + 1], colormap[gainIndex_tof * 3 + 2]);
+//        else
+//            tofColor = qRgb(colormap[1023 * 3], colormap[1023 * 3 + 1], colormap[1023 * 3 + 2]);
 
-    float width_scale = ui->tofImage_label->width()/double(tofImage.width());
-    float height_scale = ui->tofImage_label->height()/double(tofImage.height());
-    tofImage.fill(0);
-    peakImage.fill(0);
+//        if(gainIndex_intensity<1024 && gainIndex_intensity>=0)
+//            intenColor = qRgb(colormap[gainIndex_intensity * 3], colormap[gainIndex_intensity * 3 + 1], colormap[gainIndex_intensity * 3 + 2]);
+//        else
+//            intenColor = qRgb(colormap[1023 * 3], colormap[1023 * 3 + 1], colormap[1023 * 3 + 2]);
 
-    for(int i=0;i<256;i++)
-    {
-        //设置TOF图像、强度图像的颜色
-        tof = 50;
-        intensity = 1000;
-        gainIndex_tof = tof*gainImage;
-        gainIndex_intensity =intensity * gainImage;
+//        int rowNum = tofImage.height()/2;
+//        tofImage.setPixel(i,rowNum-2,tofColor);
+//        tofImage.setPixel(i,rowNum-1,intenColor);
+//        tofImage.setPixel(i,rowNum,tofColor);
+//        tofImage.setPixel(i,rowNum+1,intenColor);
+//        peakImage.setPixel(i,rowNum,intenColor);
+//    }
 
-        if(gainIndex_tof<1024 && gainIndex_tof>=0)
-            tofColor = qRgb(colormap[gainIndex_tof * 3], colormap[gainIndex_tof * 3 + 1], colormap[gainIndex_tof * 3 + 2]);
-        else
-            tofColor = qRgb(colormap[1023 * 3], colormap[1023 * 3 + 1], colormap[1023 * 3 + 2]);
-
-        if(gainIndex_intensity<1024 && gainIndex_intensity>=0)
-            intenColor = qRgb(colormap[gainIndex_intensity * 3], colormap[gainIndex_intensity * 3 + 1], colormap[gainIndex_intensity * 3 + 2]);
-        else
-            intenColor = qRgb(colormap[1023 * 3], colormap[1023 * 3 + 1], colormap[1023 * 3 + 2]);
-
-        int rowNum = tofImage.height()/2;
-        tofImage.setPixel(i,rowNum-2,tofColor);
-        tofImage.setPixel(i,rowNum-1,intenColor);
-        tofImage.setPixel(i,rowNum,tofColor);
-        tofImage.setPixel(i,rowNum+1,intenColor);
-
-
-        peakImage.setPixel(i,rowNum,intenColor);
-    }
-
-    resTofImage = tofImage.scaled(tofImage.width()*width_scale, tofImage.height()*height_scale, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-    resPeakImage = peakImage.scaled(peakImage.width()*width_scale, peakImage.height()*height_scale, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-    QPixmap pixmap(QPixmap::fromImage (resTofImage));
-    ui->tofImage_label->setPixmap(pixmap);
-    QPixmap pixmap2(QPixmap::fromImage (resPeakImage));
-    ui->peakImage_label->setPixmap(pixmap2);
-
-
+//    resTofImage = tofImage.scaled(tofImage.width()*width_scale, tofImage.height()*height_scale, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+//    resPeakImage = peakImage.scaled(peakImage.width()*width_scale, peakImage.height()*height_scale, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+//    QPixmap pixmap(QPixmap::fromImage (resTofImage));
+//    ui->tofImage_label->setPixmap(pixmap);
+//    QPixmap pixmap2(QPixmap::fromImage (resPeakImage));
+//    ui->peakImage_label->setPixmap(pixmap2);
+//    qDebug()<<"end stats"<<endl;
 
 
 }
@@ -170,10 +165,10 @@ void statisticsDialog::statistic_MeanStdSlot(QStringList tofMeanStringlist,QStri
     showImage();
 }
 
-//接收tof和peak的槽函数
+//接收tof和peak的信息， 以供显示二维图像的槽函数
 void statisticsDialog::tofPeakImageSlot(QStringList tof_list,QStringList peak_list,int rowNum)
 {
-    qDebug()<<"tofList's len = "<<tof_list.length()<<"    rowNum = "<<rowNum<<endl;
+//    qDebug()<<"tofList's len = "<<tof_list.length()<<"    rowNum = "<<rowNum<<endl;
     tofStringList = tof_list;
     peakStringList = peak_list;
     allRowNum = rowNum;
@@ -187,6 +182,7 @@ void statisticsDialog::showImage()
     float width_scale = ui->tofImage_label->width()/double(tofImage.width());
     float height_scale = ui->tofImage_label->height()/double(tofImage.height());
     tofImage.fill(0);
+    peakImage.fill(0);
 
     if(1 == allRowNum)
     {

@@ -73,7 +73,7 @@ void MainWindow::initConnect()
     connect(recvUsbMsg_obj,SIGNAL(recvMsgSignal_2_256(QByteArray)),dealUsbMsg_obj,SLOT(recvMsgSlot_2_256(QByteArray)));
     connect(recvUsbMsg_obj,SIGNAL(recvMsgSignal_4_256(QByteArray)),dealUsbMsg_obj,SLOT(recvMsgSlot_4_256(QByteArray)));
     connect(recvUsbMsg_obj,SIGNAL(recvSerialSignal_4_256(QByteArray)),dealUsbMsg_obj,SLOT(recvSerialSlot_4_256(QByteArray)));
-
+    connect(recvUsbMsg_obj,SIGNAL(showRunInfoSignal(QString)),this,SLOT(showRunInfoSlot(QString)));
 
     //显示相关
     connect(&oneSecondTimer,SIGNAL(timeout()),this,SLOT(oneSecondTimer_slot()));  //1sec 刷新显示
@@ -934,7 +934,19 @@ void MainWindow::linkInfoSlot(int flagNum)
     default:
         break;
     }
-    str = tempStr  +t1.toString("hh:mm:ss");
+//    str = tempStr  +t1.toString("hh:mm:ss");
+//    ui->textEdit->append(str);
+}
+
+
+
+void MainWindow::showRunInfoSlot(QString msgStr)
+{
+    int len = msgStr.length();
+    QTime t1 = QTime::currentTime();
+    QString timeStr = t1.toString("hh:mm:ss.zzz");
+    QString str =QString("%1%2").arg(msgStr).arg(timeStr,100-len,QLatin1Char(' '));
+
     ui->textEdit->append(str);
 }
 
