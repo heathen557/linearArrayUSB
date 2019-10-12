@@ -71,6 +71,10 @@ private slots:
 
     void tofPeakImageSlot(QStringList tof_list,QStringList peak_list,int rowNum);
 
+    void on_verticalSlider_sliderMoved(int position);
+
+    void on_verticalSlider_2_sliderMoved(int position);
+
 signals:
     void alterStatisticFrameNum_signal(int,bool);     //统计帧数 以及 是否进行统计的信号
 

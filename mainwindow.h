@@ -22,6 +22,8 @@
 #include<statisticsdialog.h>
 #include<qcustomplot.h>
 #include<calmeanstdthread.h>
+#include<openlocaldialog.h>
+
 
 
 
@@ -106,6 +108,8 @@ public:
 
     bool isLinkSuccess;
 
+    openLocalDialog openLocalDia_;
+
     //将要开启的线程
     ReceUSB_Msg *recvUsbMsg_obj;
     QThread *recvUsbThread;
@@ -177,6 +181,9 @@ private slots:
     void showSettingParaSlot(int FrameNum, int Angle ,int TOFmax);
 
     void showRunInfoSlot(QString msgStr);     //显示运行日志的槽函数
+
+    /***************读取本地文件**********************************/
+    void showOpenLocalDia_slot();
 
 
 

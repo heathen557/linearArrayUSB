@@ -88,6 +88,9 @@ void MainWindow::initConnect()
     connect(&statisticsDia_,SIGNAL(startStop_signal(int)),calMean_obj,SLOT(startStop_slot(int)));
     connect(dealUsbMsg_obj,SIGNAL(tofPeakImageSignal(QStringList,QStringList,int)),&statisticsDia_,SLOT(tofPeakImageSlot(QStringList,QStringList,int)));
 
+    //本地文件播放相关
+    connect(ui->action_5,SIGNAL(triggered()),this,SLOT(showOpenLocalDia_slot()));
+    connect(&openLocalDia_,SIGNAL(selectLocalFile_signal(QString)),dealUsbMsg_obj,SLOT(selectLocalFile_slot(QString)));
 }
 
 
@@ -822,11 +825,15 @@ void MainWindow::on_pushButton_5_clicked()
 
         isRecvFlag = true;
         emit read_usb_signal();
+        QString str = "receive USB data ,video start.";
+        showRunInfoSlot(str);
 
     }else if(ui->pushButton_5->text() == QStringLiteral("暂停"))
     {
         ui->widget->timer.stop();
         ui->pushButton_5->setText(QStringLiteral("播放"));
+        QString str = "video pause";
+        showRunInfoSlot(str);
         oneSecondTimer.stop();
     }
 }
@@ -948,6 +955,12 @@ void MainWindow::showRunInfoSlot(QString msgStr)
     QString str =QString("%1%2").arg(msgStr).arg(timeStr,100-len,QLatin1Char(' '));
 
     ui->textEdit->append(str);
+}
+
+
+void MainWindow::showOpenLocalDia_slot()
+{
+     openLocalDia_.show();
 }
 
 

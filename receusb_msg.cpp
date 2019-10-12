@@ -961,30 +961,33 @@ void ReceUSB_Msg::singleDataDeal(QString singleData)
     QByteArray sendArray;
 
     int len = singleData.length();
+
     QString dataStr = singleData.right( len - 4*3 );
 
     //把QString类型 转换为QByteArray,并向数据处理线程发送信号
-    QString data1 = "08 00 " + dataStr.mid(0, 64*4*3);
+    QString data1 = "09 00 00 00" + dataStr.mid(0, 64*4*3);
     data1 = data1.replace(" ","");
     sendArray = stringToByte(data1);
+
+//    qDebug()<<" data1 ="<<data1.mid(0,20);
     emit recvMsgSignal(sendArray);
 
 
-    QString data2 = "08 01 " + dataStr.mid(64*4*3,64*4*3);
+    QString data2 = "09 00 01 00 " + dataStr.mid(64*4*3,64*4*3);
     data2 = data2.replace(" ","");
     sendArray = stringToByte(data2);
     emit recvMsgSignal(sendArray);
 
 
 
-    QString data3 = "08 02 " + dataStr.mid(64*4*3*2,64*4*3);
+    QString data3 = "09 00 02 00" + dataStr.mid(64*4*3*2,64*4*3);
     data3 = data3.replace(" ","");
     sendArray = stringToByte(data3);
     emit recvMsgSignal(sendArray);
 
 
 
-    QString data4 = "08 03 " + dataStr.mid(64*4*3*3,64*4*3);
+    QString data4 = "09 00 03 00 " + dataStr.mid(64*4*3*3,64*4*3);
     data4 = data4.replace(" ","");
     sendArray = stringToByte(data4);
     emit recvMsgSignal(sendArray);

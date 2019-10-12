@@ -4,6 +4,7 @@
 #include <QObject>
 #include<QImage>
 #include<vector>
+#include<QTimer>
 
 using namespace std;
 
@@ -59,6 +60,11 @@ public:
     QStringList peakList;
 
 
+    //读取本地文件相关
+    QString filePath;
+    QTimer *localFile_timer;
+    int fileIndex;
+
 signals:
 
     void statisticsValueSignal(float,float,float,float);
@@ -85,6 +91,11 @@ public slots:
 
     /************串口相关的槽函数************/
     void recvSerialSlot_4_256(QByteArray MyBuffer);
+
+
+    //添加读取本地tof和PEAK的槽函数
+    void readLocalPCDFile();
+    void selectLocalFile_slot(QString sPath);
 
 
 };

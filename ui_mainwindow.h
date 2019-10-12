@@ -45,6 +45,7 @@ public:
     QAction *action_2;
     QAction *action_3;
     QAction *action_4;
+    QAction *action_5;
     QWidget *centralWidget;
     QGridLayout *gridLayout;
     QFrame *frame;
@@ -132,7 +133,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(1385, 715);
+        MainWindow->resize(1297, 715);
         QIcon icon;
         icon.addFile(QStringLiteral("icon_1.png"), QSize(), QIcon::Normal, QIcon::Off);
         MainWindow->setWindowIcon(icon);
@@ -144,6 +145,8 @@ public:
         action_3->setObjectName(QStringLiteral("action_3"));
         action_4 = new QAction(MainWindow);
         action_4->setObjectName(QStringLiteral("action_4"));
+        action_5 = new QAction(MainWindow);
+        action_5->setObjectName(QStringLiteral("action_5"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         gridLayout = new QGridLayout(centralWidget);
@@ -562,7 +565,7 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1385, 23));
+        menuBar->setGeometry(QRect(0, 0, 1297, 23));
         menu = new QMenu(menuBar);
         menu->setObjectName(QStringLiteral("menu"));
         menu_2 = new QMenu(menuBar);
@@ -587,6 +590,7 @@ public:
         menuBar->addAction(menu_5->menuAction());
         menuBar->addAction(menu_4->menuAction());
         menu->addAction(action);
+        menu->addAction(action_5);
         menu_3->addAction(action_2);
         menu_5->addAction(action_4);
 
@@ -605,6 +609,7 @@ public:
         action_2->setText(QApplication::translate("MainWindow", "\346\230\276\347\244\272\350\256\276\347\275\256", Q_NULLPTR));
         action_3->setText(QApplication::translate("MainWindow", "\347\273\237\350\256\241\350\256\276\347\275\256", Q_NULLPTR));
         action_4->setText(QApplication::translate("MainWindow", "\347\273\237\350\256\241\344\277\241\346\201\257", Q_NULLPTR));
+        action_5->setText(QApplication::translate("MainWindow", "\346\211\223\345\274\200\346\234\254\345\234\260\346\226\207\344\273\266", Q_NULLPTR));
         pushButton_5->setText(QApplication::translate("MainWindow", "\346\222\255\346\224\276", Q_NULLPTR));
         groupBox_4->setTitle(QApplication::translate("MainWindow", "\350\256\276\345\244\207\350\277\236\346\216\245\357\274\232", Q_NULLPTR));
         label->setText(QApplication::translate("MainWindow", "VID:", Q_NULLPTR));

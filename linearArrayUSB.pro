@@ -34,7 +34,8 @@ SOURCES += main.cpp\
     showsettingdia.cpp \
     statisticsdialog.cpp \
     qcustomplot.cpp \
-    calmeanstdthread.cpp
+    calmeanstdthread.cpp \
+    openlocaldialog.cpp
 
 HEADERS  += mainwindow.h \
     glwidget.h \
@@ -46,12 +47,14 @@ HEADERS  += mainwindow.h \
     showsettingdia.h \
     statisticsdialog.h \
     qcustomplot.h \
-    calmeanstdthread.h
+    calmeanstdthread.h \
+    openlocaldialog.h
 
 FORMS    += mainwindow.ui \
     filesave.ui \
     showsettingdia.ui \
-    statisticsdialog.ui
+    statisticsdialog.ui \
+    openlocaldialog.ui
 
 
 INCLUDEPATH += "D:/programInstall/libsub"

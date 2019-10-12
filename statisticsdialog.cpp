@@ -205,6 +205,8 @@ void statisticsDialog::showImage()
                 intenColor = qRgb(colormap[1023 * 3], colormap[1023 * 3 + 1], colormap[1023 * 3 + 2]);
 
             int allRowNum = tofImage.height()/2;
+//            qDebug()<<" i= "<<i<<"  allRowNum="<<allRowNum<<endl;
+
             tofImage.setPixel(i,allRowNum,tofColor);
             peakImage.setPixel(i,allRowNum,intenColor);
         }
@@ -299,5 +301,19 @@ void statisticsDialog::closeEvent(QCloseEvent *event)
     emit alterStatisticFrameNum_signal(frameNumber,false);
     emit startStop_signal(0);
     ui->start_pushButton->setText(QStringLiteral("开始统计"));
+
+}
+
+void statisticsDialog::on_verticalSlider_sliderMoved(int position)
+{
+//    qDebug()<<" position = "<<position<<endl;
+    gainImage = position;
+    ui->verticalSlider_2->setValue(position);
+}
+
+void statisticsDialog::on_verticalSlider_2_sliderMoved(int position)
+{
+    gainImage = position;
+    ui->verticalSlider->setValue(position);
 
 }
