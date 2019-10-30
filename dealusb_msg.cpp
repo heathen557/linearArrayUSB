@@ -53,7 +53,7 @@ DealUsb_msg::DealUsb_msg(QObject *parent) : QObject(parent)
 
 
 
-     isTOF_flag = false;
+     isTOF_flag = true;
      isShowImageFlag = false; //初始化不发送显示图像的数据
      localFile_timer = NULL;
 
@@ -605,7 +605,7 @@ void DealUsb_msg::recvMsgSlot_2_256(QByteArray array)
         if(imgRow>=0 && imgRow<256 && imgCol>=0 && imgCol<2)
         {
             imageArray[imgCol][imgRow] = tof;
-            imageArray[imgCol][imgRow] = intensity;
+            imageArray_peak[imgCol][imgRow] = intensity;
         }else
         {
             qDebug()<<QStringLiteral("给像素赋值时出现异常 imgrow=")<<imgRow<<"   imgCol = "<<imgCol<<endl;
@@ -1159,14 +1159,12 @@ void DealUsb_msg::readLocalPCDFile()
         while (!in.atEnd())
         {
             line[countNum] = in.readLine();
-//            qDebug()<<countNum<<" : "<<line[countNum];
             countNum++;
         }
         file.close();
     }else
     {
         qDebug()<<"read file error!"<<endl;
-        //            localFile_timer->stop();
         fileIndex = 1;
         return;
     }
@@ -1195,14 +1193,17 @@ void DealUsb_msg::readLocalPCDFile()
             tof = tofPeakList[0].toInt();
             intensity = tofPeakList[1].toInt();
 
-            imageArray[imgCol][imgRow] = tof;
-            imageArray[imgCol][imgRow] = intensity;
+            pointIndex = i;
+            if(isSaveFlag)
+            {
+                tmpTofPeak_string[pointIndex] = QString::number(tof).append(",").append(QString::number(intensity)).append("\n");
+            }
 
 
             //开始存储统计信息；
             if(statisticStartFlag == true)
             {
-                statisticIndex = i;    // statisticIndex = line_number + 4*i ;
+                statisticIndex = pointIndex;    // statisticIndex = line_number + 4*i ;
 
                 //判断每个点已经储存的个数，如果已经超过设定的范围，则进行循环储存；
                 int offset = tempStatisticTofPoints[statisticIndex].size() - statisticFrameNumber;
@@ -1337,7 +1338,6 @@ void DealUsb_msg::readLocalPCDFile()
 
     }else if(1 == ProtocolNum)          //2*256
     {
-
         for(int i=0; i<512; i++)
         {
             if(line[i].isEmpty())
@@ -1348,37 +1348,61 @@ void DealUsb_msg::readLocalPCDFile()
             tof = tofPeakList[0].toInt();
             intensity = tofPeakList[1].toInt();
 
-            imageArray[imgCol][imgRow] = tof;
-            imageArray[imgCol][imgRow] = intensity;
+
+            int imgRow = i;
+            int imgCol = 0;
+            if(i >255)
+            {
+                imgRow = i-256;
+                imgCol = 1;
+            }
 
 
+            pointIndex = i;
+            if(isSaveFlag)
+            {
+                tmpTofPeak_string[pointIndex] = QString::number(tof).append(",").append(QString::number(intensity)).append("\n");
+            }
+
+
+            if( imgRow>=0 && imgRow<256 && imgCol>=0 && imgCol<2 )
+            {
+                imageArray[imgCol][imgRow] = tof;
+                imageArray_peak[imgCol][imgRow] = intensity;
+            }else
+            {
+                qDebug()<<QStringLiteral("给像素赋值时出现异常 imgrow=")<<imgRow<<"   imgCol = "<<imgCol<<endl;
+            }
+
+            if(isSaveFlag)
+            {
+               tmpTofPeak_string[pointIndex] = QString::number(tof).append(",").append(QString::number(intensity)).append("\n");
+            }
+
+
+            /****************************************************************************************************/
             //开始存储统计信息；
             if(statisticStartFlag == true)
             {
-                statisticIndex = i;    // statisticIndex = line_number + 4*i ;
-
-                //判断每个点已经储存的个数，如果已经超过设定的范围，则进行循环储存；
-                int offset = tempStatisticTofPoints[statisticIndex].size() - statisticFrameNumber;
-                if(offset >= 0)
+                if(pointIndex<256)
                 {
-                    tempStatisticTofPoints[statisticIndex].erase(tempStatisticTofPoints[statisticIndex].begin(),tempStatisticTofPoints[statisticIndex].begin()+offset+1);
-                    tempStatisticPeakPoints[statisticIndex].erase(tempStatisticPeakPoints[statisticIndex].begin(),tempStatisticPeakPoints[statisticIndex].begin()+offset+1);
+                    statisticIndex = pointIndex;    // statisticIndex = line_number + 4*i ;
+
+                    //判断每个点已经储存的个数，如果已经超过设定的范围，则进行循环储存；
+                    int offset = tempStatisticTofPoints[statisticIndex].size() - statisticFrameNumber;
+                    if(offset >= 0)
+                    {
+                        tempStatisticTofPoints[statisticIndex].erase(tempStatisticTofPoints[statisticIndex].begin(),tempStatisticTofPoints[statisticIndex].begin()+offset+1);
+                        tempStatisticPeakPoints[statisticIndex].erase(tempStatisticPeakPoints[statisticIndex].begin(),tempStatisticPeakPoints[statisticIndex].begin()+offset+1);
+                    }
+
+                    //向每个点的容器中添加一个新的点,完成循环存储
+                    tempStatisticTofPoints[statisticIndex].push_back(tof);
+                    tempStatisticPeakPoints[statisticIndex].push_back(intensity);
                 }
 
-                //向每个点的容器中添加一个新的点,完成循环存储
-                tempStatisticTofPoints[statisticIndex].push_back(tof);
-                tempStatisticPeakPoints[statisticIndex].push_back(intensity);
             }
             /*******************************************************************************************************************************/
-
-            if( i<256 )
-            {
-                imageArray[0][pointIndex] = tof;
-                imageArray_peak[0][pointIndex] = intensity;
-            }else
-            {
-                qDebug()<<QStringLiteral("给像素赋值时出现异常 pointIndex=")<<pointIndex<<endl;
-            }
 
             //统计tof 以及peak信息
             tofMax = (tof>tofMax) ? tof : tofMax;
@@ -1389,7 +1413,7 @@ void DealUsb_msg::readLocalPCDFile()
 
 
 
-        /*******************以上循环以后，1*256个点全部接收完毕 下面对整帧数据进行处理 ********************************************/
+        /*******************以上循环以后，2*256个点全部接收完毕 下面对整帧数据进行处理 ********************************************/
 
         //统计信息相关内容
         emit statisticsValueSignal(tofMin,tofMax,peakMin,peakMax);
@@ -1406,7 +1430,7 @@ void DealUsb_msg::readLocalPCDFile()
         {
             int leftIndex = i;
             angle = -showAngle/2.0 + leftIndex*((showAngle/2.0)/128.0);
-            tmpTof = imageArray[0][i];
+            tmpTof = (imageArray[0][i] + imageArray[1][i])/2.0;
             Rece_points.push_back(angle);
             Rece_points.push_back(tmpTof);
         }
@@ -1415,7 +1439,7 @@ void DealUsb_msg::readLocalPCDFile()
         {
             int rightIndex = i-128;
             angle = rightIndex * ((showAngle/2.0)/128.0);
-            tmpTof = imageArray[0][i];
+            tmpTof = (imageArray[0][i] + imageArray[1][i])/2.0;
             Rece_points.push_back(angle);
             Rece_points.push_back(tmpTof);
         }
@@ -1427,19 +1451,222 @@ void DealUsb_msg::readLocalPCDFile()
         if(true == isShowImageFlag)
         {
             int rowNum=0,colNum;
-            for(i=0;i<256;i++)
+            for(i=0;i<512;i++)
             {
                 colNum = i;
+                if(i>255)
+                {
+                    rowNum = 1;
+                    colNum = i-256;
+                }
                 tmpTof = imageArray[rowNum][colNum];
                 tmpPeak = imageArray_peak[rowNum][colNum];
                 tofList.append(QString::number(tmpTof));
                 peakList.append(QString::number(tmpPeak));
             }
 
-            emit tofPeakImageSignal(tofList,peakList,1);    //四行
+            emit tofPeakImageSignal(tofList,peakList,2);    //两行
         }
         tofList.clear();
         peakList.clear();
+
+
+
+
+        //显示内容相关，将一帧数据传递给全局变量供显示
+        if(!Rece_points.empty())
+        {
+    //      qDebug()<<"AllPoint_vec already have number,Rece_points ="<<Rece_points.size()<<",   AllPoint_vec.size="<<AllPoint_vec.size()<<endl;
+            m_mutex.lock();
+            AllPoint_vec.push_back(Rece_points);
+            Rece_points.clear();
+
+            if(AllPoint_vec.size() == showFrameNum+1)  //循环清理第一个元素,因为每次只显示一帧数据，故这里把容器的长度设置为2,这里是用来显示的容器
+            {
+                AllPoint_vec.erase(AllPoint_vec.begin(),AllPoint_vec.begin()+1);
+
+            }
+            if(AllPoint_vec.size() > showFrameNum+1)
+            {
+                AllPoint_vec.clear();
+            }
+
+            m_mutex.unlock();
+        }
+
+        /***************/
+
+        //如果选中保存，把上一帧的数据发送到数据保存线程中，保存成文本
+        if(isSaveFlag)
+        {
+            for(int i=0; i<512; i++)
+            {
+                tofPeakToSave_string.append(tmpTofPeak_string[i]);
+            }
+
+            emit saveTXTSignal(tofPeakToSave_string);
+            tofPeakToSave_string.clear();
+        }
+
+        //统计信息相关 统计信息容器赋值给全局变量
+        if(statisticStartFlag)
+        {
+            statisticMutex.lock();
+            allStatisticTofPoints = tempStatisticTofPoints;
+            allStatisticPeakPoints = tempStatisticPeakPoints;
+            statisticMutex.unlock();
+        }
+
+    }else if(2 == ProtocolNum)          //4*256
+    {
+        for(int i=0; i<1024; i++)
+        {
+            if(line[i].isEmpty())
+                continue;
+            tofPeakList = line[i].split(",");
+            if(tofPeakList.size()<2)
+                return;
+            tof = tofPeakList[0].toInt();
+            intensity = tofPeakList[1].toInt();
+
+
+            pointIndex = i;
+            int imgRow = i;
+            int imgCol = 0;
+            if(i >255  && i<512)
+            {
+                imgRow = i-256;
+                imgCol = 1;
+            }else if(i>511 && i<768)
+            {
+                imgRow = i-512;
+                imgCol = 2;
+            }else if(i>767 && i<1024)
+            {
+                imgRow = i-768;
+                imgCol = 3;
+            }
+
+            if(isSaveFlag)
+            {
+                tmpTofPeak_string[pointIndex] = QString::number(tof).append(",").append(QString::number(intensity)).append("\n");
+            }
+
+
+            if( imgRow>=0 && imgRow<256 && imgCol>=0 && imgCol<4 )
+            {
+                imageArray[imgCol][imgRow] = tof;
+                imageArray_peak[imgCol][imgRow] = intensity;
+            }else
+            {
+                qDebug()<<QStringLiteral("给像素赋值时出现异常 imgrow=")<<imgRow<<"   imgCol = "<<imgCol<<endl;
+            }
+
+            if(isSaveFlag)
+            {
+               tmpTofPeak_string[pointIndex] = QString::number(tof).append(",").append(QString::number(intensity)).append("\n");
+            }
+
+
+            /****************************************************************************************************/
+            //开始存储统计信息；
+            if(statisticStartFlag == true)
+            {
+                if(pointIndex>511 && pointIndex<768)
+                {
+                    statisticIndex = pointIndex-512;    // statisticIndex = line_number + 4*i ;
+
+                    //判断每个点已经储存的个数，如果已经超过设定的范围，则进行循环储存；
+                    int offset = tempStatisticTofPoints[statisticIndex].size() - statisticFrameNumber;
+                    if(offset >= 0)
+                    {
+                        tempStatisticTofPoints[statisticIndex].erase(tempStatisticTofPoints[statisticIndex].begin(),tempStatisticTofPoints[statisticIndex].begin()+offset+1);
+                        tempStatisticPeakPoints[statisticIndex].erase(tempStatisticPeakPoints[statisticIndex].begin(),tempStatisticPeakPoints[statisticIndex].begin()+offset+1);
+                    }
+
+                    //向每个点的容器中添加一个新的点,完成循环存储
+                    tempStatisticTofPoints[statisticIndex].push_back(tof);
+                    tempStatisticPeakPoints[statisticIndex].push_back(intensity);
+                }
+
+            }
+            /*******************************************************************************************************************************/
+
+            //统计tof 以及peak信息
+            tofMax = (tof>tofMax) ? tof : tofMax;
+            tofMin = (tof<tofMin) ? tof : tofMin;
+            peakMax = (intensity>peakMax) ? intensity : peakMax;
+            peakMin = (intensity<peakMin) ? intensity : peakMin;
+        }//一帧数据已经接收完毕
+
+
+
+        /*******************以上循环以后，4*256个点全部接收完毕 下面对整帧数据进行处理 ********************************************/
+
+        //统计信息相关内容
+        emit statisticsValueSignal(tofMin,tofMax,peakMin,peakMax);
+        tofMin = 10000;     //重置变量
+        tofMax = -10000;
+        peakMin = 10000;
+        peakMax = -10000;
+
+        //显示数据发送给接收容器
+        //256个点 分为左右两个
+        int i = 0;
+        int tmpTof,tmpPeak;
+        for(i=0; i<128; i++)   //存储前128个点
+        {
+            int leftIndex = i;
+            angle = -showAngle/2.0 + leftIndex*((showAngle/2.0)/128.0);
+            tmpTof = (imageArray[2][i] + imageArray[3][i])/2.0;
+            Rece_points.push_back(angle);
+            Rece_points.push_back(tmpTof);
+        }
+
+        for(i=128; i<256; i++)
+        {
+            int rightIndex = i-128;
+            angle = rightIndex * ((showAngle/2.0)/128.0);
+            tmpTof = (imageArray[2][i] + imageArray[3][i])/2.0;
+            Rece_points.push_back(angle);
+            Rece_points.push_back(tmpTof);
+        }
+
+
+
+        //将tof和peak的统计值发送给统计界面以供来显示,并清空字符串连
+         if(true == isShowImageFlag)
+         {
+             int rowNum=0,colNum;
+             for(i=0;i<1024;i++)
+             {
+                 if(i<256)
+                 {
+                     rowNum = 0;
+                     colNum = i;
+                 }else if(i<512)
+                 {
+                     rowNum = 1;
+                     colNum = i - 256;
+                 }else if(i<768)
+                 {
+                     rowNum = 2;
+                     colNum = i - 512;
+                 }else if(i<1024)
+                 {
+                     rowNum = 3;
+                     colNum = i - 768;
+                 }
+                 tmpTof = imageArray[rowNum][colNum];
+                 tmpPeak = imageArray_peak[rowNum][colNum];
+                 tofList.append(QString::number(tmpTof));
+                 peakList.append(QString::number(tmpPeak));
+             }
+
+             emit tofPeakImageSignal(tofList,peakList,4);    //四行
+         }
+         tofList.clear();
+         peakList.clear();
 
 
 
@@ -1487,10 +1714,6 @@ void DealUsb_msg::readLocalPCDFile()
             allStatisticPeakPoints = tempStatisticPeakPoints;
             statisticMutex.unlock();
         }
-
-    }else if(2 == ProtocolNum)          //4*256
-    {
-
     }
 
 }
