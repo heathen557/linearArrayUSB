@@ -37,6 +37,41 @@ MainWindow::MainWindow(QWidget *parent) :
     initThread();
     initSerial();
     initConnect();
+
+
+
+    //加载offset配置集
+    QFile file1("offset.txt");
+    QString line1[300];
+    qDebug()<<"here is"<<endl;
+    if (file1.open(QIODevice::ReadOnly|QIODevice::Text))
+    {
+        QTextStream in(&file1);
+        int i = 0;
+        while (!in.atEnd())
+        {
+            line1[i] = in.readLine();
+            i++;
+        }
+        file1.close();
+
+        if(i<255)
+        {
+            qDebug()<<"here is eror"<<endl;
+            QMessageBox::information(NULL,"warn","read offsetArray error!");
+        }
+    }else{
+        QMessageBox::information(NULL,"warn","read offsetArray error!");
+    }
+
+
+    for(int i=0;i<256;i++)
+    {
+        ui->widget->helper.offsetArray[i] = line1[i].toFloat();
+
+    }
+
+
 }
 
 void MainWindow::initConnect()
@@ -181,6 +216,11 @@ void MainWindow::initSerial()
     ui->widget->helper.showTOFmax = maxDistance;
 
     ui->widget->helper.maxDistance = maxDistance*100/0.75;
+
+
+
+
+
 
 
 

@@ -101,6 +101,9 @@ Helper::Helper()
 
 
 
+
+
+
 }
 //! [0]
 
@@ -145,8 +148,13 @@ void Helper::paint(QPainter *painter, QPaintEvent *event, int elapsed)
         int pointNum = 0;
         for(int n=0; n<len-1; n+=2)
         {
+            int tmpIndex = n/2;
+
+//            qDebug()<<"   length = "<<(len-1)/2<<endl;
             float ang = AllPoint_vec[m][n];         //角度为float形式
-            int distance = AllPoint_vec[m][n+1] -20;    //tof值为整形,tof的范围为0-10m,传送来的数据为LSB，1LSB=(0.75cm 1.5cm)  故接收到的数据范围：1000/0.75 = 1333.3 ；10000/1.5 = 666.7
+//            int distance = AllPoint_vec[m][n+1]-20;    //tof值为整形,tof的范围为0-10m,传送来的数据为LSB，1LSB=(0.75cm 1.5cm)  故接收到的数据范围：1000/0.75 = 1333.3 ；10000/1.5 = 666.7
+
+            int distance = AllPoint_vec[m][n+1] + offsetArray[tmpIndex];
 
             /********、此处涉及到一些坐标的变换，tof(0~1333.3),转换比例    *********/
             //           1333.3  (maxTOF)                   distance (inputTOF)
@@ -158,13 +166,13 @@ void Helper::paint(QPainter *painter, QPaintEvent *event, int elapsed)
 
             float angle = ang*PI/180.0 ;
 
-//            float x  = Window_wid/2.0 + Dr_calculate(newDistance,3.4,angle)*sin(angle);
-//            float y  = Window_height -  Dr_calculate(newDistance,3.4,angle)*cos(angle);
+            float x  = Window_wid/2.0 + Dr_calculate(newDistance,3.4,angle)*sin(angle);
+            float y  = Window_height -  Dr_calculate(newDistance,3.4,angle)*cos(angle);
 
 //            qDebug()<<"n="<<n/2<<" ang = "<<ang<<endl;
 
-            float x  = Window_wid/2.0 + newDistance*sin(ang*PI/180.0);
-            float y  = Window_height -  newDistance*cos(ang*PI/180.0);
+//            float x  = Window_wid/2.0 + newDistance*sin(ang*PI/180.0);
+//            float y  = Window_height -  newDistance*cos(ang*PI/180.0);
 
             pointf[pointNum].setX(x);
             pointf[pointNum].setY(y);
@@ -197,6 +205,6 @@ void Helper::paint(QPainter *painter, QPaintEvent *event, int elapsed)
 
 double Helper::Dr_calculate(float disTance,float lValue,float theta)
 {
-    double dr = ((disTance*disTance)-(lValue*lValue))/(2*(disTance+lValue*cos(theta)));
+    double dr = ((disTance*disTance)-(lValue*lValue))/(2*(disTance+lValue*sin(theta)))*1.5;
     return dr;
 }
