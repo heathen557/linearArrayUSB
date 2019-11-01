@@ -57,11 +57,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
         if(i<255)
         {
-            qDebug()<<"here is eror"<<endl;
-            QMessageBox::information(NULL,"warn","read offsetArray error!");
+            QString str = "load the 'offset.txt' error!";
+            showRunInfoSlot(str);
         }
     }else{
-        QMessageBox::information(NULL,"warn","read offsetArray error!");
+        QString str = "load the 'offset.txt' error!";
+        showRunInfoSlot(str);
     }
 
 
@@ -215,14 +216,7 @@ void MainWindow::initSerial()
 
     ui->widget->helper.showTOFmax = maxDistance;
 
-    ui->widget->helper.maxDistance = maxDistance*100/0.75;
-
-
-
-
-
-
-
+    ui->widget->helper.maxDistance = maxDistance*100/1.5;
 
 
     QStringList comList;//串口号
@@ -1064,9 +1058,10 @@ void MainWindow::showSettingParaSlot(int FrameNum,int Angle, int TOFmax)
 
     ui->widget->helper.showTOFmax = TOFmax;
 
-    ui->widget->helper.maxDistance = TOFmax*100/0.75;
+//    ui->widget->helper.maxDistance = TOFmax*100/0.75;       //这是获取最大的TOF值的距离  m到tof的换算
+    ui->widget->helper.maxDistance = TOFmax*100/1.5;       //这是获取最大的TOF值的距离  m到tof的换算
 
-    qDebug()<<"MainWindow showSettingParaSlot() showFrameNum = "<<FrameNum<<"  showTOFmax ="<<TOFmax<<endl;
+    qDebug()<<"MainWindow showSettingParaSlot() showFrameNum = "<<FrameNum<<"  showTOFmax ="<<TOFmax<<"    maxDistance ="<<ui->widget->helper.maxDistance<<endl;
 }
 
 //显示统计信息窗口的槽函数

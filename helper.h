@@ -66,7 +66,7 @@ class Helper
 public:
     Helper();
 
-    double Dr_calculate(float tof,float lValue,float theta);
+    double Dr_calculate(float disTance,float lValue,float theta);
 
 
 public:
@@ -81,8 +81,8 @@ public:
 
     int showFrameNum;
     int showAngle;
-    int showTOFmax;
-    int maxDistance;
+    int showTOFmax;       //显示最大多少米
+    int maxDistance;      //显示最大多少米时 对应的Tof值
 
 
 

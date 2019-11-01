@@ -65,6 +65,9 @@ public:
     QTimer *localFile_timer;
     int fileIndex;
 
+    //重新计算角度版本时 垂直角度的值 默认设置为100
+    int vexAngleValue;
+
 signals:
 
     void statisticsValueSignal(float,float,float,float);

@@ -57,6 +57,8 @@ DealUsb_msg::DealUsb_msg(QObject *parent) : QObject(parent)
      isShowImageFlag = false; //初始化不发送显示图像的数据
      localFile_timer = NULL;
 
+     vexAngleValue = 100;  //重新计算角度时 垂直角度的值 默认设置为100
+
 
      //总共有256个点 ,针对每一个点开启一个独立的容器进行存储相关内容
      statisticStartFlag = true;    //初始化进行信息统计,后期可尝试改用信号与槽的进制进行传输
@@ -1250,10 +1252,17 @@ void DealUsb_msg::readLocalPCDFile()
         //256个点 分为左右两个
         int i = 0;
         int tmpTof,tmpPeak;
+
+        float Lr = 100*tan(showAngle/2.0*3.1415926/180.0);
+        float dspad = Lr/128.0;
+
         for(i=0; i<128; i++)   //存储前128个点
         {
             int leftIndex = i;
             angle = -showAngle/2.0 + leftIndex*((showAngle/2.0)/128.0);
+//            angle = atan((-Lr+dspad*leftIndex)/100.0)*180/3.1415926;
+
+
             tmpTof = imageArray[0][i];
             Rece_points.push_back(angle);
             Rece_points.push_back(tmpTof);
@@ -1263,6 +1272,7 @@ void DealUsb_msg::readLocalPCDFile()
         {
             int rightIndex = i-128;
             angle = rightIndex * ((showAngle/2.0)/128.0);
+//            angle = atan((dspad*rightIndex)/100.0)*180/3.1415926;
             tmpTof = imageArray[0][i];
             Rece_points.push_back(angle);
             Rece_points.push_back(tmpTof);

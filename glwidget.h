@@ -21,6 +21,8 @@ public slots:
     void animate();
     void paintEvent(QPaintEvent *event) override;
 
+    double Dr_calculate(float disTance,float lValue,float theta);
+
 
 private:
 
