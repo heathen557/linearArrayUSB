@@ -139,6 +139,10 @@ void statisticsDialog::statistic_MeanStdSlot(QStringList tofMeanStringlist,QStri
     QVector<double> peakStd_y(256);
 
     QString str;
+    float tofMeanMax = 0 ;
+    float tofStdMax = 0 ;
+    float peakMeanMax = 0 ;
+    float peakStdMax = 0 ;
     for(int i=0; i<tofMeanStringlist.size(); i++)
     {
         label_x[i] = i;
@@ -147,17 +151,25 @@ void statisticsDialog::statistic_MeanStdSlot(QStringList tofMeanStringlist,QStri
         peakMean_y[i] = peakMeanStringlist[i].toDouble();
         peakStd_y[i] = peakStdStringlist[i].toDouble();
 
+        tofMeanMax = tofMean_y[i]>tofMeanMax ? tofMean_y[i]:tofMeanMax;
+        tofStdMax = tofStd_y[i]>tofStdMax ? tofStd_y[i]:tofStdMax;
+        peakMeanMax = peakMean_y[i]>peakMeanMax ? peakMean_y[i]:peakMeanMax;
+        peakStdMax = peakStd_y[i]>peakStdMax ?peakStd_y[i]:peakStdMax;
     }
 
+    ui->TOFMean_widget->yAxis->setRange(0,tofMeanMax+10);
     ui->TOFMean_widget->graph(0)->setData(label_x,tofMean_y);
     ui->TOFMean_widget->replot();
 
+    ui->TOFSTD_widget->yAxis->setRange(0,tofStdMax+10);
     ui->TOFSTD_widget->graph(0)->setData(label_x,tofStd_y);
     ui->TOFSTD_widget->replot();
 
+    ui->PEAKMEAN_widget->yAxis->setRange(0,peakMeanMax+10);
     ui->PEAKMEAN_widget->graph(0)->setData(label_x,peakMean_y);
     ui->PEAKMEAN_widget->replot();
 
+    ui->PEAKSTD_widget->yAxis->setRange(0,peakStdMax+10);
     ui->PEAKSTD_widget->graph(0)->setData(label_x,peakStd_y);
     ui->PEAKSTD_widget->replot();
 

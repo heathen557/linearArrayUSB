@@ -50,9 +50,6 @@ DealUsb_msg::DealUsb_msg(QObject *parent) : QObject(parent)
 
 
 
-
-
-
      isTOF_flag = true;
      isShowImageFlag = false; //初始化不发送显示图像的数据
      localFile_timer = NULL;
@@ -71,7 +68,6 @@ DealUsb_msg::DealUsb_msg(QObject *parent) : QObject(parent)
          allStatisticTofPoints.push_back(singlePoint);
          allStatisticPeakPoints.push_back(singlePoint);
      }
-
 
 }
 

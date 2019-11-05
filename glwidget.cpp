@@ -35,8 +35,6 @@ void GLWidget::paintEvent(QPaintEvent *event)
 
 void GLWidget::mousePressEvent(QMouseEvent *event)
 {
-
-
 //    //暂时屏蔽 单位换算未最终裁定
 //    int x = event->x();
 //    int y = event->y();
@@ -47,7 +45,7 @@ void GLWidget::mousePressEvent(QMouseEvent *event)
 
 //    float lestAngle = 90 - helper.showAngle/2.0;
 
-//    float maxDistance = origin_x/cos(lestAngle*3.1415926/180.0);
+//    float maxDistance = origin_x/cos(lestAngle*3.1415926/180.0);     //对应的窗口的最大长度
 //    qDebug()<<" maxLength = "<<maxDistance<<endl;
 
 
@@ -61,13 +59,14 @@ void GLWidget::mousePressEvent(QMouseEvent *event)
 //    //在左侧的时候，上下都是负的，得到的结果是正的；    在右侧的时候横坐标是正的，纵坐标是负的
 //    if(x != origin_x)
 //        offset = (y - origin_y)/(x - origin_x);
-//    float angle = atan(offset)*180/3.14159;
+//    float angle = atan(offset)*180/3.14159;               //这个角度是point与y轴的夹角
 
 //    qDebug()<<"  the angle  =  "<<angle<<endl;
 
 //    if(angle>=lestAngle || angle<=-lestAngle)
 //    {
 //        int showTOF = (helper.maxDistance_ * distance * cos(lestAngle*3.14159/180.0))/origin_x;
+//        int showTOF = helper.maxDistance_ * distance / maxDistance;
 //        str.append("x=").append(QString::number(x)).append(",y=").append(QString::number(y)).append(",tof=").append(QString::number(showTOF));
 //        QToolTip::showText(QCursor::pos(),str);
 //    }

@@ -59,6 +59,9 @@ MainWindow::MainWindow(QWidget *parent) :
         {
             QString str = "load the 'offset.txt' error!";
             showRunInfoSlot(str);
+        }else{
+            QString str = "load the 'offset.txt' success!";
+            showRunInfoSlot(str);
         }
     }else{
         QString str = "load the 'offset.txt' error!";
