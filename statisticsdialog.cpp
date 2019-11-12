@@ -37,7 +37,7 @@ void statisticsDialog::initCustomPlot()
 
     ui->TOFSTD_widget->legend->setVisible(true);
     ui->TOFSTD_widget->legend->setFont(QFont("Helvetica", 9));
-    ui->TOFSTD_widget->yAxis->setRange(-1,3);
+    ui->TOFSTD_widget->yAxis->setRange(0,3);
     ui->TOFSTD_widget->xAxis->setRange(0,256);
     ui->TOFSTD_widget->addGraph();
     ui->TOFSTD_widget->graph(0)->setName(QStringLiteral("标准差"));
@@ -52,7 +52,7 @@ void statisticsDialog::initCustomPlot()
 
     ui->PEAKSTD_widget->legend->setVisible(true);
     ui->PEAKSTD_widget->legend->setFont(QFont("Helvetica", 9));
-    ui->PEAKSTD_widget->yAxis->setRange(-1,3);
+    ui->PEAKSTD_widget->yAxis->setRange(0,3);
     ui->PEAKSTD_widget->xAxis->setRange(0,256);
     ui->PEAKSTD_widget->addGraph();
     ui->PEAKSTD_widget->graph(0)->setName(QStringLiteral("标准差"));
@@ -161,7 +161,7 @@ void statisticsDialog::statistic_MeanStdSlot(QStringList tofMeanStringlist,QStri
     ui->TOFMean_widget->graph(0)->setData(label_x,tofMean_y);
     ui->TOFMean_widget->replot();
 
-    ui->TOFSTD_widget->yAxis->setRange(0,tofStdMax+10);
+//    ui->TOFSTD_widget->yAxis->setRange(0,tofStdMax+10);
     ui->TOFSTD_widget->graph(0)->setData(label_x,tofStd_y);
     ui->TOFSTD_widget->replot();
 
@@ -169,7 +169,7 @@ void statisticsDialog::statistic_MeanStdSlot(QStringList tofMeanStringlist,QStri
     ui->PEAKMEAN_widget->graph(0)->setData(label_x,peakMean_y);
     ui->PEAKMEAN_widget->replot();
 
-    ui->PEAKSTD_widget->yAxis->setRange(0,peakStdMax+10);
+//    ui->PEAKSTD_widget->yAxis->setRange(0,peakStdMax+10);
     ui->PEAKSTD_widget->graph(0)->setData(label_x,peakStd_y);
     ui->PEAKSTD_widget->replot();
 
@@ -198,7 +198,7 @@ void statisticsDialog::showImage()
 
     if(1 == allRowNum)
     {
-        for(int i=0;i<tofStringList.length();i++)      //256
+        for(int i=0;i<256;i++)      //256
         {
             //设置TOF图像、强度图像的颜色
             tof = tofStringList[i].toInt();
