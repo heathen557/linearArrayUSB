@@ -195,8 +195,8 @@ void Helper::paint(QPainter *painter, QPaintEvent *event, int elapsed)
     QString text2 = QString::number(showAngle/2.0);
     text2.append(QStringLiteral("°"));
 
-    painter->drawText(QRect(5, Window_height-Window_wid/2*tan(lestAngle*3.14159/180.0)-15, 30, 20), Qt::AlignCenter, text1);
-    painter->drawText(QRect(Window_wid-30, Window_height-Window_wid/2*tan(lestAngle*3.14159/180.0)-15, 30, 20), Qt::AlignCenter, text2);
+    painter->drawText(QRect(5, Window_height-Window_wid/2*tan(lestAngle*3.14159/180.0)+25, 50, 20), Qt::AlignCenter, text1);
+    painter->drawText(QRect(Window_wid-45, Window_height-Window_wid/2*tan(lestAngle*3.14159/180.0)+25, 50, 20), Qt::AlignCenter, text2);
 
 }
 

@@ -16,6 +16,8 @@ public:
 
     explicit DealUsb_msg(QObject *parent = 0);
 
+    bool isShouldMean(int index);
+
     QByteArray recvArray;
 
     int lastLineNum;
@@ -71,8 +73,12 @@ public:
 
 
     //根据强度值滤波 的offset ，以及滑动平均的帧数 默认设置为1
-    int peakOffset;   //0
+    int peakOffset;      //0
     int slideFrameNum;   //1
+    int averageOffset;   //10
+    //对5帧数据做一次平均之后显示，并且原始数据给的也是平均之后的数据
+    int lastImageArray[21][256];        //只存储一行256 存储四组  故采用了二维数组的形式
+    int haveIndex;                      //统计一共有多少帧数据
 
 signals:
 
@@ -96,7 +102,7 @@ public slots:
 
     void changeTofPeak_slot();
 
-    void changePeakOffsetAverageFrame_slot(int offset_peak,int slideAverage_num);    // 设定peak的阈值（默认为0），peak的值小于阈值时，tof修改为65535 ； 并设定滑动平均的帧数
+    void changePeakOffsetAverageFrame_slot(int offset_peak,int slideAverage_num,int averageOff);    // 设定peak的阈值（默认为0），peak的值小于阈值时，tof修改为65535 ； 并设定滑动平均的帧数
 
 
 

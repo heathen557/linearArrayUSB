@@ -102,7 +102,7 @@ void MainWindow::initConnect()
     //主函数与数据处理线程的 信号与槽的连接
     connect(dealUsbMsg_obj,SIGNAL(statisticsValueSignal(float,float,float,float)),this,SLOT(statisticsValueSlot(float, float, float,float)));
     connect(this,SIGNAL(changeTofPeak_signal()),dealUsbMsg_obj,SLOT(changeTofPeak_slot()));
-    connect(this,SIGNAL(changePeakOffsetAverageFrame_signal(int,int)),dealUsbMsg_obj,SLOT(changePeakOffsetAverageFrame_slot(int,int)));
+    connect(this,SIGNAL(changePeakOffsetAverageFrame_signal(int,int,int)),dealUsbMsg_obj,SLOT(changePeakOffsetAverageFrame_slot(int,int,int)));
 
 
     //文件保存相关的 信号与槽的连接
@@ -3960,7 +3960,8 @@ void MainWindow::on_peakOffset_lineEdit_returnPressed()
 {
     int peakOffset = ui->peakOffset_lineEdit->text().toInt();
     int slideFrmNum = ui->slideFrameNum_lineEdit->text().toInt();
-    emit changePeakOffsetAverageFrame_signal(peakOffset,slideFrmNum);
+    int averageOff = ui->averageOffset_lineEdit->text().toInt();
+    emit changePeakOffsetAverageFrame_signal(peakOffset,slideFrmNum,averageOff);
 
 }
 //改变滑动平均的帧数
@@ -3968,5 +3969,27 @@ void MainWindow::on_slideFrameNum_lineEdit_returnPressed()
 {
     int peakOffset = ui->peakOffset_lineEdit->text().toInt();
     int slideFrmNum = ui->slideFrameNum_lineEdit->text().toInt();
-    emit changePeakOffsetAverageFrame_signal(peakOffset,slideFrmNum);
+    int averageOff = ui->averageOffset_lineEdit->text().toInt();
+    if(slideFrmNum>20)
+    {
+        QMessageBox::information(NULL,"warn",QStringLiteral("不能超过20"));
+        ui->slideFrameNum_lineEdit->setText("1");
+        return;
+    }
+    emit changePeakOffsetAverageFrame_signal(peakOffset,slideFrmNum,averageOff);
+}
+
+//改变滑动平均帧时判断的阈值
+void MainWindow::on_averageOffset_lineEdit_returnPressed()
+{
+    int peakOffset = ui->peakOffset_lineEdit->text().toInt();
+    int slideFrmNum = ui->slideFrameNum_lineEdit->text().toInt();
+    int averageOff = ui->averageOffset_lineEdit->text().toInt();
+    if(slideFrmNum>20)
+    {
+        QMessageBox::information(NULL,"warn",QStringLiteral("不能超过20"));
+        ui->slideFrameNum_lineEdit->setText("1");
+        return;
+    }
+    emit changePeakOffsetAverageFrame_signal(peakOffset,slideFrmNum,averageOff);
 }

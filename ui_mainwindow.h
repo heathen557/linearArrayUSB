@@ -119,6 +119,8 @@ public:
     QLineEdit *peakOffset_lineEdit;
     QLabel *label_12;
     QLineEdit *slideFrameNum_lineEdit;
+    QLabel *label_13;
+    QLineEdit *averageOffset_lineEdit;
     QSpacerItem *verticalSpacer_2;
     QGroupBox *groupBox_2;
     QGridLayout *gridLayout_5;
@@ -390,7 +392,7 @@ public:
         toolBox->addItem(page_2, QString::fromUtf8("         \350\256\276\345\244\207\345\257\204\345\255\230\345\231\250\351\205\215\347\275\256"));
         page_3 = new QWidget();
         page_3->setObjectName(QStringLiteral("page_3"));
-        page_3->setGeometry(QRect(0, 0, 236, 362));
+        page_3->setGeometry(QRect(0, -36, 236, 390));
         gridLayout_10 = new QGridLayout(page_3);
         gridLayout_10->setSpacing(6);
         gridLayout_10->setContentsMargins(11, 11, 11, 11);
@@ -525,6 +527,17 @@ public:
         slideFrameNum_lineEdit->setAlignment(Qt::AlignCenter);
 
         formLayout->setWidget(1, QFormLayout::FieldRole, slideFrameNum_lineEdit);
+
+        label_13 = new QLabel(groupBox);
+        label_13->setObjectName(QStringLiteral("label_13"));
+
+        formLayout->setWidget(2, QFormLayout::LabelRole, label_13);
+
+        averageOffset_lineEdit = new QLineEdit(groupBox);
+        averageOffset_lineEdit->setObjectName(QStringLiteral("averageOffset_lineEdit"));
+        averageOffset_lineEdit->setAlignment(Qt::AlignCenter);
+
+        formLayout->setWidget(2, QFormLayout::FieldRole, averageOffset_lineEdit);
 
 
         gridLayout_7->addLayout(formLayout, 0, 0, 1, 1);
@@ -689,6 +702,8 @@ public:
         peakOffset_lineEdit->setText(QApplication::translate("MainWindow", "0", Q_NULLPTR));
         label_12->setText(QApplication::translate("MainWindow", "\345\271\263\345\235\207\345\270\247\346\225\260\357\274\232", Q_NULLPTR));
         slideFrameNum_lineEdit->setText(QApplication::translate("MainWindow", "1", Q_NULLPTR));
+        label_13->setText(QApplication::translate("MainWindow", "\345\271\263\345\235\207\351\230\210\345\200\274\357\274\232", Q_NULLPTR));
+        averageOffset_lineEdit->setText(QApplication::translate("MainWindow", "10", Q_NULLPTR));
         toolBox->setItemText(toolBox->indexOf(page_3), QApplication::translate("MainWindow", "            \344\270\262\345\217\243\350\277\236\346\216\245", Q_NULLPTR));
         groupBox_2->setTitle(QApplication::translate("MainWindow", "\347\273\237\350\256\241\344\277\241\346\201\257\344\270\216\346\227\245\345\277\227", Q_NULLPTR));
         label_11->setText(QApplication::translate("MainWindow", "        TOF/PEAK\344\277\241\346\201\257\347\273\237\350\256\241", Q_NULLPTR));

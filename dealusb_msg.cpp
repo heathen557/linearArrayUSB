@@ -54,9 +54,10 @@ DealUsb_msg::DealUsb_msg(QObject *parent) : QObject(parent)
      isShowImageFlag = false; //初始化不发送显示图像的数据
      localFile_timer = NULL;
 
-     vexAngleValue = 100;  //重新计算角度时 垂直角度的值 默认设置为100
-     peakOffset = 0;     //根据强度进行滤波时候用
-     slideFrameNum = 1;    //滑动平均 设置的窗口的大小
+     vexAngleValue = 100;    //重新计算角度时 垂直角度的值 默认设置为100
+     peakOffset = 0;         //根据强度进行滤波时候用
+     slideFrameNum = 1;      //滑动平均 设置的窗口的大小
+     averageOffset = 10;     //平均的阈值，做平均时相邻的点 大于此值时 就不进行平均操作
 
 
      //总共有256个点 ,针对每一个点开启一个独立的容器进行存储相关内容
@@ -73,13 +74,35 @@ DealUsb_msg::DealUsb_msg(QObject *parent) : QObject(parent)
 
 }
 
+
+bool DealUsb_msg::isShouldMean(int index)
+{
+    bool flag ;
+    for(int i=0;i<slideFrameNum - 1;i++)
+    {
+        int res = abs(lastImageArray[i][index]-lastImageArray[i+1][index]);
+        if(res>averageOffset )
+        {
+            flag = false;
+            return flag;
+        }
+    }
+
+    flag = true;
+    return flag;
+}
+
+
+
+
 // 改变peakOffset的值 ， 滑动平均的帧数
-void DealUsb_msg::changePeakOffsetAverageFrame_slot(int offset_peak,int slideAverage_num)
+void DealUsb_msg::changePeakOffsetAverageFrame_slot(int offset_peak,int slideAverage_num,int averageOff)
 {
     peakOffset = offset_peak;
     slideFrameNum = slideAverage_num;
+    averageOffset = averageOff;
 
-    qDebug()<<"peakOffset= "<<peakOffset<<"  slideFrameNum= "<<slideFrameNum;
+    qDebug()<<"peakOffset= "<<peakOffset<<"  slideFrameNum= "<<slideFrameNum<<"  averageOffset ="<<averageOffset;
 }
 
 void DealUsb_msg:: showSettingParaSlot(int frameNum, int Angle,int TOFmax)
@@ -273,6 +296,8 @@ void DealUsb_msg::recvMsgSlot(QByteArray array)
     if( line_number ==0 && lastLineNum==3)  //此时说明上一帧数据已经接收完毕，把整帧数据付给其他线程，供其显示，数据可以显示了
     {
 
+
+        haveIndex++;
         //统计信息相关内容
         emit statisticsValueSignal(tofMin,tofMax,peakMin,peakMax);
         tofMin = 10000;     //重置变量
@@ -393,6 +418,33 @@ void DealUsb_msg::recvMsgSlot(QByteArray array)
                                                  //          lineNum=1: 1 5 9 13...
                                                  //          lineNum=2: 2 6 10 14...
                                                  //          lineNum=3: 3 7 11 15 ...
+
+        ////////////////滑动平均
+        for(int w=0; w<slideFrameNum-1; w++)
+        {
+            lastImageArray[w][pointIndex] = lastImageArray[w+1][pointIndex];
+        }
+        lastImageArray[slideFrameNum-1][pointIndex] = tof;
+        if(haveIndex > slideFrameNum)
+        {
+            haveIndex = slideFrameNum + 1;      //赋予一个大的值即可
+            if(isShouldMean(pointIndex))        //根据阈值判断是否进行平均处理
+            {
+                int zeroNum = 0;
+                int allTof_ = 0;
+                for(int h=0;h<slideFrameNum;h++)
+                {
+                    if(0 == lastImageArray[h][pointIndex])
+                        zeroNum = zeroNum + 1;
+                    allTof_ += lastImageArray[h][pointIndex];
+                }
+                if(zeroNum != slideFrameNum)
+                {
+                    tof = allTof_/(slideFrameNum - zeroNum);
+                }
+            }
+        }
+
 
         //保存文件时，tofPeakToSave_string存储相关的信息
         if(isSaveFlag)     //如果需要保存文件信息
@@ -1158,7 +1210,7 @@ void DealUsb_msg::selectLocalFile_slot(QString sPath)
         connect(localFile_timer,SIGNAL(timeout()),this,SLOT(readLocalPCDFile()));
     }
     fileIndex = 1;
-    localFile_timer->start(100);
+    localFile_timer->start(90);
 }
 
 void DealUsb_msg::readLocalPCDFile()
@@ -1216,8 +1268,37 @@ void DealUsb_msg::readLocalPCDFile()
 
             if(intensity<peakOffset)   //peak设置阈值
                 tof = 65535;
-
             pointIndex = i;
+
+            for(int w=0; w<slideFrameNum-1; w++)
+            {
+                lastImageArray[w][pointIndex] = lastImageArray[w+1][pointIndex];
+            }
+            lastImageArray[slideFrameNum-1][pointIndex] = tof;
+            if(haveIndex > slideFrameNum)
+            {
+                haveIndex = slideFrameNum + 1;   //赋予一个大的值即可
+                if(isShouldMean(pointIndex))    //两个相邻之间的间隔大于一个阈值时 ，则不进行平均，显示原始数据
+                {
+                    int zeroNum = 0;
+                    int allTof_ = 0;
+                    for(int h=0;h<slideFrameNum;h++)
+                    {
+                        if(0 == lastImageArray[h][pointIndex])
+                            zeroNum = zeroNum + 1;
+                        allTof_ += lastImageArray[h][pointIndex];
+                    }
+                    if(zeroNum != slideFrameNum)
+                    {
+                        tof = allTof_/(slideFrameNum - zeroNum);
+                    }
+                }
+
+
+            }
+
+
+
             if(isSaveFlag)
             {
                 tmpTofPeak_string[pointIndex] = QString::number(tof).append(",").append(QString::number(intensity)).append("\n");
@@ -1263,6 +1344,7 @@ void DealUsb_msg::readLocalPCDFile()
 
         /*******************以上循环以后，1*256个点全部接收完毕 下面对整帧数据进行处理 ********************************************/
 
+        haveIndex++;
         //统计信息相关内容
         emit statisticsValueSignal(tofMin,tofMax,peakMin,peakMax);
         tofMin = 10000;     //重置变量
