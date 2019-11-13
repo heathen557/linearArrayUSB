@@ -246,6 +246,10 @@ private slots:
 
     void on_serialPlay_pushButton_clicked();
 
+    void on_peakOffset_lineEdit_returnPressed();
+
+    void on_slideFrameNum_lineEdit_returnPressed();
+
 signals:
     void openLinkSignal(int ,int); //打开连接
 
@@ -268,6 +272,8 @@ signals:
     void changeTofPeak_signal();
 
     void openSerial_signal(Settings,bool);
+
+    void changePeakOffsetAverageFrame_signal(int ,int );     //// 设定peak的阈值（默认为0），peak的值小于阈值时，tof修改为65535 ； 并设定滑动平均的帧数
 
 };
 

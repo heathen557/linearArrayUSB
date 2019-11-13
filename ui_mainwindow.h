@@ -14,6 +14,7 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QComboBox>
+#include <QtWidgets/QFormLayout>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
@@ -91,8 +92,7 @@ public:
     QPushButton *getALL_pushButton;
     QPushButton *setAll_pushButton;
     QWidget *page_3;
-    QGridLayout *gridLayout_7;
-    QSpacerItem *verticalSpacer_2;
+    QGridLayout *gridLayout_10;
     QGroupBox *gbox1;
     QGridLayout *gridLayout_6;
     QHBoxLayout *horizontalLayout_8;
@@ -112,6 +112,14 @@ public:
     QComboBox *stopBitsBox;
     QPushButton *openSerial_pushButton;
     QPushButton *serialPlay_pushButton;
+    QGroupBox *groupBox;
+    QGridLayout *gridLayout_7;
+    QFormLayout *formLayout;
+    QLabel *label_10;
+    QLineEdit *peakOffset_lineEdit;
+    QLabel *label_12;
+    QLineEdit *slideFrameNum_lineEdit;
+    QSpacerItem *verticalSpacer_2;
     QGroupBox *groupBox_2;
     QGridLayout *gridLayout_5;
     QFrame *frame_6;
@@ -176,7 +184,7 @@ public:
         toolBox->setStyleSheet(QStringLiteral(""));
         page = new QWidget();
         page->setObjectName(QStringLiteral("page"));
-        page->setGeometry(QRect(0, 0, 250, 358));
+        page->setGeometry(QRect(0, 0, 236, 369));
         gridLayout_3 = new QGridLayout(page);
         gridLayout_3->setSpacing(6);
         gridLayout_3->setContentsMargins(11, 11, 11, 11);
@@ -349,7 +357,7 @@ public:
         toolBox->addItem(page, QString::fromUtf8("            \345\270\270\347\224\250\351\205\215\347\275\256"));
         page_2 = new QWidget();
         page_2->setObjectName(QStringLiteral("page_2"));
-        page_2->setGeometry(QRect(0, 0, 250, 358));
+        page_2->setGeometry(QRect(0, 0, 250, 354));
         gridLayout_4 = new QGridLayout(page_2);
         gridLayout_4->setSpacing(6);
         gridLayout_4->setContentsMargins(11, 11, 11, 11);
@@ -382,15 +390,11 @@ public:
         toolBox->addItem(page_2, QString::fromUtf8("         \350\256\276\345\244\207\345\257\204\345\255\230\345\231\250\351\205\215\347\275\256"));
         page_3 = new QWidget();
         page_3->setObjectName(QStringLiteral("page_3"));
-        page_3->setGeometry(QRect(0, 0, 250, 358));
-        gridLayout_7 = new QGridLayout(page_3);
-        gridLayout_7->setSpacing(6);
-        gridLayout_7->setContentsMargins(11, 11, 11, 11);
-        gridLayout_7->setObjectName(QStringLiteral("gridLayout_7"));
-        verticalSpacer_2 = new QSpacerItem(20, 158, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-        gridLayout_7->addItem(verticalSpacer_2, 2, 0, 1, 1);
-
+        page_3->setGeometry(QRect(0, 0, 236, 362));
+        gridLayout_10 = new QGridLayout(page_3);
+        gridLayout_10->setSpacing(6);
+        gridLayout_10->setContentsMargins(11, 11, 11, 11);
+        gridLayout_10->setObjectName(QStringLiteral("gridLayout_10"));
         gbox1 = new QGroupBox(page_3);
         gbox1->setObjectName(QStringLiteral("gbox1"));
         gridLayout_6 = new QGridLayout(gbox1);
@@ -484,12 +488,53 @@ public:
         gridLayout_6->addWidget(openSerial_pushButton, 5, 0, 1, 1);
 
 
-        gridLayout_7->addWidget(gbox1, 0, 0, 1, 1);
+        gridLayout_10->addWidget(gbox1, 0, 0, 1, 1);
 
         serialPlay_pushButton = new QPushButton(page_3);
         serialPlay_pushButton->setObjectName(QStringLiteral("serialPlay_pushButton"));
 
-        gridLayout_7->addWidget(serialPlay_pushButton, 1, 0, 1, 1);
+        gridLayout_10->addWidget(serialPlay_pushButton, 1, 0, 1, 1);
+
+        groupBox = new QGroupBox(page_3);
+        groupBox->setObjectName(QStringLiteral("groupBox"));
+        gridLayout_7 = new QGridLayout(groupBox);
+        gridLayout_7->setSpacing(6);
+        gridLayout_7->setContentsMargins(11, 11, 11, 11);
+        gridLayout_7->setObjectName(QStringLiteral("gridLayout_7"));
+        formLayout = new QFormLayout();
+        formLayout->setSpacing(6);
+        formLayout->setObjectName(QStringLiteral("formLayout"));
+        label_10 = new QLabel(groupBox);
+        label_10->setObjectName(QStringLiteral("label_10"));
+
+        formLayout->setWidget(0, QFormLayout::LabelRole, label_10);
+
+        peakOffset_lineEdit = new QLineEdit(groupBox);
+        peakOffset_lineEdit->setObjectName(QStringLiteral("peakOffset_lineEdit"));
+        peakOffset_lineEdit->setAlignment(Qt::AlignCenter);
+
+        formLayout->setWidget(0, QFormLayout::FieldRole, peakOffset_lineEdit);
+
+        label_12 = new QLabel(groupBox);
+        label_12->setObjectName(QStringLiteral("label_12"));
+
+        formLayout->setWidget(1, QFormLayout::LabelRole, label_12);
+
+        slideFrameNum_lineEdit = new QLineEdit(groupBox);
+        slideFrameNum_lineEdit->setObjectName(QStringLiteral("slideFrameNum_lineEdit"));
+        slideFrameNum_lineEdit->setAlignment(Qt::AlignCenter);
+
+        formLayout->setWidget(1, QFormLayout::FieldRole, slideFrameNum_lineEdit);
+
+
+        gridLayout_7->addLayout(formLayout, 0, 0, 1, 1);
+
+
+        gridLayout_10->addWidget(groupBox, 2, 0, 1, 1);
+
+        verticalSpacer_2 = new QSpacerItem(20, 158, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        gridLayout_10->addItem(verticalSpacer_2, 3, 0, 1, 1);
 
         toolBox->addItem(page_3, QString::fromUtf8("            \344\270\262\345\217\243\350\277\236\346\216\245"));
 
@@ -565,7 +610,7 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1297, 23));
+        menuBar->setGeometry(QRect(0, 0, 1297, 22));
         menu = new QMenu(menuBar);
         menu->setObjectName(QStringLiteral("menu"));
         menu_2 = new QMenu(menuBar);
@@ -596,7 +641,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        toolBox->setCurrentIndex(0);
+        toolBox->setCurrentIndex(2);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -639,6 +684,11 @@ public:
         label_9->setText(QApplication::translate("MainWindow", "\345\201\234\346\255\242\344\275\215\357\274\232", Q_NULLPTR));
         openSerial_pushButton->setText(QApplication::translate("MainWindow", "\346\211\223\345\274\200\344\270\262\345\217\243", Q_NULLPTR));
         serialPlay_pushButton->setText(QApplication::translate("MainWindow", "\346\222\255\346\224\276", Q_NULLPTR));
+        groupBox->setTitle(QApplication::translate("MainWindow", "\346\230\276\347\244\272\350\256\276\347\275\256\357\274\232", Q_NULLPTR));
+        label_10->setText(QApplication::translate("MainWindow", "peak\347\232\204\351\230\210\345\200\274\357\274\232", Q_NULLPTR));
+        peakOffset_lineEdit->setText(QApplication::translate("MainWindow", "0", Q_NULLPTR));
+        label_12->setText(QApplication::translate("MainWindow", "\345\271\263\345\235\207\345\270\247\346\225\260\357\274\232", Q_NULLPTR));
+        slideFrameNum_lineEdit->setText(QApplication::translate("MainWindow", "1", Q_NULLPTR));
         toolBox->setItemText(toolBox->indexOf(page_3), QApplication::translate("MainWindow", "            \344\270\262\345\217\243\350\277\236\346\216\245", Q_NULLPTR));
         groupBox_2->setTitle(QApplication::translate("MainWindow", "\347\273\237\350\256\241\344\277\241\346\201\257\344\270\216\346\227\245\345\277\227", Q_NULLPTR));
         label_11->setText(QApplication::translate("MainWindow", "        TOF/PEAK\344\277\241\346\201\257\347\273\237\350\256\241", Q_NULLPTR));

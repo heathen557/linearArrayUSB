@@ -55,6 +55,8 @@ DealUsb_msg::DealUsb_msg(QObject *parent) : QObject(parent)
      localFile_timer = NULL;
 
      vexAngleValue = 100;  //重新计算角度时 垂直角度的值 默认设置为100
+     peakOffset = 0;     //根据强度进行滤波时候用
+     slideFrameNum = 1;    //滑动平均 设置的窗口的大小
 
 
      //总共有256个点 ,针对每一个点开启一个独立的容器进行存储相关内容
@@ -69,6 +71,15 @@ DealUsb_msg::DealUsb_msg(QObject *parent) : QObject(parent)
          allStatisticPeakPoints.push_back(singlePoint);
      }
 
+}
+
+// 改变peakOffset的值 ， 滑动平均的帧数
+void DealUsb_msg::changePeakOffsetAverageFrame_slot(int offset_peak,int slideAverage_num)
+{
+    peakOffset = offset_peak;
+    slideFrameNum = slideAverage_num;
+
+    qDebug()<<"peakOffset= "<<peakOffset<<"  slideFrameNum= "<<slideFrameNum;
 }
 
 void DealUsb_msg:: showSettingParaSlot(int frameNum, int Angle,int TOFmax)
@@ -371,6 +382,9 @@ void DealUsb_msg::recvMsgSlot(QByteArray array)
             tof = quint8(MyBuffer[4 + i * 4 + 2]) + ((quint8(MyBuffer[4 + i * 4 + 3 ]))<<8);
         }
 
+        if(intensity<peakOffset)   //peak设置阈值
+            tof = 65535;
+
 
 //        qDebug()<<"tof = "<<tof<<" intensity ="<<intensity<<endl;
 
@@ -593,6 +607,9 @@ void DealUsb_msg::recvMsgSlot_2_256(QByteArray array)
             intensity = quint8(MyBuffer[4 + i * 4]) + ((quint8(MyBuffer[4 + i * 4 +1]))<<8);
             tof = quint8(MyBuffer[4 + i * 4 + 2]) + ((quint8(MyBuffer[4 + i * 4 + 3 ]))<<8);
         }
+
+        if(intensity<peakOffset)   //peak设置阈值
+            tof = 65535;
 
 
         //行列以及TOF值信息传递给图像
@@ -830,6 +847,9 @@ void DealUsb_msg::recvMsgSlot_4_256(QByteArray array)
             tof = quint8(MyBuffer[4 + i * 4 + 2]) + ((quint8(MyBuffer[4 + i * 4 + 3 ]))<<8);
         }
 
+        if(intensity<peakOffset)   //peak设置阈值
+            tof = 65535;
+
 
         //行列以及TOF值信息传递给图像
         int imgRow = i * 4 + line_offset;
@@ -926,6 +946,9 @@ void DealUsb_msg::recvSerialSlot_4_256(QByteArray MyBuffer)
                     intensity = quint8(MyBuffer[spad_no * 64 * 2 * 4 + line * 256 + row * 4 + 0]) + ((quint8(MyBuffer[spad_no * 64 * 2 * 4 + line * 256 + row * 4 + 1]))<<8);
                     tof = quint8(MyBuffer[spad_no * 64 * 2 * 4 + line * 256 + row * 4 + 2]) + ((quint8(MyBuffer[spad_no * 64 * 2 * 4 + line * 256 + row * 4 + 3]))<<8);
                 }
+
+                if(intensity<peakOffset)   //peak设置阈值
+                    tof = 65535;
 //                int data_ls = (para.data[spad_no * 64 * 2 * 4 + line * 256 + row * 4 + 0]) + (para.data[spad_no * 64 * 2 * 4 + line * 256 + row * 4 + 1] << 8);
 //                A4_L_picture[line_backup, row_backup].position = (ushort)data_ls;
 //                data_ls = para.data[spad_no * 64 * 2 * 4 + line * 256 + row * 4 + 2] + (para.data[spad_no * 64 * 2 * 4 + line * 256 + row * 4 + 3] << 8);
@@ -1191,6 +1214,9 @@ void DealUsb_msg::readLocalPCDFile()
             tof = tofPeakList[0].toInt();
             intensity = tofPeakList[1].toInt();
 
+            if(intensity<peakOffset)   //peak设置阈值
+                tof = 65535;
+
             pointIndex = i;
             if(isSaveFlag)
             {
@@ -1354,6 +1380,8 @@ void DealUsb_msg::readLocalPCDFile()
             tof = tofPeakList[0].toInt();
             intensity = tofPeakList[1].toInt();
 
+            if(intensity<peakOffset)   //peak设置阈值
+                tof = 65535;
 
             int imgRow = i;
             int imgCol = 0;
@@ -1534,6 +1562,9 @@ void DealUsb_msg::readLocalPCDFile()
                 return;
             tof = tofPeakList[0].toInt();
             intensity = tofPeakList[1].toInt();
+
+            if(intensity<peakOffset)   //peak设置阈值
+                tof = 65535;
 
 
             pointIndex = i;

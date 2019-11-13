@@ -68,6 +68,12 @@ public:
     //重新计算角度版本时 垂直角度的值 默认设置为100
     int vexAngleValue;
 
+
+
+    //根据强度值滤波 的offset ，以及滑动平均的帧数 默认设置为1
+    int peakOffset;   //0
+    int slideFrameNum;   //1
+
 signals:
 
     void statisticsValueSignal(float,float,float,float);
@@ -89,6 +95,8 @@ public slots:
     void showSettingParaSlot(int,int,int);
 
     void changeTofPeak_slot();
+
+    void changePeakOffsetAverageFrame_slot(int offset_peak,int slideAverage_num);    // 设定peak的阈值（默认为0），peak的值小于阈值时，tof修改为65535 ； 并设定滑动平均的帧数
 
 
 

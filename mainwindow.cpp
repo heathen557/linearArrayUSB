@@ -75,6 +75,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     }
 
+    ui->toolBox->setCurrentIndex(0);
 
 }
 
@@ -101,6 +102,8 @@ void MainWindow::initConnect()
     //主函数与数据处理线程的 信号与槽的连接
     connect(dealUsbMsg_obj,SIGNAL(statisticsValueSignal(float,float,float,float)),this,SLOT(statisticsValueSlot(float, float, float,float)));
     connect(this,SIGNAL(changeTofPeak_signal()),dealUsbMsg_obj,SLOT(changeTofPeak_slot()));
+    connect(this,SIGNAL(changePeakOffsetAverageFrame_signal(int,int)),dealUsbMsg_obj,SLOT(changePeakOffsetAverageFrame_slot(int,int)));
+
 
     //文件保存相关的 信号与槽的连接
     connect(ui->action,SIGNAL(triggered()),this,SLOT(showSaveFileDialog())); //文件保存 窗口打开
@@ -3950,4 +3953,20 @@ void MainWindow::on_serialPlay_pushButton_clicked()
         ui->serialPlay_pushButton->setText(QStringLiteral("播放"));
         oneSecondTimer.stop();
     }
+}
+
+//改变peakOffset的值
+void MainWindow::on_peakOffset_lineEdit_returnPressed()
+{
+    int peakOffset = ui->peakOffset_lineEdit->text().toInt();
+    int slideFrmNum = ui->slideFrameNum_lineEdit->text().toInt();
+    emit changePeakOffsetAverageFrame_signal(peakOffset,slideFrmNum);
+
+}
+//改变滑动平均的帧数
+void MainWindow::on_slideFrameNum_lineEdit_returnPressed()
+{
+    int peakOffset = ui->peakOffset_lineEdit->text().toInt();
+    int slideFrmNum = ui->slideFrameNum_lineEdit->text().toInt();
+    emit changePeakOffsetAverageFrame_signal(peakOffset,slideFrmNum);
 }

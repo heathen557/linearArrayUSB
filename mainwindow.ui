@@ -52,15 +52,15 @@
           <string notr="true"/>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>2</number>
          </property>
          <widget class="QWidget" name="page">
           <property name="geometry">
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>250</width>
-            <height>358</height>
+            <width>236</width>
+            <height>369</height>
            </rect>
           </property>
           <attribute name="label">
@@ -318,7 +318,7 @@
             <x>0</x>
             <y>0</y>
             <width>250</width>
-            <height>358</height>
+            <height>354</height>
            </rect>
           </property>
           <attribute name="label">
@@ -362,27 +362,14 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>250</width>
-            <height>358</height>
+            <width>236</width>
+            <height>362</height>
            </rect>
           </property>
           <attribute name="label">
            <string>            串口连接</string>
           </attribute>
-          <layout class="QGridLayout" name="gridLayout_7">
-           <item row="2" column="0">
-            <spacer name="verticalSpacer_2">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>158</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
+          <layout class="QGridLayout" name="gridLayout_10">
            <item row="0" column="0">
             <widget class="QGroupBox" name="gbox1">
              <property name="title">
@@ -478,6 +465,66 @@
               <string>播放</string>
              </property>
             </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QGroupBox" name="groupBox">
+             <property name="title">
+              <string>显示设置：</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_7">
+              <item row="0" column="0">
+               <layout class="QFormLayout" name="formLayout">
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_10">
+                  <property name="text">
+                   <string>peak的阈值：</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QLineEdit" name="peakOffset_lineEdit">
+                  <property name="text">
+                   <string>0</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="label_12">
+                  <property name="text">
+                   <string>平均帧数：</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QLineEdit" name="slideFrameNum_lineEdit">
+                  <property name="text">
+                   <string>1</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <spacer name="verticalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>158</height>
+              </size>
+             </property>
+            </spacer>
            </item>
           </layout>
          </widget>
@@ -588,7 +635,7 @@ border:0px</string>
      <x>0</x>
      <y>0</y>
      <width>1297</width>
-     <height>23</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
